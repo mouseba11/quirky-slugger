@@ -267,7 +267,7 @@ const LIST_SECTIONS = [
     groups: [
       ['Shared templates', 'Plain templates any pattern can use.', (c) => c.sharedTemplates, false],
       ['Joiner variants', 'Extra list joiners mixed in with the main joiner, e.g. "and the".', (c) => c.joinerVariants || [], false, 'joinerVariants'],
-      ['Numbers', 'The plain values {n} picks from.', (c) => c.numbers, true, 'numbers'],
+      ['Numbers', 'The plain values {n} picks from. A digit or a word, such as 3 or three.', (c) => c.numbers, false, 'numbers'],
       ['Quirky numbers', 'Added to the {n} pool when the quirk factor hits. A number or a short phrase.', (c) => c.quirkyNumbers, false, 'quirkyNumbers']
     ]
   },
@@ -369,7 +369,7 @@ function cleanConfig(source) {
   });
   cleaned.joiner = cleaned.joiner == null ? String(defaults.joiner) : String(cleaned.joiner);
   cleaned.quirks = Boolean(cleaned.quirks);
-  cleaned.numbers = trimmed(cleaned.numbers).map(Number).filter((n) => Number.isFinite(n));
+  cleaned.numbers = trimmed(cleaned.numbers);
   cleaned.quirkyNumbers = trimmed(cleaned.quirkyNumbers);
   cleaned.stopWords = trimmed(cleaned.stopWords);
   cleaned.joinerVariants = trimmed(cleaned.joinerVariants);

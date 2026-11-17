@@ -94,7 +94,7 @@ Defaults below come from `quirky-slugger.config.json` (algorithm settings) and `
 | `connectFactor` | 0.4 | 0..1. Chance of the connecting pool (two or more keywords). |
 | `quirks` | `false` | boolean. |
 | `quirkFactor` | 0.7 | 0..1. Chance that quirks mode actually goes quirky for this call. A missing or invalid value counts as 0, so quirky templates are never used. |
-| `numbers` | `[2, 3, 5]` | numbers for `{n}`. Always in the pool. |
+| `numbers` | `["2", "3", "5", "two", "three", "five"]` | strings `{n}` picks from. A digit or a word. Always in the pool. German: `zwei`, `drei`, `fünf`. Spanish: `dos`, `tres`, `cinco`. |
 | `quirkyNumbers` | `["42", "A bunch", "Sneaky"]` | strings. Appended to the `{n}` pool only when `quirkRoll` is true. Slugified with the rest of the slug; title-cased in the title. |
 | `quirkyModifiers` | `{ adjectives[22], suffixes[18] }` | strings, hyphenated multi-word values. |
 | `connectors` | `{ verbs[17], gerunds[16], nouns[16], participles[22] }` | see 6.3. |

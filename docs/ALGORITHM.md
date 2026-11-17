@@ -129,7 +129,7 @@ Templates that need more keywords than you gave are skipped. A template using `{
 | `{rest}` | All keywords except the first. |
 | `{adj}` | An adjective from `quirkyModifiers.adjectives`: `peculiar`. |
 | `{suffix}` | An ending from `quirkyModifiers.suffixes`: `rabbit-hole`. |
-| `{n}` | A value from `numbers` (`3`), or from `numbers` plus `quirkyNumbers` (`42`, `A bunch`) when the quirk-factor roll hits. |
+| `{n}` | A string from `numbers` (`3`, `three`), or from `numbers` plus `quirkyNumbers` (`42`, `A bunch`) when the quirk-factor roll hits. |
 | `{top}` | The most common word in your text that is not a keyword. |
 | `{connect}` | A connecting verb: `link`, `unite`, `pair`... |
 | `{connecting}` | The `-ing` form: `linking`, `uniting`... |

@@ -138,7 +138,7 @@ Checklist:
 - `connectors.gerunds`: `-ing` form with the same object.
 - `connectors.nouns`: singular noun that works after `a` or `the` and before `between` (`the-{connection}-between-{kw}`).
 - `connectors.participles`: past participle **including its preposition** (`paired-with`, `tied-to`).
-- `numbers`: plain `{n}` values. Always in the pool.
+- `numbers`: plain `{n}` strings. A digit or a word (`2`, `two`). Always in the pool. Append rather than insert.
 - `quirkyNumbers`: extra `{n}` values, appended only when the quirk roll hits. A phrase is allowed (`A bunch`). It is title-cased in the title and hyphenated in the slug.
 
 Check every template that uses that placeholder. Append rather than insert, so fewer existing results change.

@@ -4,9 +4,12 @@
     "and the"
   ],
   "numbers": [
-    2,
-    3,
-    5
+    "2",
+    "3",
+    "5",
+    "two",
+    "three",
+    "five"
   ],
   "quirkyNumbers": [
     "42",

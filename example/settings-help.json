@@ -58,9 +58,9 @@
     "When off, titles stay plain."
   ],
   "numbers": [
-    "The plain values {n} picks from.",
-    "Always in the pool, quirks or not.",
-    "Add or remove entries to change what numbers can appear."
+    "The plain values {n} picks from. Each entry is a string: a digit or a word.",
+    "The English defaults are 2, 3, 5, two, three and five. Always in the pool, quirks or not.",
+    "Add or remove entries to change what can appear. A word is title-cased in the title and kept as written in the slug."
   ],
   "quirkyNumbers": [
     "Extra {n} values appended only when quirks mode is on and the quirk-factor roll hits.",

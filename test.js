@@ -507,6 +507,8 @@ assert.deepStrictEqual(
 assert.strictEqual(titleOf('beans', 'whats-new-with-{kw}'), "What's New with Beans");
 assert.strictEqual(titleOf('beans', 'the-only-{kw}-recipe-youll-need'), "The Only Beans Recipe You'll Need");
 assert.strictEqual(titleOf('beans', '{n}-things-you-didnt-know-about-{kw}', { numbers: [7] }), "7 Things You Didn't Know About Beans");
+assert.strictEqual(titleOf('beans', '{n}-things-you-didnt-know-about-{kw}', { numbers: ['two'] }), "Two Things You Didn't Know About Beans");
+assert.strictEqual(api.explain('beans', 'x', { config: { numbers: ['two'], patterns: [{ id: 'p', triggers: [], templates: ['{n}-things-about-{kw}'] }] } }).slug, 'two-things-about-beans');
 
 // ---------- connecting the keywords ----------
 

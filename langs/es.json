@@ -1,9 +1,12 @@
 {
   "joiner": "y",
   "numbers": [
-    2,
-    3,
-    5
+    "2",
+    "3",
+    "5",
+    "dos",
+    "tres",
+    "cinco"
   ],
   "quirkyNumbers": [
     "42",

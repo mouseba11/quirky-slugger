@@ -8,6 +8,10 @@ All notable changes to this project are documented here. The format follows [Kee
 
 - `pluralFactor` (default `0.3`), shown as Plurals in the example config. An eligible keyword has that chance of a trailing `s` in the slug and the title. Keywords ending in `s` or a vowel are left as written.
 
+### Changed
+
+- `{n}` is a string. The plain pools are `2`, `3`, `5` and the words `two`, `three`, `five` (German `zwei`, `drei`, `fünf`; Spanish `dos`, `tres`, `cinco`). The example editor keeps those words instead of dropping anything that is not a digit.
+
 ## [1.0.0] - 2026-11-17
 
 First public release.

@@ -210,7 +210,7 @@ quirkySlug('beans, toast', text, { config: './my-patterns.json' });
 | `connectFactor` | `0.4` | When two or more keywords are given, the chance (0 to 1) of using a connecting template. |
 | `quirks` | `false` | Turns quirks mode on by default. |
 | `quirkFactor` | `0.7` | In quirks mode, the chance (0 to 1) of a quirky template, and of adding `quirkyNumbers` to the `{n}` pool. |
-| `numbers` | `[2, 3, 5]` | The numbers `{n}` picks from. |
+| `numbers` | `["2", "3", "5", "two", "three", "five"]` | The strings `{n}` picks from. A digit or a word. German uses `zwei`, `drei`, `fünf`. Spanish uses `dos`, `tres`, `cinco`. |
 | `quirkyNumbers` | `["42", "A bunch", "Sneaky"]` | Added to that pool when quirks mode is on and the quirk-factor roll hits. A phrase is title-cased in the title and hyphenated in the slug. |
 | `quirkyModifiers` | see file | `adjectives` and `suffixes`, used by `{adj}` and `{suffix}`. |
 | `connectors` | see file | `verbs`, `gerunds`, `nouns` and `participles`, used by `{connect}`, `{connecting}`, `{connection}` and `{connected}`. |
@@ -262,7 +262,7 @@ A template is a hyphenated string. The slug is the filled-in template. The title
 | `{kw}` | All keywords as a list: `baked beans, toast and tea`. |
 | `{kw1}`, `{kw2}`... | One keyword, numbered from 1. |
 | `{rest}` | Every keyword except the first, as a list: `toast and tea`. |
-| `{n}` | A value from `numbers`, plus `quirkyNumbers` when the quirk-factor roll hits: `top-{n}-{kw}` gives `top-3-baked-beans` or `top-a-bunch-baked-beans`. |
+| `{n}` | A value from `numbers`, plus `quirkyNumbers` when the quirk-factor roll hits: `top-{n}-{kw}` gives `top-3-baked-beans`, `top-three-baked-beans`, or `top-a-bunch-baked-beans`. |
 | `{top}` | The most frequent non-keyword word in the text. |
 | `{adj}` | A random adjective from `quirkyModifiers.adjectives`. |
 | `{suffix}` | A random ending from `quirkyModifiers.suffixes`, such as `rabbit-hole`. |
