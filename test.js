@@ -143,6 +143,22 @@ for (const quirkFactor of [0, 1]) {
     assert.deepStrictEqual(unknown, [], `unknown placeholder in ${code} "${t}"`);
     assert.ok(/^[a-z0-9{}.,:;?!'-]+$/.test(t), `unexpected character in ${code} template "${t}"`);
   });
+
+  // A template that is already in a shared or connecting pool must not be repeated inside a pattern
+  // (it would double that title's odds). The connection pattern repeats connecting templates on purpose.
+  [false, true].forEach((quirky) => {
+    const shared = quirky ? pack.sharedQuirkyTemplates : pack.sharedTemplates;
+    const connect = quirky ? pack.connectQuirkyTemplates : pack.connectTemplates;
+    pack.patterns.filter((p) => p.id !== 'connection').forEach((p) => {
+      const own = quirky ? (p.quirkyTemplates || []) : p.templates;
+      const seen = new Set();
+      own.forEach((t) => {
+        assert.ok(!shared.includes(t) && !connect.includes(t), `${code}/${p.id}: "${t}" repeats a pool template`);
+        assert.ok(!seen.has(t), `${code}/${p.id}: "${t}" is listed twice`);
+        seen.add(t);
+      });
+    });
+  });
 });
 const defaults = require('./langs/en.json');
 
@@ -644,5 +660,14 @@ fs.rmdirSync(fixtureDir);
 
 // Missing keywords is an error.
 assert.throws(() => quirkySlug('', 'text'), TypeError);
+
+// A factor that is missing or not a number counts as 0, and one above 1 counts as 1.
+{
+  const f = (config) => quirkySlug.explain(CONTROL_KEYWORDS, CONTROL_TEXT, { quirks: true, config });
+  assert.strictEqual(f({ quirkFactor: undefined }).quirky, false);
+  assert.strictEqual(f({ quirkFactor: 'x' }).quirky, false);
+  assert.strictEqual(f({ quirkFactor: 7 }).quirky, true);
+  assert.ok(f({ patternSpread: NaN }).candidates.length >= 1, 'a NaN patternSpread must not empty the candidates');
+}
 
 console.log('all tests passed');

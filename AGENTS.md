@@ -13,8 +13,9 @@ Read order for a non-trivial change:
 ## Commands
 
 ```
-npm test      # node test.js. Plain assert, no framework. Prints "all tests passed".
-npm start     # example site on http://localhost:4000 (PORT env var overrides)
+npm test            # node test.js. Plain assert, no framework. Prints "all tests passed".
+npm start           # example site on http://localhost:4000 (PORT env var overrides)
+npm run pack:check  # npm pack --dry-run: lists exactly what would be published
 ```
 
 Run `npm test` after every change. It takes about 10 seconds because it runs statistical surveys over hundreds of seeds.
@@ -24,9 +25,10 @@ Run `npm test` after every change. It takes about 10 seconds because it runs sta
 | Path | What it is | Change it when |
 | --- | --- | --- |
 | `index.js` | The whole algorithm and the public API (`quirkySlug`, `explain`, `keywordWeights`, `slugify`), including `options.lang` / locale hooks. | The **method** changes. |
-| `quirky-slugger.config.json` | Shared algorithm settings only (`maxWords`, `patternSpread`, default `lang`, …). | You change scoring / length / quirk defaults. |
-| `langs/*.json` | Language packs (`en`, `de`, `es`): templates, patterns, connectors, stop words, `locale`. | You want different **wording** or a new language. Most content changes belong here. |
-| `langs/samples.json` | Example-site sample keywords/text per language. | The demo sample changes. |
+| `quirky-slugger.config.json` | Shared algorithm settings only (`maxWords`, `patternSpread`, default `lang`, the `...Factor` values, …). | You change scoring / length / quirk / joiner-variant defaults. |
+| `langs/*.json` | Language packs (`en`, `de`, `es`): **patterns**, templates, connectors, stop words, joiner, `locale`. | You want different **wording**, a new pattern, or a new language. Most content changes belong here. |
+| `langs/samples.json` | Example-site sample keywords/text per language. Not published. | The demo sample changes. |
+| `package.json` | Name (`@mouseba11/quirky-slugger`), scripts, and the `files` whitelist that decides what is published. | A file must be added to or kept out of the package, or you add a language pack. |
 | `test.js` | Test suite. Uses a pinned wrapper plus statistical surveys. | You change behaviour or defaults. |
 | `example/server.js` | Zero-dependency HTTP server. Serves `/api/config`, `/api/langs`, `/api/lang/:code`, `/api/samples`, `POST /api/slug`. | The API or options change. |
 | `example/index.html` | Demo page with Tester, Config, and a Language dropdown. | New `explain` fields or languages should be shown. |
@@ -36,7 +38,7 @@ Run `npm test` after every change. It takes about 10 seconds because it runs sta
 | `README.md` | Package documentation (install, API, languages, config, templates). | The API, config keys or placeholders change. |
 | `CHANGELOG.md` | Version history. | Every release, and any output-changing change. |
 
-`example/` is not published. `docs`, `AGENTS.md` and `CHANGELOG.md` are.
+Published: `index.js`, the config file, `langs/en.json`, `langs/de.json`, `langs/es.json`, `docs/`, `AGENTS.md`, `CHANGELOG.md` (plus `README.md`, `LICENSE` and `package.json`, which npm always includes). Not published: `example/`, `test.js`, `langs/samples.json`. Run `npm run pack:check` to confirm.
 
 ## Rules
 
@@ -70,7 +72,11 @@ To render every template of a pattern for review:
 const c = require('./langs/en.json');
 for (const t of c.patterns.find(p => p.id === 'review').templates) {
   console.log(q('baked beans, toast, tea', 'x', {
-    config: { patterns: [{ id: 'p', triggers: [], templates: [t] }], connectors: c.connectors }
+    config: {
+      patterns: [{ id: 'p', triggers: [], templates: [t] }],
+      connectors: c.connectors,
+      joinerVariantFactor: 0
+    }
   }).title);
 }
 ```
@@ -86,13 +92,14 @@ for (const t of c.patterns.find(p => p.id === 'review').templates) {
 3. Rewrite `joiner`, stop words, connectors, quirky modifiers, numbers, all template pools, and every pattern’s triggers/templates. Prefer fixed articles inside templates; avoid frames that need gender agreement with unknown keywords.
 4. Keep template characters to `[a-z0-9{}.,:;?!'-]` (accents belong in titles via keywords, not template literals, so validation and slugs stay clean).
 5. Add a sample under `langs/samples.json` with ~50/40/10 keyword weights if it is a three-keyword demo.
-6. The example site picks up new packs from the `langs/` folder automatically (`GET /api/langs`).
-7. Add smoke tests (load pack, non-empty slug/title, `explain().lang`, weight check if you added a sample).
-8. Update README / CHANGELOG. Keep the note that language support is rudimentary and further work is left to other quirky sluggers.
+6. Add `langs/xx.json` to the `files` list in `package.json`. It is an explicit whitelist (so `samples.json` stays out), and a pack that is not listed is not published.
+7. The example site picks up new packs from the `langs/` folder automatically (`GET /api/langs`).
+8. Add smoke tests (load pack, non-empty slug/title, `explain().lang`, weight check if you added a sample).
+9. Update README / CHANGELOG. Keep the note that language support is rudimentary and further work is left to other quirky sluggers.
 
 ### Add a pattern
 
-1. Append an object to `patterns` in `quirky-slugger.config.json`:
+1. Append an object to `patterns` in `langs/en.json` (and the other packs, if the pattern should exist in every language):
 
    ```json
    { "id": "interview",
@@ -139,17 +146,17 @@ Check every template that uses that placeholder. Append rather than insert, so f
 
 A placeholder name appears in **five** places. Update all of them:
 
-1. The placeholder regex in `index.js`, which currently appears in **four** matching expressions: the `template.split(...)` call, the `next` match in the `parts` mapping, `render`, and `titleText`. Search for `kw\d*|rest|n|top|adj|suffix`.
+1. The two placeholder regex constants in `index.js`, `PLACEHOLDER_RE` and `PLACEHOLDER_SPLIT` (inside `explain`). Both list every name; search for `kw\d*|rest|n|top|adj|suffix`.
 2. `valueFor` in `index.js` (and a `used.<name>` entry plus the `explain()` return value if you want it exposed).
 3. `needs()` in `index.js`, if the placeholder implies a minimum number of keywords.
 4. The allowed-placeholder regex in `test.js` (the loop that validates every default template).
-5. The placeholder table in `README.md`, `docs/ALGORITHM.md` and `docs/ALGORITHM.agents.md`.
+5. The placeholder table in `README.md`, `docs/ALGORITHM.md` and `docs/ALGORITHM.agents.md` (including the regex quoted in spec section 1.5).
 
 Give any random choice its own salt string so it stays independent of the others, and add it to the salt table in the spec.
 
 ### Change a default setting
 
-Edit the key in `quirky-slugger.config.json`, then update the default in `README.md` (configuration table), `docs/ALGORITHM.md` (if it is quoted), and `docs/ALGORITHM.agents.md` (section 1.2). Update any test thresholds that depend on it.
+Edit the key in `quirky-slugger.config.json` (or in `langs/*.json` for pack content such as `joiner` or `joinerVariants`), then update the default in `README.md` (configuration table), `docs/ALGORITHM.md` (if it is quoted), and `docs/ALGORITHM.agents.md` (section 1.2). Update any test thresholds that depend on it.
 
 ### Change the algorithm
 
@@ -164,7 +171,7 @@ Edit the key in `quirky-slugger.config.json`, then update the default in `README
 
 `test.js` is a single script of `assert` calls. A failing assertion throws and shows the line. There are two styles of test.
 
-- **Pinned tests.** A wrapper adds `{ patternSpread: 1, sharedFactor: 0, connectFactor: 0 }` so the best pattern always wins and no pool is mixed in. Most tests use it. It returns just the slug string.
+- **Pinned tests.** A wrapper adds `{ patternSpread: 1, sharedFactor: 0, connectFactor: 0, joinerVariantFactor: 0 }` so the best pattern always wins, no pool is mixed in, and the joiner is the plain `and`. Most tests use it. It returns just the slug string.
 - **Statistical surveys.** They run `explain` over hundreds of seeds and assert counts, for example "at least 120 distinct quirky titles" or "the connecting pool is used 30 to 50 percent of the time". If you shrink the defaults or change a factor and one fails, either the change cost variety (reconsider it) or the threshold should move deliberately (update it **and** the table in spec section 9).
 
 New tests go in the matching section of `test.js`. When a test should be independent of default data, give it its own `patterns` config. A custom `patterns` list empties the shared and connecting pools, so only your templates can be chosen.
@@ -189,4 +196,5 @@ Add an entry to `CHANGELOG.md` for each release. `npm test` first, then `npm run
 - The text is part of the seed. One character of difference gives a different choice, which is fine, but it means "stable output for a stable input" only holds if the text is identical.
 - A custom `patterns` list silently drops the shared and connecting pools. If your custom output has no variety, check that.
 - Do not rely on `explain().pattern` for a pattern without an `id`: it is `null`, while `scores` uses `pattern-<index>`.
-- `quirkFactor` must stay numeric in the config. If it is missing, quirky templates are never used.
+- A `...Factor` that is missing or not a number counts as 0 (the feature switches off silently), for example `quirkFactor: undefined` means quirky templates are never used.
+- Do not copy a template into a pattern when it is already in the shared or connecting pool for the same mode: it doubles that title's odds. (The `connection` pattern's overlap with the connecting pool is deliberate.)

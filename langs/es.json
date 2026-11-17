@@ -548,7 +548,6 @@
         "{kw}:-una-carta-de-amor",
         "en-elogio-de-{kw}",
         "el-atractivo-{adj}-de-{kw}",
-        "{kw}:-carta-de-amor-{adj}",
         "{kw1}-mas-{rest}:-hechos-el-uno-para-el-otro",
         "{kw}:-el-{suffix}-{adj}"
       ]
@@ -718,7 +717,6 @@
         "como-{kw}-cambio-mi-vida",
         "mi-ano-{adj}-con-{kw}",
         "{kw}:-una-confesion-{adj}",
-        "querido-{kw},-tenemos-que-hablar",
         "mi-obsesion-{adj}-con-{kw}"
       ]
     },

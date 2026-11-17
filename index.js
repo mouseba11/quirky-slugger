@@ -48,6 +48,15 @@ function hash(s) {
   return h >>> 0;
 }
 
+// A factor is a number from 0 to 1. Anything that is not a number counts as 0.
+function clamp01(value) {
+  return Math.min(1, Math.max(0, Number(value) || 0));
+}
+
+function splitWords(text) {
+  return String(text || '').split(/\s+/).filter(Boolean);
+}
+
 function truncateSlug(slug, max) {
   if (!max || slug.length <= max) return slug;
   let cut = slug.slice(0, max);
@@ -131,12 +140,9 @@ function chooseJoiner(config, chance) {
   const variants = Array.isArray(config.joinerVariants)
     ? config.joinerVariants.map((v) => String(v)).filter(Boolean)
     : [];
-  const factor = Math.min(1, Math.max(0, Number(config.joinerVariantFactor)));
-  if (!variants.length || !Number.isFinite(factor) || factor <= 0 || chance('|joiner-var') >= factor) {
-    return base;
-  }
-  const idx = Math.floor(chance('|joiner-pick') * variants.length) % variants.length;
-  return variants[idx];
+  const factor = clamp01(config.joinerVariantFactor);
+  if (!variants.length || factor <= 0 || chance('|joiner-var') >= factor) return base;
+  return variants[Math.floor(chance('|joiner-pick') * variants.length)];
 }
 
 // Whether "an" (rather than "a") goes before this word: "an accidental", but "a unique"
@@ -281,6 +287,8 @@ function parseKeywords(keywords) {
  * @param {string|string[]} keywords  e.g. "beans,toast" or ["beans", "toast"]
  * @param {string} [text]             free text, truncated to config.maxWords words
  * @param {object} [options]
+ * @param {string} [options.lang]           language pack code ("en", "de", "es"...); default "en"
+ * @param {string} [options.langsDir]       folder of {lang}.json packs, instead of the bundled langs/
  * @param {object|string} [options.config]  config object, or path to a JSON config file
  * @param {boolean} [options.quirks]        turn quirks mode on or off (overrides config.quirks)
  * @param {string|number} [options.seed]    vary the choices; the same input and seed always give the same slug
@@ -298,7 +306,8 @@ function explain(keywords, text, options) {
   const kwTokens = new Set(kws.flatMap(tokenize).map(fold));
 
   // 1. Truncate text to maxWords and tokenise. `origOf` remembers a real word for each stem.
-  const words = String(text || '').split(/\s+/).filter(Boolean).slice(0, config.maxWords);
+  const allWords = splitWords(text);
+  const words = allWords.slice(0, config.maxWords);
   const origOf = new Map();
   const textTokens = [];
   tokenize(words.join(' ')).forEach((raw) => {
@@ -332,7 +341,8 @@ function explain(keywords, text, options) {
   const query = new Map();
   tf.forEach((count, term) => query.set(term, count * idf(term)));
 
-  let bestScore = config.minScore || 0;
+  const minScore = config.minScore || 0;
+  let bestScore = minScore;
   const scores = [];
   config.patterns.forEach((p, i) => {
     const vec = new Map();
@@ -347,8 +357,8 @@ function explain(keywords, text, options) {
   //      picks one, with chances in proportion to score, so strong matches win most often but close
   //      runners-up still appear. A spread of 1 means only the top pattern(s) can win.
   //    - If nothing scored above minScore, the seed picks one of the trigger-less (generic) patterns.
-  const spread = Math.min(1, Math.max(0, config.patternSpread === undefined ? 1 : Number(config.patternSpread)));
-  const usedFallback = !scores.some((s) => s.score > (config.minScore || 0));
+  const spread = config.patternSpread === undefined ? 1 : clamp01(config.patternSpread);
+  const usedFallback = !scores.some((s) => s.score > minScore);
   let candidates;
   let best;
   if (usedFallback) {
@@ -357,7 +367,7 @@ function explain(keywords, text, options) {
     candidates.forEach((c) => { c.share = 1 / candidates.length; });
     best = pick(candidates, '|pattern').pattern;
   } else {
-    candidates = scores.filter((s) => s.score > (config.minScore || 0) && s.score >= bestScore * spread);
+    candidates = scores.filter((s) => s.score > minScore && s.score >= bestScore * spread);
     const total = candidates.reduce((sum, c) => sum + c.score, 0);
     candidates.forEach((c) => { c.share = c.score / total; });
     let roll = chance('|pattern');
@@ -370,7 +380,7 @@ function explain(keywords, text, options) {
   //    sharedFactor (0-1) is the chance of drawing from the shared templates (any pattern) instead of
   //    the chosen pattern's own, which adds variety within a pattern.
   const quirks = options && options.quirks !== undefined ? options.quirks : config.quirks;
-  const quirkFactor = Math.min(1, Math.max(0, Number(config.quirkFactor)));
+  const quirkFactor = clamp01(config.quirkFactor);
   //    Templates that need more keywords than were given ({kw2}, {kw3}..., {rest}) are skipped.
   //    If that leaves no plain template, all of them are kept and the missing parts are left out.
   //    Connector words ({connect}, {connecting}, {connection}, {connected}) join keywords together,
@@ -391,11 +401,11 @@ function explain(keywords, text, options) {
   const useQuirky = quirkRoll && (quirkyList.length > 0 || sharedQuirky.length > 0);
   const own = useQuirky ? (quirkyList.length ? quirkyList : plainList) : plainList;
   const shared = useQuirky ? sharedQuirky : sharedPlain;
-  const sharedFactor = Math.min(1, Math.max(0, Number(config.sharedFactor) || 0));
+  const sharedFactor = clamp01(config.sharedFactor);
   //    connectFactor (0-1) is the chance, when two or more keywords are given, of drawing from the
   //    connecting templates, which join and compare the keywords instead of just listing them.
   const connectList = useQuirky ? connectQuirky : connectPlain;
-  const connectFactor = Math.min(1, Math.max(0, Number(config.connectFactor) || 0));
+  const connectFactor = clamp01(config.connectFactor);
   const fromConnect = kws.length >= 2 && connectList.length > 0 && chance('|connect') < connectFactor;
   const fromShared = !fromConnect && shared.length > 0 && (own.length === 0 || chance('|shared') < sharedFactor);
   const template = fromConnect
@@ -511,7 +521,7 @@ function explain(keywords, text, options) {
     top: used.top,
     keywords: kws.map((keyword, i) => ({ keyword, weight: weights[i] })),
     wordsUsed: words.length,
-    wordsIgnored: Math.max(0, String(text || '').split(/\s+/).filter(Boolean).length - words.length),
+    wordsIgnored: allWords.length - words.length,
     truncated: slug.length < full.length,
     untruncatedSlug: full
   };
@@ -538,7 +548,7 @@ function keywordWeights(keywords, text, options) {
   if (kws.length === 0) {
     throw new TypeError('quirky-slugger: at least one keyword is required');
   }
-  const words = String(text || '').split(/\s+/).filter(Boolean).slice(0, config.maxWords);
+  const words = splitWords(text).slice(0, config.maxWords);
   const weights = weighKeywords(kws, words);
   return kws.map((keyword, i) => ({ keyword, weight: weights[i] }));
 }

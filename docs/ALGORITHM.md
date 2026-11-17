@@ -138,7 +138,7 @@ Templates that need more keywords than you gave are skipped. A template using `{
 
 The word in each gap is picked by the seed from the matching list, so each word form has its own list and the grammar always works. The connecting words are based on the synonyms for *connect* in a thesaurus.
 
-The keyword list puts the word "and" (`joiner`) only before the **last** keyword: `baked beans, toast and tea`. A literal `a` in a template becomes `an` before a vowel sound: `an accidental plot twist`, `a curious plot twist`.
+The keyword list puts the word "and" (`joiner`) only before the **last** keyword: `baked beans, toast and tea`. Now and then (`joinerVariantFactor`, 25% by default) it uses a variant from `joinerVariants` instead, such as `and the`, which suits names: `Potatoes and the John Lloyd Experience`. Set `joinerVariantFactor` to `0` to always use the plain joiner. A literal `a` in a template becomes `an` before a vowel sound: `an accidental plot twist`, `a curious plot twist`.
 
 ### 7. Build the slug and the title
 
@@ -158,16 +158,16 @@ Keywords: `baked beans, toast, tea`. Text (30 words):
 3. **Candidates:** both pass the 20% test, so the odds are `recipe` 61% and `food` 39%.
 4. **The seed decides.** With the seed `demo` the winner is `recipe`.
 5. **Template pool:** the 40% connecting draw hits, so the template comes from `connectTemplates`: `a-{connection}-between-{kw}`.
-6. **Gaps:** `{connection}` becomes `correlation`, `{kw}` becomes `baked beans, toast and tea`, and `a` stays `a` because `correlation` does not start with a vowel sound.
+6. **Gaps:** `{connection}` becomes `correlation`, and `a` stays `a` because `correlation` does not start with a vowel sound. `{kw}` becomes `baked beans, toast and the tea`: this seed also hits the 25% joiner-variant roll, so the last keyword gets `and the` instead of `and`.
 7. **Result:**
 
 ```js
 quirkySlug('baked beans, toast, tea', text, { seed: 'demo' });
-// -> { slug: 'a-correlation-between-baked-beans-toast-and-tea',
-//      title: 'A Correlation Between Baked Beans, Toast and Tea' }
+// -> { slug: 'a-correlation-between-baked-beans-toast-and-the-tea',
+//      title: 'A Correlation Between Baked Beans, Toast and the Tea' }
 ```
 
-Other seeds on the same input give other titles, such as `Baked Beans, Toast and Tea Recipe Ideas`, `What to Eat: Baked Beans, Toast and Tea` and `Baked Beans vs Toast and Tea: Closer than You Think`.
+With `joinerVariantFactor: 0` the same seed gives `A Correlation Between Baked Beans, Toast and Tea`. Other seeds on the same input give other titles, such as `Baked Beans, Toast and Tea Recipe Ideas`, `What to Eat: Baked Beans, Toast and Tea` and `Baked Beans vs Toast and Tea: Closer than You Think`.
 
 ## Why did I get this title?
 
@@ -179,6 +179,7 @@ info.pattern;          // 'recipe'
 info.candidates;       // [{ id: 'recipe', share: 0.61 }, { id: 'food', share: 0.39 }]
 info.template;         // 'a-{connection}-between-{kw}'
 info.connectTemplate;  // true
+info.joiner;           // 'and the'
 ```
 
 The example site shows the same information on a web page. Pattern rows whose score displays as 0.000 are left out. Open Raw data to see every score.
@@ -206,7 +207,8 @@ The example site shows the same information on a web page. Pattern rows whose sc
 | A new kind of title | Add a pattern with triggers and templates |
 | A pattern to match the words you care about | Add those words to its triggers. Triggers the text never uses lower its score |
 | More words for `{adj}`, `{suffix}` or connectors | Add them to `quirkyModifiers` or `connectors` |
-| Fully predictable output for tests | `patternSpread: 1`, `sharedFactor: 0`, `connectFactor: 0`, and a fixed seed |
+| Always the plain joiner (`and`), never `and the` | `joinerVariantFactor: 0` |
+| Fully predictable output for tests | `patternSpread: 1`, `sharedFactor: 0`, `connectFactor: 0`, `joinerVariantFactor: 0`, and a fixed seed |
 
 ## The default patterns
 

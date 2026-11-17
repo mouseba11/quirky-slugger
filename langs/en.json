@@ -390,9 +390,7 @@
         "{kw}-our-top-picks",
         "best-{kw1}-with-{rest}",
         "our-favourite-{kw}",
-        "top-{n}-{kw}-picks",
-        "{n}-things-you-never-knew-about-{kw}",
-        "{n}-things-you-didnt-know-about-{kw}"
+        "top-{n}-{kw}-picks"
       ],
       "quirkyTemplates": [
         "gloriously-{adj}-{kw}-picks",
@@ -400,8 +398,7 @@
         "weirdly-great-{kw}-ideas",
         "{kw}-ranked-by-{adj}-science",
         "forget-{rest},-all-you-need-is-{kw1}",
-        "{n}-{adj}-{kw}-picks",
-        "{n}-things-you-never-knew-about-{kw}"
+        "{n}-{adj}-{kw}-picks"
       ]
     },
     {
@@ -538,7 +535,6 @@
         "{kw}:-a-love-letter",
         "in-praise-of-{kw}",
         "the-{adj}-appeal-of-{kw}",
-        "a-{adj}-love-letter-to-{kw}",
         "{kw1}-plus-{rest}:-a-match-made-in-heaven",
         "{kw}:-the-{adj}-{suffix}"
       ]
@@ -604,7 +600,6 @@
         "the-reasons-behind-{kw}",
         "how-it-really-works:-{kw}",
         "{kw}:-the-explanation",
-        "{n}-things-you-never-knew-about-{kw}",
         "everything-you-never-knew-about-{kw}"
       ],
       "quirkyTemplates": [
@@ -612,8 +607,7 @@
         "why-we-cant-stop-thinking-about-{kw}",
         "the-{adj}-physics-of-{kw}",
         "{kw}:-the-science-nobody-asked-for",
-        "decoding-{kw}",
-        "{n}-things-you-never-knew-about-{kw}"
+        "decoding-{kw}"
       ]
     },
     {
@@ -707,7 +701,6 @@
         "how-{kw}-changed-my-life",
         "my-{adj}-year-of-{kw}",
         "{kw}:-a-{adj}-confession",
-        "dear-{kw},-we-need-to-talk",
         "my-{adj}-obsession-with-{kw}"
       ]
     },
@@ -821,9 +814,7 @@
         "all-about-{kw}",
         "{kw}-explained",
         "{kw}-overview",
-        "{kw1}-with-{rest}",
-        "{n}-things-you-never-knew-about-{kw}",
-        "{n}-things-to-know-about-{kw}"
+        "{kw1}-with-{rest}"
       ],
       "quirkyTemplates": [
         "the-{adj}-{kw}-{suffix}",

@@ -1,6 +1,6 @@
 # quirky-slugger: algorithm specification (for agents and maintainers)
 
-Exact behaviour of `index.js` and `quirky-slugger.config.json`. Written to be unambiguous and to be checked against the code. For a narrative version see [`ALGORITHM.md`](ALGORITHM.md). For how to make changes see [`../AGENTS.md`](../AGENTS.md).
+Exact behaviour of `index.js`, `quirky-slugger.config.json` and the language packs in `langs/`. Written to be unambiguous and to be checked against the code. For a narrative version see [`ALGORITHM.md`](ALGORITHM.md). For how to make changes see [`../AGENTS.md`](../AGENTS.md).
 
 Function names are given instead of line numbers because lines drift. Search `index.js` for the identifier.
 
@@ -14,14 +14,17 @@ slugify(string) -> string
 ```
 
 - Exports: `module.exports = quirkySlug` with properties `quirkySlug`, `keywordWeights`, `explain`, `slugify`.
-- CommonJS, `'use strict'`, Node >= 14, **no runtime dependencies** (`fs` is the only `require`, apart from the config JSON).
-- **Pure and deterministic.** No `Math.random`, no `Date`, no network, no global state. The result is a function of `(keywords, truncated text, options.seed, merged config, options.quirks)`.
+- CommonJS, `'use strict'`, Node >= 14, **no runtime dependencies** (only the built-ins `fs` and `path`, plus the config JSON).
+- `slugify` here is a local helper in `index.js`, not the npm package of that name.
+- **Pure and deterministic.** No `Math.random`, no `Date`, no network, no global state. The result is a function of `(keywords, truncated text, options.seed, merged config, options.quirks)`, where the merged config includes the language pack.
 - Errors: a `TypeError` with message prefix `quirky-slugger:` for no keywords, empty/invalid `patterns`, a pattern without a non-empty `templates` array, or a non-array `quirkyTemplates`. A missing config file path throws the underlying `fs` error. Invalid JSON throws `SyntaxError`.
 
 ### Options
 
 | Option | Type | Effect |
 | --- | --- | --- |
+| `lang` | string | Language pack code, `/^[a-z]{2}(-[a-z0-9]+)?$/i`. Wins over `config.lang`. Default `"en"`. Invalid code or missing file → `TypeError`. |
+| `langsDir` | string | Folder holding `{lang}.json` packs. Relative paths resolve against `process.cwd()`. Default: the bundled `langs/`. |
 | `config` | object or string | An object, or a path to a JSON file read with `fs.readFileSync` on **every call**. |
 | `quirks` | boolean | If not `undefined`, overrides `config.quirks`. |
 | `seed` | string or number | If not `undefined`, not `null` and not `''`, appended to the seed string (see 3). Numbers are stringified. `0` counts as set. |
@@ -30,6 +33,7 @@ slugify(string) -> string
 
 ```
 slug, title                          strings
+lang                                 language code used (lowercase)
 pattern                              id of the chosen pattern, or null if the pattern has no id
 score                                cosine score of the chosen pattern; 0 when usedFallback
 usedFallback                         boolean
@@ -42,6 +46,7 @@ connectors                           { connect?, connecting?, connection?, conne
 quirksMode                           boolean, effective setting
 quirky                               boolean, a quirky list was chosen
 quirkFactor                          number, effective (clamped 0..1)
+joiner                               the list joiner used this call: config.joiner or a joinerVariants entry (5.6)
 seed                                 string or null
 adjective, suffix, number, top       string or undefined; set only if the template used the placeholder
 keywords                             [{ keyword, weight }]
@@ -69,28 +74,34 @@ Language support is **rudimentary**: packs are demos; proper localisation is lef
 
 ### 1.2 Keys, types and defaults
 
+Defaults below come from `quirky-slugger.config.json` (algorithm settings) and `langs/en.json` (content). Counts are for the English pack. Every `...Factor` is clamped to 0..1 by `clamp01`, and a non-number (`undefined`, `NaN`, a non-numeric string) counts as 0.
+
 | Key | Default | Type and use |
 | --- | --- | --- |
+| `lang` | `"en"` | string. Pack used when `options.lang` is absent. |
 | `maxWords` | 256 | int. Text is truncated to this many whitespace-separated words. |
 | `maxSlugLength` | 60 | int. Falsy disables truncation. |
 | `joiner` | `"and"` | string. Word before the last list item. `""` gives comma-only lists. |
+| `joinerVariants` | `["and the"]` (en only) | string[]. Alternative joiners; see 5.6. Absent or empty disables variants. |
+| `joinerVariantFactor` | 0.25 | 0..1. Chance of using a variant instead of `joiner`. |
 | `keywordWeight` | 2 | number. Multiplier for the keyword boost (4.2). |
 | `minScore` | 0 | number. A pattern must score strictly above this. |
-| `patternSpread` | 0.2 | 0..1. Candidate threshold as a fraction of the best score. **If the key is absent (for example not in the merged config) the code uses 1**, but the default file sets 0.2. |
-| `sharedFactor` | 0.25 | 0..1, clamped. `NaN` becomes 0. |
-| `connectFactor` | 0.4 | 0..1, clamped. `NaN` becomes 0. |
+| `patternSpread` | 0.2 | 0..1. Candidate threshold as a fraction of the best score. **If the key is `undefined` the code uses 1**, but the default file sets 0.2. |
+| `sharedFactor` | 0.25 | 0..1. Chance of the shared pool. |
+| `connectFactor` | 0.4 | 0..1. Chance of the connecting pool (two or more keywords). |
 | `quirks` | `false` | boolean. |
-| `quirkFactor` | 0.7 | 0..1, clamped. **Not `NaN`-guarded**: `Number(undefined)` is `NaN`, which makes `chance(...) < NaN` false, so quirky templates are never used. Always keep the key present. |
+| `quirkFactor` | 0.7 | 0..1. Chance that quirks mode actually goes quirky for this call. A missing or invalid value counts as 0, so quirky templates are never used. |
 | `numbers` | `[2, 3, 5]` | numbers for `{n}`. Always in the pool. |
 | `quirkyNumbers` | `["42", "A bunch", "Sneaky"]` | strings. Appended to the `{n}` pool only when `quirkRoll` is true. Slugified with the rest of the slug; title-cased in the title. |
 | `quirkyModifiers` | `{ adjectives[22], suffixes[18] }` | strings, hyphenated multi-word values. |
 | `connectors` | `{ verbs[17], gerunds[16], nouns[16], participles[22] }` | see 6.3. |
 | `stopWords` | 36 words | folded with `fold` before use. |
-| `sharedTemplates` | 9 | templates for any pattern, plain mode. |
-| `sharedQuirkyTemplates` | 11 | quirks mode. |
+| `sharedTemplates` | 11 | templates for any pattern, plain mode. |
+| `sharedQuirkyTemplates` | 12 | quirks mode. |
 | `connectTemplates` | 23 | templates that join/compare keywords, plain. |
 | `connectQuirkyTemplates` | 14 | quirks mode. |
 | `patterns` | 20 | see 1.3. |
+| `locale` | see 1.4 | pack-level rendering rules (title case, `a`/`an`, joiner alternate). |
 
 
 ### 1.3 Pattern
@@ -103,7 +114,19 @@ Language support is **rudimentary**: packs are demos; proper localisation is lef
 - If `id` is missing, `scores[].id` is `pattern-<index>` but `explain().pattern` is `null` (a known inconsistency).
 - Default ids: `curious-history`, `recipe`, `review`, `howto`, `list`, `connection`, `comparison`, `news`, `food`, `comfort`, `explainer`, `opinion`, `tips`, `personal`, `travel`, `tech`, `health` (17 with triggers), then generic `default`, `spotlight`, `essentials`.
 
-### 1.4 Template grammar
+### 1.4 `locale`
+
+Optional object on a language pack. Every field is optional. When absent: `titleCase` is `en`, `smallWords` is the English set, `article` rules are off (only `en-a-an` turns them on), and there is no `joinerAlt`.
+
+| Field | Values | Effect |
+| --- | --- | --- |
+| `id`, `label` | strings | Identification. `label` is shown by the example site's language dropdown. |
+| `titleCase` | `"en"` (default), `"de"`, `"es"` | `en` and `de`: capitalise every word except `smallWords` in the middle. `es`: sentence style, only the first word and words after `: ! ?` are capitalised. See 5.5. |
+| `smallWords` | string[] | Words kept lowercase mid-title. Empty or absent → the English `SMALL_WORDS`. |
+| `article` | `"en-a-an"`, `"none"` | `en-a-an` enables the literal `a-` → `an-` rule (5.4). Anything else disables it. |
+| `joinerAlt` | `null` or `{ whenNextStartsWith: string[], use: string }` | If the item after the joiner starts with one of the prefixes (compared after accent-stripping, lowercasing and removing non-alphanumerics), `use` replaces the joiner. Spanish `y` → `e` before `i`/`hi`. |
+
+### 1.5 Template grammar
 
 A template is a string of lowercase letters, digits, hyphens, punctuation `, : ; ? ! '`, and placeholders. Placeholders (regex, as used in `index.js`):
 
@@ -113,7 +136,7 @@ A template is a string of lowercase letters, digits, hyphens, punctuation `, : ;
 
 | Placeholder | Value | Salt |
 | --- | --- | --- |
-| `{kw}` | all keywords, joined by `joinForSlug` (slug) or `joinForTitle` (title) | none |
+| `{kw}` | all keywords, joined by `joinForSlug` (slug) or `joinForTitle` (title), using the joiner chosen in 5.6 | `\|joiner-var`, `\|joiner-pick` (once per call, not per placeholder) |
 | `{kwN}` | Nth keyword (1-based); `''` if out of range | none |
 | `{rest}` | all keywords except the first, joined as above | none |
 | `{n}` | `String(pick(numberPool, '\|n'))` or `''`. `numberPool` is `numbers`, plus `quirkyNumbers` when `quirkRoll` is true | `\|n` |
@@ -173,6 +196,8 @@ chance(salt)     = hash(seed + salt) / 4294967296        // [0, 1)
 | `\|quirk` | `chance` | quirky vs plain list (only evaluated when quirks is on and a quirky list exists) |
 | `\|connect` | `chance` | connecting pool vs normal (only evaluated when `kws.length >= 2` and the pool is non-empty) |
 | `\|shared` | `chance` | shared pool vs the pattern's own |
+| `\|joiner-var` | `chance` | use a joiner variant instead of `joiner` (compared with `joinerVariantFactor`; only evaluated when variants exist and the factor is above 0) |
+| `\|joiner-pick` | `chance` | which variant: `variants[floor(chance * variants.length)]` |
 | `\|ct` / `\|cq` | `pick` | template from `connectPlain` / `connectQuirky` |
 | `\|st` / `\|sq` | `pick` | template from `sharedPlain` / `sharedQuirky` |
 | `\|t` / `\|qt` | `pick` | template from the pattern's plain / quirky list |
@@ -248,7 +273,7 @@ usedFallback = no pattern has score > minScore
 ```
 
 - **Fallback:** `generic` = patterns with empty or missing triggers (or `[patterns[0]]` if none). `candidates` = those with `share = 1/n`, `score = 0`. Chosen by `pick(candidates, '|pattern')`.
-- **Otherwise:** `candidates` = patterns with `score > minScore` and `score >= bestScore * spread`, `spread = clamp(patternSpread, 0, 1)` (absent means 1). `share = score / sum(candidate scores)`. `roll = chance('|pattern')`; walk candidates in **config order**, `roll -= share`, and choose the first with `roll < 0` (the last if rounding leaves none).
+- **Otherwise:** `candidates` = patterns with `score > minScore` and `score >= bestScore * spread`, `spread = clamp01(patternSpread)` (`undefined` means 1). `share = score / sum(candidate scores)`. `roll = chance('|pattern')`; walk candidates in **config order**, `roll -= share`, and choose the first with `roll < 0` (the last if rounding leaves none).
 
 `scores` in the result lists every pattern; `candidates` lists those that could win.
 
@@ -298,30 +323,42 @@ The non-keyword stem with the highest `tf` (first one wins ties, in token order)
 ### 5.4 Rendering
 
 1. Split the template on the placeholder regex into literal and placeholder parts.
-2. **a/an:** for a literal part that matches `/(^|-)a-$/` and is immediately followed by a placeholder whose slug value `startsWithVowelSound`, replace the trailing `a-` with `an-`. Vowel sound regex: `/^(?:[aei]|o(?!ne\b|nce\b)|u(?!ni|s[ei]|ti|ro))/` (so `an hour`-type silent-h words are not handled; `a union`, `a one-off`, `an overlap`, `an alliance` are).
+2. **a/an:** only when `locale.article === 'en-a-an'`. For a literal part that matches `/(^|-)a-$/` and is immediately followed by a placeholder whose slug value `startsWithVowelSound`, replace the trailing `a-` with `an-`. Vowel sound regex: `/^(?:[aei]|o(?!ne\b|nce\b)|u(?!ni|s[ei]|ti|ro))/` (so `an hour`-type silent-h words are not handled; `a union`, `a one-off`, `an overlap`, `an alliance` are).
 3. **Slug:** `full = slugify(render(false))`, `slug = truncateSlug(full, maxSlugLength)`. List placeholders use `joinForSlug`; the joiner goes through `slugify`; an empty/unsluggable joiner yields plain hyphens.
 4. **Title:** each placeholder rendered with `forTitle = true`; literal parts have `-` replaced by spaces and the `CONTRACTIONS` map applied (`dont`, `doesnt`, `didnt`, `isnt`, `cant`, `wont`, `youre`, `youll`, `whats`, `thats`, matched on word boundaries). Then collapse whitespace, remove whitespace before `, ; : ! ?`, trim, and apply `titleCase`.
 5. The title is not truncated.
 
 ### 5.5 `titleCase`
 
-Split on single spaces. For word `w` at index `i`:
+Mode and small words come from `locale` (1.4). Split on single spaces. For word `w` at index `i`:
 
 - If `w` contains an uppercase letter, keep it as is.
-- Else if `0 < i < last`, the previous word does not end in `: ! ?`, and `w` without trailing `, ; : ! ?` is in `SMALL_WORDS`, keep it lowercase.
-- Else capitalise the first character.
+- Mode `es`: capitalise the first character only if `i === 0` or the previous word ends in `: ! ?`; otherwise keep it as is.
+- Modes `en` and `de`: if `0 < i < last`, the previous word does not end in `: ! ?`, and `w` without trailing `, ; : ! ?` (lowercased) is in the small-word set, keep it lowercase. Otherwise capitalise the first character.
 
-`SMALL_WORDS` = `a an and as at but by for in nor of on or the to vs with from into onto than via`.
+The small-word set is `locale.smallWords` when it is a non-empty array, else `SMALL_WORDS` = `a an and as at but by for in nor of on or the to vs with from into onto than via`.
 
-### 5.6 Keyword lists (`joinForTitle`, `joinForSlug`)
+### 5.6 Keyword lists and the joiner (`chooseJoiner`, `pickJoiner`, `joinForTitle`, `joinForSlug`)
 
-For one item, the item. With `joiner` empty: items joined by `, ` (title) or `-` (slug). Otherwise `a, b joiner c` (title) and `a-b-joiner-c` (slug): the joiner appears **only** before the last item, and never when there is one item. `{rest}` applies the same function to `keywords.slice(1)`, so for two keywords `{rest}` is just the second keyword.
+**Which joiner** (`chooseJoiner`, once per call, before any template is chosen):
+
+```
+base     = config.joiner (default "and" when null/undefined), as a string
+variants = config.joinerVariants as non-empty strings (else [])
+factor   = clamp01(config.joinerVariantFactor)
+if variants is empty or factor <= 0 or chance('|joiner-var') >= factor:  joiner = base
+else joiner = variants[ floor(chance('|joiner-pick') * variants.length) ]
+```
+
+**Joining.** For one item, the item. With the joiner empty: items joined by `, ` (title) or `-` (slug). Otherwise `a, b joiner c` (title) and `a-b-joiner-c` (slug): the joiner appears **only** before the last item, and never when there is one item. `{rest}` applies the same function to `keywords.slice(1)`, so for two keywords `{rest}` is just the second keyword.
+
+**Joiner alternate** (`pickJoiner`, applied at each join, so it sees the last item): if `locale.joinerAlt` is set and the last item (normalised as in 1.4) starts with one of its prefixes, `joinerAlt.use` replaces the joiner. Both are then slugified for the slug.
 
 ## 6. Default data
 
 ### 6.1 Pools
 
-Sizes are the defaults in `quirky-slugger.config.json`: 112 plain and 107 quirky pattern templates, 9 + 11 shared, 23 + 14 connecting.
+Sizes are those of the English pack, `langs/en.json`: 113 plain and 105 quirky pattern templates, 11 + 12 shared, 23 + 14 connecting. The `connection` pattern deliberately repeats several connecting-pool templates (5 plain, 2 quirky) so it leans on connector words when it wins; no other template appears twice among the options available to one pattern in one mode. `de` and `es` follow the same shape with slightly different counts.
 
 ### 6.2 Which placeholders each pool uses
 
@@ -361,19 +398,19 @@ Do not put a word in a list unless it fits every template using that placeholder
 - **Overlapping keyword tokens** (for example `tea` and `iced tea`) share weight attribution by order.
 - **Duplicate keywords** are not de-duplicated.
 - **Unsluggable keywords** (for example `"!!!"` or non-Latin text): `kwSlugs` filters them out, but `needs` and the title still count them, so `{kwN}` indices can shift in the slug. Avoid such keywords, or filter them before calling.
-- **`quirkFactor` must be present** and numeric (see 1.2).
+- **Invalid factors count as 0.** `quirkFactor`, `sharedFactor`, `connectFactor`, `joinerVariantFactor` and a supplied `patternSpread` go through `clamp01`: a missing or non-numeric value silently turns that feature off (or, for `patternSpread`, makes every positive-scoring pattern a candidate).
 - **`minScore`** applies to candidate selection and the fallback test, not to the displayed `scores`.
 - **A custom config is read and validated on every call**, including re-reading a file path. Cache the object yourself in hot loops.
 - **Template characters.** Only `[a-z0-9{}.,:;?!'-]` are allowed in default templates (enforced by `test.js`). A `'` inside a template is kept in the title but dropped from the slug.
 - **Grammar relies on template authoring.** Several default templates end without a colon where a colon would read better (`... What You Need to Know`). Fixing wording is a config-only change, but it changes the output for inputs that select that template.
 - **Silent-h and some other `a`/`an` cases** (`an hour`, `an MBA`) are not handled by `startsWithVowelSound`.
-- **Performance** is `O(patterns x terms)` per call plus one config load.
+- **Performance** is `O(patterns x terms)` per call plus one config load. The language pack is read and parsed from disk on every call; nothing is cached, so editing a pack takes effect immediately and a hot loop should pass its own `options.config` object rather than rely on repeated loads.
 
 ## 9. Test expectations that depend on data
 
 `test.js` pins behaviour in two ways. Know which kind you are about to break.
 
-1. **Pinned wrapper.** Most tests call a wrapper that adds `{ patternSpread: 1, sharedFactor: 0, connectFactor: 0 }` to the config so the best pattern always wins and no pool is mixed in. These tests depend on triggers and templates, not on pool contents.
+1. **Pinned wrapper.** Most tests call a wrapper that adds `{ patternSpread: 1, sharedFactor: 0, connectFactor: 0, joinerVariantFactor: 0 }` to the config so the best pattern always wins, no pool is mixed in, and the joiner is always the plain `and`. These tests depend on triggers and templates, not on pool contents.
 2. **Statistical surveys** run `explain` over hundreds of seeds (`v0`..`v299`, `c0`..`c399`, `w0`..`w1999`) against the control text and assert thresholds. They fail if the default data shrinks or loses variety. Current thresholds:
 
 | Assertion | Threshold |

@@ -464,7 +464,6 @@
         "gegenueber"
       ],
       "templates": [
-        "{kw}-im-vergleich",
         "{kw}-vergleich",
         "{kw}:-was-ist-besser?",
         "{kw1}-vs-{rest}",
@@ -548,7 +547,6 @@
         "{kw}:-ein-liebesbrief",
         "ein-lob-auf-{kw}",
         "der-{adj}-reiz-von-{kw}",
-        "{kw}:-{adj}-liebesbrief",
         "{kw1}-plus-{rest}:-wie-fuer-einander-gemacht",
         "{kw}:-das-{adj}-{suffix}"
       ]
@@ -715,7 +713,6 @@
         "wie-{kw}-mein-leben-veraendert-hat",
         "mein-{adj}-jahr-mit-{kw}",
         "{kw}:-ein-{adj}-gestaendnis",
-        "liebe-{kw},-wir-muessen-reden",
         "meine-{adj}-obsession-mit-{kw}"
       ]
     },

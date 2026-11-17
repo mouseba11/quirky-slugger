@@ -129,6 +129,7 @@ quirkySlug.explain('baked beans, toast, tea', text, { seed: 'demo' });
 | `connectTemplate` | `true` if the template came from the connecting pool. |
 | `connectors` | The connector words used, for example `{ connection: 'overlap' }`. |
 | `quirksMode` / `quirky` / `quirkFactor` | Whether quirks mode was on, whether a quirky template was chosen, and the factor used. |
+| `joiner` | The word used before the last keyword for this call: `config.joiner`, or a `joinerVariants` entry such as `and the`. |
 | `adjective` / `suffix` / `number` / `top` | The values used for `{adj}`, `{suffix}`, `{n}` and `{top}`, if the template had them. |
 | `keywords` | `[{ keyword, weight }]`, each keyword's share of the text. |
 | `wordsUsed` / `wordsIgnored` | Words counted, and words dropped for exceeding `maxWords`. |
@@ -161,7 +162,7 @@ quirkySlug.slugify('Crème Brûlée & Toast!'); // -> 'creme-brulee-toast'
 
 The title is built from the same template as the slug, so the two always match.
 
-- Keywords keep their own wording (`baked beans` becomes `Baked Beans`) and are listed as `a`, `a and b`, or `a, b and c`. The word before the last keyword is `config.joiner`. With an empty `joiner` they are comma separated.
+- Keywords keep their own wording (`baked beans` becomes `Baked Beans`) and are listed as `a`, `a and b`, or `a, b and c`. The word before the last keyword is `config.joiner`, or now and then a `joinerVariants` entry such as `and the`. With an empty `joiner` they are comma separated.
 - Words are title-cased. Small words (`a`, `an`, `and`, `as`, `at`, `but`, `by`, `for`, `in`, `nor`, `of`, `on`, `or`, `the`, `to`, `vs`, `with`, `from`, `into`, `onto`, `than`, `via`) stay lowercase unless they are first, last or straight after a colon, `?` or `!`. Words that already contain a capital, such as `NASA`, are left alone.
 - Punctuation written into a template (`,` `:` `;` `?` `!`) appears in the title and is dropped from the slug.
 - A literal `a` in a template becomes `an` before a vowel sound, in both slug and title.
@@ -214,6 +215,8 @@ quirkySlug('beans, toast', text, { config: './my-patterns.json' });
 | `sharedTemplates` / `sharedQuirkyTemplates` | see file | Templates usable with any pattern. |
 | `connectTemplates` / `connectQuirkyTemplates` | see file | Templates that join and compare the keywords. |
 | `patterns` | see file | The control set: the title patterns the text is matched against. |
+
+Every `...Factor` setting is clamped to the range 0 to 1, and a value that is not a number counts as 0.
 
 If you supply `patterns`, it **replaces** the default control set entirely, and the shared and connecting template lists are emptied too (they are written for the default patterns). Supply your own lists if you want them. See [`docs/ALGORITHM.md`](docs/ALGORITHM.md) for how each key is used.
 
@@ -299,7 +302,8 @@ Set `connectFactor` to `0` to turn connecting titles off, or raise it to make th
 | More generic, pattern-independent titles | Raise `sharedFactor`. |
 | Fewer or no connecting titles | Lower `connectFactor`, or set it to `0`. |
 | More or fewer quirky titles | Change `quirkFactor` (in quirks mode). |
-| Stable results for tests | Set `patternSpread: 1`, `sharedFactor: 0`, `connectFactor: 0`. |
+| Always the plain joiner (`and`) | Set `joinerVariantFactor` to `0`. |
+| Stable results for tests | Set `patternSpread: 1`, `sharedFactor: 0`, `connectFactor: 0`, `joinerVariantFactor: 0`. |
 
 ## Example site
 
