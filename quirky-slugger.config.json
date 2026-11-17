@@ -1,0 +1,13 @@
+{
+  "lang": "en",
+  "maxWords": 256,
+  "maxSlugLength": 60,
+  "keywordWeight": 2,
+  "minScore": 0,
+  "patternSpread": 0.2,
+  "sharedFactor": 0.25,
+  "connectFactor": 0.4,
+  "joinerVariantFactor": 0.25,
+  "quirks": false,
+  "quirkFactor": 0.7
+}

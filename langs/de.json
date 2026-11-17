@@ -1,0 +1,922 @@
+{
+  "joiner": "und",
+  "numbers": [
+    2,
+    3,
+    5
+  ],
+  "quirkyNumbers": [
+    "42",
+    "Eine Menge",
+    "Heimlich"
+  ],
+  "connectors": {
+    "verbs": [
+      "verbinden",
+      "verknuepfen",
+      "vereinen",
+      "paaren",
+      "kombinieren",
+      "ueberbruecken",
+      "zusammenfuehren",
+      "verflechten",
+      "verbinden",
+      "mischen",
+      "verschmelzen",
+      "zusammenbringen",
+      "verkoppeln",
+      "aneinanderreihen"
+    ],
+    "gerunds": [
+      "verbinden",
+      "verknuepfen",
+      "vereinen",
+      "paaren",
+      "kombinieren",
+      "ueberbruecken",
+      "zusammenfuehren",
+      "verflechten",
+      "mischen",
+      "verschmelzen",
+      "zusammenbringen",
+      "verkoppeln"
+    ],
+    "nouns": [
+      "verbindung",
+      "bruecke",
+      "bindung",
+      "band",
+      "zusammenhang",
+      "gemeinsamkeit",
+      "schnittmenge",
+      "ueberschneidung",
+      "union",
+      "fusion",
+      "korrelation",
+      "beziehung",
+      "partnerschaft",
+      "allianz",
+      "faden"
+    ],
+    "participles": [
+      "verbunden-mit",
+      "verknuepft-mit",
+      "verbunden-zu",
+      "gepaart-mit",
+      "kombiniert-mit",
+      "verschmolzen-mit",
+      "verflochten-mit",
+      "vereint-mit",
+      "gekoppelt-mit",
+      "in-beziehung-zu",
+      "assoziiert-mit",
+      "korreliert-mit"
+    ]
+  },
+  "quirkyModifiers": {
+    "adjectives": [
+      "kurios",
+      "eigenartig",
+      "vergessen",
+      "seltsam-spezifisch",
+      "aus-dem-ruder",
+      "retro",
+      "schraeg",
+      "wunderlich",
+      "zufaellig",
+      "geheim",
+      "unerwartet",
+      "unterschaetzt",
+      "uebersehen",
+      "exzentrisch",
+      "unwahrscheinlich",
+      "verspielt",
+      "ungeheuerlich",
+      "geheimnisvoll",
+      "verdaechtig-genau",
+      "leicht-chaotisch",
+      "entzueckend-schraeg",
+      "legendär"
+    ],
+    "suffixes": [
+      "kaninchenbau",
+      "chaos",
+      "tiefgang",
+      "raetsel",
+      "abenteuer",
+      "chronik",
+      "nebenquest",
+      "kuriosum",
+      "phaenomen",
+      "saga",
+      "verschwoerung",
+      "meisterkurs",
+      "liebesgeschichte",
+      "plot-twist",
+      "heisse-these",
+      "fiasko",
+      "offenbarung",
+      "lage"
+    ]
+  },
+  "stopWords": [
+    "der",
+    "die",
+    "das",
+    "den",
+    "dem",
+    "des",
+    "ein",
+    "eine",
+    "einer",
+    "eines",
+    "einem",
+    "einen",
+    "und",
+    "oder",
+    "aber",
+    "als",
+    "auch",
+    "auf",
+    "aus",
+    "bei",
+    "bis",
+    "durch",
+    "fuer",
+    "gegen",
+    "im",
+    "in",
+    "mit",
+    "nach",
+    "neben",
+    "ohne",
+    "schon",
+    "seit",
+    "sich",
+    "sie",
+    "so",
+    "ueber",
+    "um",
+    "und",
+    "unter",
+    "vom",
+    "von",
+    "vor",
+    "was",
+    "wenn",
+    "wer",
+    "wie",
+    "wir",
+    "wo",
+    "zu",
+    "zum",
+    "zur",
+    "ist",
+    "sind",
+    "war",
+    "waren",
+    "hat",
+    "haben",
+    "wird",
+    "werden",
+    "nicht",
+    "noch",
+    "nur",
+    "sehr",
+    "mehr",
+    "man",
+    "es",
+    "ich",
+    "du",
+    "er",
+    "ihr",
+    "ihm"
+  ],
+  "sharedTemplates": [
+    "{n}-dinge-die-man-ueber-{kw}-wissen-sollte",
+    "der-komplette-leitfaden-zu-{kw}",
+    "{kw}:-was-man-wissen-sollte",
+    "{kw}:-ein-genauerer-blick",
+    "{kw}-kennenlernen",
+    "{n}-gruende-{kw}-zu-lieben",
+    "alles-was-man-ueber-{kw}-wissen-muss",
+    "warum-es-zaehlt:-{kw}",
+    "{kw1}-mit-{rest}:-ein-genauerer-blick"
+  ],
+  "sharedQuirkyTemplates": [
+    "{n}-{adj}-fakten-ueber-{kw}",
+    "{n}-dinge-die-man-ueber-{kw}-nicht-wusste",
+    "der-{adj}-leitfaden-zu-{kw}",
+    "{kw}:-{adj}-und-{suffix}",
+    "liebe-{kw},-wir-muessen-reden",
+    "warte,-was-ist-mit-{kw}?",
+    "das-geheime-leben-von-{kw}",
+    "drin-in-der-{adj}-welt-von-{kw}",
+    "{kw}:-{adj}-liebesbrief",
+    "{kw}:-damit-hat-niemand-gerechnet",
+    "{n}-{adj}-gruende-{kw}-auszuprobieren"
+  ],
+  "connectTemplates": [
+    "die-{connection}-zwischen-{kw}",
+    "gibt-es-eine-{connection}-zwischen-{kw}?",
+    "die-{connection}-zwischen-{kw}-finden",
+    "{kw}:-die-{connection}-mit-der-niemand-gerechnet-hat",
+    "{kw}-miteinander-{connecting}",
+    "die-kunst-{kw}-zu-{connect}",
+    "wie-man-{kw}-{connect}-kann",
+    "kann-man-{kw}-{connect}?",
+    "{kw1}-{connected}-{rest}",
+    "die-punkte-verbinden:-{kw}",
+    "die-schnittmenge-zwischen-{kw}",
+    "was-haben-{kw}-gemeinsam?",
+    "warum-{kw}-zusammengehoeren",
+    "wie-{kw}-zusammenpassen",
+    "{kw}:-besser-zusammen?",
+    "{kw}:-das-fehlende-glied",
+    "wo-{kw}-sich-ueberschneiden",
+    "von-{kw1}-zu-{rest}",
+    "wie-lassen-sich-{kw}-vergleichen?",
+    "{kw}-im-vergleich",
+    "{kw}:-vergleich-und-kontrast",
+    "{kw1}-vs-{rest}:-naeher-als-gedacht"
+  ],
+  "connectQuirkyTemplates": [
+    "die-{adj}-{connection}-zwischen-{kw}",
+    "{kw}:-{adj}-{connection}",
+    "{kw}:-die-{connection}-nach-der-niemand-gefragt-hat",
+    "{kw}-miteinander-{connecting}:-{adj}-{suffix}",
+    "{n}-{adj}-wege-{kw}-zu-{connect}",
+    "wie-man-{kw}-in-{n}-{adj}-schritten-{connect}",
+    "{kw1}-{connected}-{rest}:-{adj}-{suffix}",
+    "das-{adj}-{suffix}-beim-{connecting}-von-{kw}",
+    "was-{kw}-heimlich-gemeinsam-haben",
+    "was-{kw}-gemeinsam-haben:-{adj}-{suffix}",
+    "die-grosse-vereinheitlichte-theorie-von-{kw}",
+    "{kw}:-{adj}-venn-diagramm",
+    "{kw}-vergleichen:-{adj}-{suffix}",
+    "{kw1}-vs-{rest}:-das-{adj}-duell"
+  ],
+  "patterns": [
+    {
+      "id": "curious-history",
+      "triggers": [
+        "geschichte",
+        "historie",
+        "vergessen",
+        "erfindung",
+        "vintage",
+        "retro",
+        "aera",
+        "jahrhundert",
+        "jahrhunderte",
+        "charme",
+        "1920"
+      ],
+      "templates": [
+        "die-geschichte-von-{kw}",
+        "eine-kurze-geschichte-von-{kw}",
+        "{kw}-im-lauf-der-zeit",
+        "die-kurze-geschichte-von-{kw}",
+        "die-story-von-{kw}",
+        "{kw}:-ein-rueckblick"
+      ],
+      "quirkyTemplates": [
+        "die-{adj}-geschichte-von-{kw}",
+        "vergessenes-{kw}-{suffix}",
+        "{kw}:-wilder-als-gedacht",
+        "die-{adj}-welt-von-{kw}",
+        "alles-was-man-nie-ueber-{kw}-wusste",
+        "die-{adj}-rueckkehr-von-{kw}",
+        "der-kuriose-fall-von-{kw1},-mit-{rest}"
+      ]
+    },
+    {
+      "id": "recipe",
+      "triggers": [
+        "rezept",
+        "kochen",
+        "gekocht",
+        "backen",
+        "gebacken",
+        "zutat",
+        "zutaten",
+        "ofen",
+        "braten",
+        "kochen",
+        "kueche",
+        "gericht",
+        "mahlzeit",
+        "servieren"
+      ],
+      "templates": [
+        "einfaches-{kw}-rezept",
+        "wie-man-{kw}-zubereitet",
+        "{kw}-rezeptideen",
+        "{kw1}-serviert-mit-{rest}",
+        "{kw}-von-grund-auf",
+        "ein-einfaches-{kw}-rezept",
+        "das-einzige-{kw}-rezept-das-man-braucht"
+      ],
+      "quirkyTemplates": [
+        "laecherlich-gutes-{kw}",
+        "das-{adj}-{kw}-experiment",
+        "wie-man-{kw}-hinbekommt-ohne-zu-weinen",
+        "{kw}:-{adj}-zubereiten",
+        "die-{adj}-kunst-von-{kw}",
+        "{kw1},-eine-natuerliche-erweiterung-von-{rest}",
+        "{kw1}-mit-{rest}:-{adj}-liebesgeschichte"
+      ]
+    },
+    {
+      "id": "review",
+      "triggers": [
+        "rezension",
+        "bewertung",
+        "urteil",
+        "vorteile",
+        "nachteile",
+        "getestet",
+        "wert",
+        "score",
+        "test"
+      ],
+      "templates": [
+        "{kw}-test",
+        "{kw}:-lohnt-es-sich?",
+        "{kw}-ehrliche-rezension",
+        "{kw1}-mit-{rest}-getestet",
+        "unser-urteil-zu-{kw}",
+        "{kw}:-vor-und-nachteile"
+      ],
+      "quirkyTemplates": [
+        "brutal-ehrliches-{kw}-urteil",
+        "wir-haben-{kw}-getestet-damit-ihr-es-nicht-muesst",
+        "{kw}:-genial-oder-nur-hype?",
+        "ich-habe-{kw}-ausprobiert-damit-ihr-es-nicht-muesst",
+        "{kw}:-die-{adj}-wahrheit",
+        "{kw1}-vs-{rest}:-das-ehrliche-urteil"
+      ]
+    },
+    {
+      "id": "howto",
+      "triggers": [
+        "wie",
+        "schritt",
+        "anleitung",
+        "tutorial",
+        "lernen",
+        "anweisungen",
+        "einrichtung",
+        "installieren",
+        "leitfaden"
+      ],
+      "templates": [
+        "wie-man-{kw}-meistert",
+        "einstieg-in-{kw}",
+        "{kw}-schritt-fuer-schritt",
+        "einsteigerleitfaden-zu-{kw}",
+        "wie-man-{kw1}-mit-{rest}-kombiniert",
+        "das-beste-aus-{kw}-herausholen",
+        "{kw}-fuer-einsteiger"
+      ],
+      "quirkyTemplates": [
+        "kein-blabla-leitfaden-zu-{kw}",
+        "{kw}-baendigen-schritt-fuer-schritt",
+        "der-{adj}-ueberlebensleitfaden-zu-{kw}",
+        "von-null-zu-{adj}-mit-{kw}",
+        "wie-man-{kw1}-mit-{rest}-wie-ein-profi-kombiniert"
+      ]
+    },
+    {
+      "id": "list",
+      "triggers": [
+        "beste",
+        "besten",
+        "top",
+        "liste",
+        "ranking",
+        "favoriten",
+        "tipps",
+        "ideen",
+        "auswahl"
+      ],
+      "templates": [
+        "die-besten-{kw}",
+        "top-{kw}-ideen",
+        "{kw}-unsere-favoriten",
+        "beste-{kw1}-mit-{rest}",
+        "unsere-lieblings-{kw}",
+        "top-{n}-{kw}-tipps"
+      ],
+      "quirkyTemplates": [
+        "herrlich-{adj}-{kw}-auswahl",
+        "der-ultimative-{kw}-kaninchenbau",
+        "seltsam-gute-{kw}-ideen",
+        "{kw}-gerankt-nach-{adj}-wissenschaft",
+        "vergiss-{rest},-alles-was-man-braucht-ist-{kw1}",
+        "{n}-{adj}-{kw}-tipps"
+      ]
+    },
+    {
+      "id": "connection",
+      "triggers": [
+        "verbindung",
+        "verbinden",
+        "verknuepfung",
+        "beziehung",
+        "gemeinsam",
+        "gemeinsamkeit",
+        "zusammen",
+        "ueberschneidung",
+        "bruecke",
+        "bindung",
+        "thema",
+        "faden",
+        "zusammenhang"
+      ],
+      "templates": [
+        "die-{connection}-zwischen-{kw}",
+        "die-{connection}-zwischen-{kw}-finden",
+        "{kw1}-{connected}-{rest}",
+        "{kw}-miteinander-{connecting}",
+        "die-punkte-verbinden:-{kw}",
+        "{kw}:-wie-alles-zusammenhaengt",
+        "die-faeden-hinter-{kw}",
+        "{kw}:-das-grosse-ganze"
+      ],
+      "quirkyTemplates": [
+        "die-{adj}-{connection}-zwischen-{kw}",
+        "{kw}:-{adj}-{connection}",
+        "{kw}:-das-{adj}-{suffix}-dahinter",
+        "das-{adj}-netz-von-{kw}"
+      ]
+    },
+    {
+      "id": "comparison",
+      "triggers": [
+        "versus",
+        "vs",
+        "vergleich",
+        "vergleichen",
+        "unterschied",
+        "besser",
+        "alternative",
+        "gegenueber"
+      ],
+      "templates": [
+        "{kw}-im-vergleich",
+        "{kw}-vergleich",
+        "{kw}:-was-ist-besser?",
+        "{kw1}-vs-{rest}",
+        "{kw}-direktvergleich",
+        "die-wahl-zwischen-{kw}"
+      ],
+      "quirkyTemplates": [
+        "{kw}-showdown",
+        "das-grosse-{kw}-duell",
+        "{kw}:-wer-gewinnt?",
+        "{kw}:-die-{adj}-rivalitaet",
+        "{kw1}-vs-{rest}:-wer-gewinnt?"
+      ]
+    },
+    {
+      "id": "news",
+      "triggers": [
+        "angekuendigt",
+        "heute",
+        "breaking",
+        "bericht",
+        "update",
+        "neuigkeit",
+        "neu",
+        "veroeffentlicht",
+        "start"
+      ],
+      "templates": [
+        "{kw}-neuigkeiten",
+        "{kw}-was-man-wissen-muss",
+        "{kw}:-das-neueste",
+        "was-gibt-es-neues-bei-{kw}"
+      ],
+      "quirkyTemplates": [
+        "frischer-{kw}-plot-twist",
+        "was-ist-los-mit-{kw}?",
+        "das-neueste-{kw}-{suffix}",
+        "eilmeldung:-{kw1}-in-gespraechen-mit-{rest}",
+        "{kw}:-das-{adj}-{suffix}"
+      ]
+    },
+    {
+      "id": "food",
+      "triggers": [
+        "fruehstueck",
+        "mittagessen",
+        "abendessen",
+        "brunch",
+        "tomate",
+        "sosse",
+        "sauce",
+        "butter",
+        "milch",
+        "geschmack",
+        "lecker",
+        "knusprig",
+        "herzhaft",
+        "suess",
+        "snack",
+        "teller",
+        "tasse",
+        "gabel",
+        "salz",
+        "essen",
+        "bissen",
+        "hungrig",
+        "appetit",
+        "kueche",
+        "restaurant",
+        "speisekarte"
+      ],
+      "templates": [
+        "die-freude-an-{kw}",
+        "ein-geschmack-von-{kw}",
+        "{kw}-richtig-gemacht",
+        "{kw1}-mit-{rest}:-eine-perfekte-paarung",
+        "das-einfache-vergnuegen-von-{kw}",
+        "was-essen:-{kw}"
+      ],
+      "quirkyTemplates": [
+        "{kw}:-ein-liebesbrief",
+        "ein-lob-auf-{kw}",
+        "der-{adj}-reiz-von-{kw}",
+        "{kw}:-{adj}-liebesbrief",
+        "{kw1}-plus-{rest}:-wie-fuer-einander-gemacht",
+        "{kw}:-das-{adj}-{suffix}"
+      ]
+    },
+    {
+      "id": "comfort",
+      "triggers": [
+        "komfort",
+        "klassiker",
+        "hausgemacht",
+        "traditionell",
+        "nostalgie",
+        "nostalgisch",
+        "kindheit",
+        "gemuetlich",
+        "warm",
+        "vertraut",
+        "grossmutter",
+        "oma",
+        "zeitlos",
+        "zuhause",
+        "einfach"
+      ],
+      "templates": [
+        "der-komfort-von-{kw}",
+        "klassisches-{kw}",
+        "{kw}:-die-einfachen-freuden",
+        "zeitloses-{kw}",
+        "{kw}-wie-zuhause",
+        "zurueck-zu-den-basics-mit-{kw}"
+      ],
+      "quirkyTemplates": [
+        "eine-{adj}-ode-an-{kw}",
+        "warum-{kw}-nie-aus-der-mode-kommt",
+        "{kw}:-der-{adj}-klassiker",
+        "{kw}:-eine-umarmung-in-verkleidung",
+        "der-{adj}-komfort-von-{kw}"
+      ]
+    },
+    {
+      "id": "explainer",
+      "triggers": [
+        "warum",
+        "wissenschaft",
+        "grund",
+        "weil",
+        "wirkung",
+        "erklaeren",
+        "ursache",
+        "forschung",
+        "studie",
+        "chemie",
+        "physik",
+        "geschehen",
+        "bedeutung",
+        "funktioniert"
+      ],
+      "templates": [
+        "warum-es-funktioniert:-{kw}",
+        "die-wissenschaft-von-{kw}",
+        "was-{kw}-ausmacht",
+        "die-gruende-hinter-{kw}",
+        "wie-es-wirklich-funktioniert:-{kw}",
+        "{kw}:-die-erklaerung"
+      ],
+      "quirkyTemplates": [
+        "die-{adj}-wissenschaft-von-{kw}",
+        "warum-wir-nicht-aufhoeren-koennen-an-{kw}-zu-denken",
+        "die-{adj}-physik-von-{kw}",
+        "{kw}:-die-wissenschaft-nach-der-niemand-gefragt-hat",
+        "{kw}-entschluesseln"
+      ]
+    },
+    {
+      "id": "opinion",
+      "triggers": [
+        "meinung",
+        "wahrheit",
+        "ueberschaetzt",
+        "unterschaetzt",
+        "umstritten",
+        "mythos",
+        "debatte",
+        "unbeliebt",
+        "glauben",
+        "falsch",
+        "ehrlich",
+        "denken",
+        "argumentieren",
+        "verteidigen"
+      ],
+      "templates": [
+        "die-wahrheit-ueber-{kw}",
+        "{kw}:-eine-ehrliche-meinung",
+        "{kw}-neu-denken",
+        "das-plaedoyer-fuer-{kw}",
+        "{kw}:-mythen-und-fakten",
+        "zur-verteidigung-von-{kw}"
+      ],
+      "quirkyTemplates": [
+        "unbeliebte-meinung:-{kw}",
+        "{kw}:-eine-{adj}-heisse-these",
+        "das-{adj}-plaedoyer-fuer-{kw}",
+        "ueber-{kw}-redet-niemand-genug",
+        "hoer-auf-{kw}-zu-ueberdenken"
+      ]
+    },
+    {
+      "id": "tips",
+      "triggers": [
+        "tipp",
+        "tipps",
+        "trick",
+        "hack",
+        "fehler",
+        "vermeiden",
+        "geheimnis",
+        "abkuerzung",
+        "rat",
+        "einfach",
+        "schnell",
+        "schlau"
+      ],
+      "templates": [
+        "tipps-fuer-{kw}",
+        "{kw}:-schnelle-tipps",
+        "haeufige-{kw}-fehler-vermeiden",
+        "{kw}-leicht-gemacht",
+        "schlaue-wege-{kw}-zu-nutzen",
+        "{n}-tipps-fuer-{kw}"
+      ],
+      "quirkyTemplates": [
+        "{n}-{adj}-{kw}-hacks",
+        "{n}-fehler-die-jeder-mit-{kw}-macht",
+        "{kw}-hacks-die-experten-geheim-halten",
+        "{n}-{adj}-tipps-fuer-{kw}",
+        "der-{adj}-trick-bei-{kw}"
+      ]
+    },
+    {
+      "id": "personal",
+      "triggers": [
+        "mein",
+        "meine",
+        "geschichte",
+        "reise",
+        "erinnerung",
+        "erinnern",
+        "aufgewachsen",
+        "lektion",
+        "erfahrung",
+        "tagebuch",
+        "leben",
+        "liebe"
+      ],
+      "templates": [
+        "meine-geschichte-mit-{kw}",
+        "was-{kw}-mich-gelehrt-hat",
+        "eine-reise-durch-{kw}",
+        "lektionen-von-{kw}",
+        "{kw}:-eine-persoenliche-geschichte"
+      ],
+      "quirkyTemplates": [
+        "wie-{kw}-mein-leben-veraendert-hat",
+        "mein-{adj}-jahr-mit-{kw}",
+        "{kw}:-ein-{adj}-gestaendnis",
+        "liebe-{kw},-wir-muessen-reden",
+        "meine-{adj}-obsession-mit-{kw}"
+      ]
+    },
+    {
+      "id": "travel",
+      "triggers": [
+        "reise",
+        "reisen",
+        "ausflug",
+        "besuch",
+        "stadt",
+        "urlaub",
+        "ziel",
+        "tour",
+        "erkunden",
+        "lokal",
+        "hotel",
+        "strand",
+        "wochenende",
+        "strasse",
+        "flug"
+      ],
+      "templates": [
+        "{kw}-erkunden",
+        "ein-wochenende-mit-{kw}",
+        "{kw}-besuchen",
+        "{kw}:-reisenotizen",
+        "der-lokale-leitfaden-zu-{kw}"
+      ],
+      "quirkyTemplates": [
+        "verloren-in-{kw}",
+        "{kw}:-ein-{adj}-ausflug",
+        "ein-{adj}-wochenende-mit-{kw}",
+        "durch-{kw}-wandern",
+        "abseits-der-pfade:-{kw}"
+      ]
+    },
+    {
+      "id": "tech",
+      "triggers": [
+        "technik",
+        "technologie",
+        "software",
+        "app",
+        "code",
+        "geraet",
+        "digital",
+        "online",
+        "daten",
+        "system",
+        "gadget",
+        "computer",
+        "internet",
+        "algorithmus"
+      ],
+      "templates": [
+        "die-zukunft-von-{kw}",
+        "{kw}-im-digitalen-zeitalter",
+        "die-technik-hinter-{kw}",
+        "modernes-{kw}",
+        "{kw}:-die-technik-erklaert"
+      ],
+      "quirkyTemplates": [
+        "{kw}:-reagiert-nicht",
+        "{kw}-debuggen:-{adj}-{suffix}",
+        "{kw}-as-a-service:-die-{adj}-startup-idee",
+        "{kw}-in-einen-algorithmus-verwandeln",
+        "der-{adj}-startup-pitch-fuer-{kw}"
+      ]
+    },
+    {
+      "id": "health",
+      "triggers": [
+        "gesundheit",
+        "gesund",
+        "wellness",
+        "energie",
+        "schlaf",
+        "diaet",
+        "ernaehrung",
+        "kalorien",
+        "fitness",
+        "geist",
+        "koerper",
+        "stress",
+        "entspannen",
+        "sport",
+        "protein",
+        "ballaststoffe",
+        "vitamin"
+      ],
+      "templates": [
+        "die-gesundheitsvorteile-von-{kw}",
+        "{kw}-fuer-ein-gesuenderes-leben",
+        "achtsames-{kw}",
+        "der-wellness-leitfaden-zu-{kw}",
+        "{kw}:-was-der-koerper-braucht"
+      ],
+      "quirkyTemplates": [
+        "{kw}:-heimlich-gut-fuer-dich?",
+        "die-{adj}-wellness-routine:-{kw}",
+        "{kw}-fuer-die-seele",
+        "sich-{adj}-fuehlen-mit-{kw}",
+        "{kw}:-wellness,-aber-{adj}"
+      ]
+    },
+    {
+      "id": "default",
+      "triggers": [],
+      "templates": [
+        "alles-ueber-{kw}",
+        "{kw}-erklaert",
+        "{kw}-ueberblick",
+        "{kw1}-mit-{rest}"
+      ],
+      "quirkyTemplates": [
+        "das-{adj}-{kw}-{suffix}",
+        "hinein-in-den-{kw}-kaninchenbau",
+        "ein-{adj}-blick-auf-{kw}",
+        "warum-alle-{kw}-unterschaetzen",
+        "die-{adj}-wahrheit-ueber-{kw}",
+        "{kw}:-die-fortsetzung-nach-der-niemand-gefragt-hat",
+        "{kw1},-eine-natuerliche-erweiterung-von-{rest}",
+        "als-{kw1}-auf-{rest}-traf:-{adj}-{suffix}"
+      ]
+    },
+    {
+      "id": "spotlight",
+      "triggers": [],
+      "templates": [
+        "im-fokus:-{kw}",
+        "lerne-{kw}-kennen",
+        "{kw}-auf-einen-blick",
+        "vorstellung:-{kw}"
+      ],
+      "quirkyTemplates": [
+        "{kw}:-die-{adj}-ursprungsgeschichte",
+        "auftritt-{kw},-von-links",
+        "hoch-lebe-{kw}",
+        "{kw}:-das-plaedoyer-fuer-{adj}-{suffix}"
+      ]
+    },
+    {
+      "id": "essentials",
+      "triggers": [],
+      "templates": [
+        "{kw}:-das-wesentliche",
+        "die-basics-von-{kw}",
+        "{kw}-grundlagen",
+        "eine-einfuehrung-in-{kw}"
+      ],
+      "quirkyTemplates": [
+        "{kw}-grundlagen:-die-{adj}-ausgabe",
+        "die-{adj}-basics-von-{kw}",
+        "alles-was-wir-bisher-ueber-{kw}-wissen",
+        "die-{adj}-einfuehrung-in-{kw}"
+      ]
+    }
+  ],
+  "locale": {
+    "id": "de",
+    "label": "Deutsch",
+    "titleCase": "de",
+    "article": "none",
+    "joinerAlt": null,
+    "smallWords": [
+      "und",
+      "oder",
+      "von",
+      "vom",
+      "zum",
+      "zur",
+      "im",
+      "am",
+      "fuer",
+      "mit",
+      "bei",
+      "nach",
+      "ueber",
+      "als",
+      "der",
+      "die",
+      "das",
+      "den",
+      "dem",
+      "des",
+      "ein",
+      "eine",
+      "einer",
+      "eines",
+      "einem",
+      "einen",
+      "zu",
+      "in",
+      "an",
+      "auf",
+      "aus",
+      "bis",
+      "durch",
+      "ohne",
+      "vs"
+    ]
+  }
+}

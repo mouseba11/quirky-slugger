@@ -1,0 +1,70 @@
+{
+  "maxWords": [
+    "How many words of the input text are used when scoring patterns.",
+    "Words after this limit are ignored. The default 256 is enough for a short article or a long social post.",
+    "Raise it only if you routinely paste longer text and need those later words to affect the pattern choice."
+  ],
+  "maxSlugLength": [
+    "Maximum length of the slug, in characters.",
+    "The slug is cut on a word boundary so it never ends mid-word. The title is never truncated.",
+    "Set 0 to disable truncation."
+  ],
+  "joiner": [
+    "The word placed only before the last keyword in a list.",
+    "With joiner \"and\", three keywords become baked-beans-toast-and-tea. An empty joiner gives plain hyphens: baked-beans-toast-tea.",
+    "Change this for another language, or clear it for a tighter slug. Variants such as \"and the\" are mixed in via joinerVariants."
+  ],
+  "joinerVariants": [
+    "Extra joiner phrases mixed with the main joiner before the last keyword.",
+    "English default includes \"and the\", so titles can read Potatoes and the John Lloyd Experience as well as Potatoes and Toast.",
+    "Used joinerVariantFactor of the time when the list has two or more keywords."
+  ],
+  "joinerVariantFactor": [
+    "Chance, from 0 to 1, of using a joiner variant instead of the main joiner.",
+    "At 0, only the main joiner is used. At 1, a variant is always chosen when the list is non-empty."
+  ],
+  "keywordWeight": [
+    "How strongly keywords count when scoring patterns.",
+    "Keywords that also appear as triggers pull the match toward those patterns. Higher values make that pull stronger.",
+    "Leave the default unless a keyword is also a trigger and you want to dial that effect up or down."
+  ],
+  "minScore": [
+    "A pattern must score strictly above this to be a candidate.",
+    "At 0 (the default), any positive score can win. Raise it to ignore weak matches and fall back to generic patterns more often."
+  ],
+  "patternSpread": [
+    "How close to the best score a pattern must be to stay in the running, from 0 to 1.",
+    "At 0.2, a pattern needs at least 20% of the best score. At 1, only the single best pattern can be chosen.",
+    "Lower it for more variety across patterns; raise it when you want the closest match to dominate."
+  ],
+  "sharedFactor": [
+    "The chance, from 0 to 1, of using a shared template instead of the chosen pattern's own.",
+    "Shared templates work with any pattern. At 0 they are never used; at 1 they are preferred whenever the list is non-empty.",
+    "Raise it for more generic, pattern-independent titles."
+  ],
+  "connectFactor": [
+    "When two or more keywords are given, the chance of using a connecting template that joins or compares them.",
+    "At 0, connecting titles are off. At 1, they are always preferred when available.",
+    "Needs at least two keywords."
+  ],
+  "quirks": [
+    "Turns quirks mode on or off.",
+    "When on, there is a quirk-factor chance of using quirky templates (adjectives, playful endings) and of adding quirky numbers to {n}.",
+    "When off, titles stay plain."
+  ],
+  "numbers": [
+    "The plain values {n} picks from.",
+    "Always in the pool, quirks or not.",
+    "Add or remove entries to change what numbers can appear."
+  ],
+  "quirkyNumbers": [
+    "Extra {n} values appended only when quirks mode is on and the quirk-factor roll hits.",
+    "A number or a short phrase is fine (\"A bunch\"). It is title-cased in the title and hyphenated in the slug.",
+    "With quirks off, or when the roll stays plain, these entries are not used. Add or remove them to change what can appear on a quirky roll."
+  ],
+  "quirkFactor": [
+    "When quirks mode is on, the chance, from 0 to 1, of a quirky result instead of a plain one.",
+    "That chance picks a quirky template when one is available, and it adds the quirky numbers to the {n} pool. At 1, the quirky path is always taken. At 0, quirks mode can be on and every title still stays plain, numbers included. It does nothing while quirks mode is off.",
+    "The factor slider next to Quirks on the tester overrides this for that one run."
+  ]
+}

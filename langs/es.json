@@ -1,0 +1,926 @@
+{
+  "joiner": "y",
+  "numbers": [
+    2,
+    3,
+    5
+  ],
+  "quirkyNumbers": [
+    "42",
+    "Un monton",
+    "A escondidas"
+  ],
+  "connectors": {
+    "verbs": [
+      "conectar",
+      "enlazar",
+      "unir",
+      "emparejar",
+      "combinar",
+      "puentear",
+      "reunir",
+      "entrelazar",
+      "fundir",
+      "mezclar",
+      "acoplar",
+      "atar",
+      "tejer",
+      "acercar"
+    ],
+    "gerunds": [
+      "conectando",
+      "enlazando",
+      "uniendo",
+      "emparejando",
+      "combinando",
+      "puenteando",
+      "reuniendo",
+      "entrelazando",
+      "fundiendo",
+      "mezclando",
+      "acoplando",
+      "atando",
+      "tejiendo",
+      "acercando"
+    ],
+    "nouns": [
+      "vinculo",
+      "puente",
+      "lazo",
+      "enlace",
+      "conexion",
+      "terreno-comun",
+      "hilo-comun",
+      "solapamiento",
+      "union",
+      "fusion",
+      "correlacion",
+      "relacion",
+      "asociacion",
+      "asociación",
+      "alianza",
+      "pareja"
+    ],
+    "participles": [
+      "conectado-con",
+      "enlazado-con",
+      "unido-a",
+      "emparejado-con",
+      "combinado-con",
+      "fundido-con",
+      "entrelazado-con",
+      "asociado-con",
+      "relacionado-con",
+      "correlacionado-con",
+      "acoplado-con",
+      "atado-a",
+      "tejido-en"
+    ]
+  },
+  "quirkyModifiers": {
+    "adjectives": [
+      "curioso",
+      "peculiar",
+      "olvidado",
+      "raro-especifico",
+      "descontrolado",
+      "retro",
+      "excentrico",
+      "maravillosamente-raro",
+      "accidental",
+      "secreto",
+      "inesperado",
+      "infravalorado",
+      "pasado-por-alto",
+      "improbable",
+      "caprichoso",
+      "escandaloso",
+      "misterioso",
+      "sospechosamente-especifico",
+      "ligeramente-caotico",
+      "deliciosamente-raro",
+      "legendario"
+    ],
+    "suffixes": [
+      "madriguera",
+      "lio",
+      "inmersión",
+      "misterio",
+      "aventura",
+      "cronicas",
+      "mision-secundaria",
+      "rareza",
+      "fenomeno",
+      "saga",
+      "conspiracion",
+      "clase-magistral",
+      "historia-de-amor",
+      "giro-de-guion",
+      "opinion-picante",
+      "fiasco",
+      "revelacion",
+      "situacion"
+    ]
+  },
+  "stopWords": [
+    "el",
+    "la",
+    "los",
+    "las",
+    "un",
+    "una",
+    "unos",
+    "unas",
+    "y",
+    "o",
+    "pero",
+    "si",
+    "de",
+    "del",
+    "al",
+    "a",
+    "en",
+    "con",
+    "por",
+    "para",
+    "sin",
+    "sobre",
+    "entre",
+    "como",
+    "que",
+    "qué",
+    "se",
+    "su",
+    "sus",
+    "lo",
+    "le",
+    "les",
+    "me",
+    "te",
+    "nos",
+    "es",
+    "son",
+    "era",
+    "eran",
+    "fue",
+    "ser",
+    "estar",
+    "esta",
+    "este",
+    "estos",
+    "estas",
+    "hay",
+    "tiene",
+    "tienen",
+    "muy",
+    "mas",
+    "más",
+    "ya",
+    "no",
+    "ni",
+    "tambien",
+    "también",
+    "yo",
+    "tu",
+    "tú",
+    "el",
+    "ella",
+    "nosotros",
+    "vosotros",
+    "ellos"
+  ],
+  "sharedTemplates": [
+    "{n}-cosas-que-saber-sobre-{kw}",
+    "la-guia-completa-de-{kw}",
+    "{kw}:-lo-que-hay-que-saber",
+    "{kw}:-una-mirada-mas-de-cerca",
+    "conocer-{kw}",
+    "{n}-razones-para-amar-{kw}",
+    "todo-lo-que-hay-que-saber-sobre-{kw}",
+    "por-que-importa:-{kw}",
+    "{kw1}-con-{rest}:-una-mirada-mas-de-cerca"
+  ],
+  "sharedQuirkyTemplates": [
+    "{n}-datos-{adj}-sobre-{kw}",
+    "{n}-cosas-que-no-sabias-sobre-{kw}",
+    "la-guia-{adj}-de-{kw}",
+    "{kw}:-{suffix}-{adj}",
+    "querido-{kw},-tenemos-que-hablar",
+    "espera,-que-pasa-con-{kw}?",
+    "la-vida-secreta-de-{kw}",
+    "dentro-del-mundo-{adj}-de-{kw}",
+    "{kw}:-carta-de-amor-{adj}",
+    "{kw}:-nadie-vio-esto-venir",
+    "{n}-razones-{adj}-para-probar-{kw}"
+  ],
+  "connectTemplates": [
+    "el-{connection}-entre-{kw}",
+    "hay-un-{connection}-entre-{kw}?",
+    "encontrar-el-{connection}-entre-{kw}",
+    "{kw}:-el-{connection}-que-nadie-esperaba",
+    "{connecting}-{kw}",
+    "el-arte-de-{connecting}-{kw}",
+    "como-{connect}-{kw}",
+    "se-puede-{connect}-{kw}?",
+    "{kw1}-{connected}-{rest}",
+    "unir-los-puntos:-{kw}",
+    "el-solapamiento-entre-{kw}",
+    "que-tienen-en-comun-{kw}?",
+    "por-que-{kw}-van-juntos",
+    "como-encajan-{kw}",
+    "{kw}:-mejor-juntos?",
+    "{kw}:-el-eslabon-perdido",
+    "donde-se-solapan-{kw}",
+    "de-{kw1}-a-{rest}",
+    "como-se-comparan-{kw}?",
+    "comparando-{kw}:-cara-a-cara",
+    "{kw}:-comparar-y-contrastar",
+    "{kw1}-vs-{rest}:-mas-cerca-de-lo-que-parece"
+  ],
+  "connectQuirkyTemplates": [
+    "el-{connection}-{adj}-entre-{kw}",
+    "{kw}:-{connection}-{adj}",
+    "{kw}:-el-{connection}-que-nadie-pidio",
+    "{connecting}-{kw}:-{suffix}-{adj}",
+    "{n}-formas-{adj}-de-{connect}-{kw}",
+    "como-{connect}-{kw}-en-{n}-pasos-{adj}",
+    "{kw1}-{connected}-{rest}:-{suffix}-{adj}",
+    "el-{suffix}-{adj}-de-{connecting}-{kw}",
+    "lo-que-{kw}-tienen-en-comun-en-secreto",
+    "lo-que-{kw}-tienen-en-comun:-{suffix}-{adj}",
+    "la-gran-teoria-unificada-de-{kw}",
+    "{kw}:-diagrama-de-venn-{adj}",
+    "comparando-{kw}:-{suffix}-{adj}",
+    "{kw1}-vs-{rest}:-el-duelo-{adj}"
+  ],
+  "patterns": [
+    {
+      "id": "curious-history",
+      "triggers": [
+        "historia",
+        "olvidado",
+        "olvidada",
+        "invencion",
+        "invención",
+        "vintage",
+        "retro",
+        "era",
+        "siglo",
+        "siglos",
+        "encanto",
+        "1920"
+      ],
+      "templates": [
+        "la-historia-de-{kw}",
+        "una-breve-historia-de-{kw}",
+        "{kw}-a-lo-largo-de-los-anos",
+        "la-corta-historia-de-{kw}",
+        "la-historia-detras-de-{kw}",
+        "{kw}:-una-mirada-atras"
+      ],
+      "quirkyTemplates": [
+        "la-historia-{adj}-de-{kw}",
+        "{kw}-{suffix}-olvidado",
+        "{kw}:-mas-salvaje-de-lo-que-parece",
+        "el-mundo-{adj}-de-{kw}",
+        "todo-lo-que-nunca-supiste-sobre-{kw}",
+        "el-regreso-{adj}-de-{kw}",
+        "el-curioso-caso-de-{kw1},-con-{rest}"
+      ]
+    },
+    {
+      "id": "recipe",
+      "triggers": [
+        "receta",
+        "cocinar",
+        "cocina",
+        "hornear",
+        "ingrediente",
+        "ingredientes",
+        "horno",
+        "freir",
+        "hervir",
+        "plato",
+        "comida",
+        "servir"
+      ],
+      "templates": [
+        "receta-facil-de-{kw}",
+        "como-preparar-{kw}",
+        "ideas-de-recetas-con-{kw}",
+        "{kw1}-servido-con-{rest}",
+        "{kw}-desde-cero",
+        "una-receta-sencilla-de-{kw}",
+        "la-unica-receta-de-{kw}-que-necesitas"
+      ],
+      "quirkyTemplates": [
+        "{kw}-ridiculamente-bueno",
+        "el-experimento-{adj}-de-{kw}",
+        "como-acertar-{kw}-sin-llorar",
+        "{kw}:-hazlo-{adj}",
+        "el-arte-{adj}-de-{kw}",
+        "{kw1},-una-extension-natural-de-{rest}",
+        "{kw1}-con-{rest}:-historia-de-amor-{adj}"
+      ]
+    },
+    {
+      "id": "review",
+      "triggers": [
+        "reseña",
+        "resena",
+        "valoracion",
+        "veredicto",
+        "pros",
+        "contras",
+        "probado",
+        "vale",
+        "puntuacion",
+        "opinion"
+      ],
+      "templates": [
+        "resena-de-{kw}",
+        "{kw}:-vale-la-pena?",
+        "resena-sincera-de-{kw}",
+        "{kw1}-con-{rest}-a-prueba",
+        "nuestro-veredicto-sobre-{kw}",
+        "{kw}:-pros-y-contras"
+      ],
+      "quirkyTemplates": [
+        "veredicto-brutalmente-sincero-de-{kw}",
+        "probamos-{kw}-para-que-tu-no-tengas-que-hacerlo",
+        "{kw}:-genialidad-o-solo-bombo?",
+        "probe-{kw}-para-que-tu-no-tengas-que-hacerlo",
+        "{kw}:-la-verdad-{adj}",
+        "{kw1}-vs-{rest}:-el-veredicto-sincero"
+      ]
+    },
+    {
+      "id": "howto",
+      "triggers": [
+        "como",
+        "cómo",
+        "paso",
+        "guia",
+        "guía",
+        "tutorial",
+        "aprender",
+        "instrucciones",
+        "configurar",
+        "instalar"
+      ],
+      "templates": [
+        "como-dominar-{kw}",
+        "como-empezar-con-{kw}",
+        "guia-paso-a-paso-de-{kw}",
+        "guia-para-principiantes-de-{kw}",
+        "como-combinar-{kw1}-con-{rest}",
+        "sacar-el-maximo-de-{kw}",
+        "{kw}-para-principiantes"
+      ],
+      "quirkyTemplates": [
+        "guia-sin-paja-de-{kw}",
+        "domar-{kw}-paso-a-paso",
+        "la-guia-de-supervivencia-{adj}-de-{kw}",
+        "de-cero-a-{adj}-con-{kw}",
+        "como-combinar-{kw1}-con-{rest}-como-un-profesional"
+      ]
+    },
+    {
+      "id": "list",
+      "triggers": [
+        "mejor",
+        "mejores",
+        "top",
+        "lista",
+        "ranking",
+        "favoritos",
+        "ideas",
+        "seleccion"
+      ],
+      "templates": [
+        "los-mejores-{kw}",
+        "mejores-ideas-de-{kw}",
+        "{kw}-nuestras-favoritas",
+        "mejor-{kw1}-con-{rest}",
+        "nuestros-{kw}-favoritos",
+        "top-{n}-ideas-de-{kw}"
+      ],
+      "quirkyTemplates": [
+        "seleccion-{adj}-de-{kw}",
+        "la-madriguera-definitiva-de-{kw}",
+        "ideas-de-{kw}-raramente-buenas",
+        "{kw}-clasificados-por-ciencia-{adj}",
+        "olvida-{rest},-solo-necesitas-{kw1}",
+        "{n}-ideas-{adj}-de-{kw}"
+      ]
+    },
+    {
+      "id": "connection",
+      "triggers": [
+        "conectar",
+        "conexion",
+        "conexión",
+        "enlace",
+        "relacion",
+        "relación",
+        "comun",
+        "común",
+        "compartido",
+        "juntos",
+        "solapamiento",
+        "puente",
+        "lazo",
+        "tema",
+        "hilo",
+        "asociacion"
+      ],
+      "templates": [
+        "el-{connection}-entre-{kw}",
+        "encontrar-el-{connection}-entre-{kw}",
+        "{kw1}-{connected}-{rest}",
+        "{connecting}-{kw}",
+        "unir-los-puntos:-{kw}",
+        "{kw}:-como-encaja-todo",
+        "los-hilos-detras-de-{kw}",
+        "{kw}:-el-panorama-completo"
+      ],
+      "quirkyTemplates": [
+        "el-{connection}-{adj}-entre-{kw}",
+        "{kw}:-{connection}-{adj}",
+        "{kw}:-el-{suffix}-{adj}-de-fondo",
+        "la-red-{adj}-de-{kw}"
+      ]
+    },
+    {
+      "id": "comparison",
+      "triggers": [
+        "versus",
+        "vs",
+        "comparar",
+        "comparacion",
+        "comparación",
+        "diferencia",
+        "mejor",
+        "alternativa"
+      ],
+      "templates": [
+        "{kw}-comparados",
+        "comparacion-de-{kw}",
+        "{kw}:-cual-es-mejor?",
+        "{kw1}-vs-{rest}",
+        "{kw}-cara-a-cara",
+        "elegir-entre-{kw}"
+      ],
+      "quirkyTemplates": [
+        "duelo-de-{kw}",
+        "el-gran-cara-a-cara-de-{kw}",
+        "{kw}:-cual-gana?",
+        "{kw}:-la-rivalidad-{adj}",
+        "{kw1}-vs-{rest}:-quien-gana?"
+      ]
+    },
+    {
+      "id": "news",
+      "triggers": [
+        "anunciado",
+        "hoy",
+        "ultima-hora",
+        "informe",
+        "actualizacion",
+        "lanzamiento",
+        "nuevo",
+        "nueva",
+        "publicado"
+      ],
+      "templates": [
+        "novedades-de-{kw}",
+        "{kw}-lo-que-hay-que-saber",
+        "{kw}:-lo-ultimo",
+        "que-hay-de-nuevo-con-{kw}"
+      ],
+      "quirkyTemplates": [
+        "giro-fresco-de-{kw}",
+        "que-esta-pasando-con-{kw}?",
+        "lo-ultimo-de-{kw}-{suffix}",
+        "ultima-hora:-{kw1}-en-conversaciones-con-{rest}",
+        "{kw}:-el-{suffix}-{adj}"
+      ]
+    },
+    {
+      "id": "food",
+      "triggers": [
+        "desayuno",
+        "almuerzo",
+        "cena",
+        "brunch",
+        "tomate",
+        "salsa",
+        "mantequilla",
+        "leche",
+        "sabor",
+        "delicioso",
+        "crujiente",
+        "salado",
+        "dulce",
+        "aperitivo",
+        "plato",
+        "taza",
+        "tenedor",
+        "sal",
+        "comer",
+        "bocado",
+        "hambriento",
+        "apetito",
+        "cocina",
+        "restaurante",
+        "menu",
+        "menú"
+      ],
+      "templates": [
+        "la-alegria-de-{kw}",
+        "un-sabor-de-{kw}",
+        "{kw}-bien-hecho",
+        "{kw1}-con-{rest}:-un-maridaje-perfecto",
+        "el-placer-sencillo-de-{kw}",
+        "que-comer:-{kw}"
+      ],
+      "quirkyTemplates": [
+        "{kw}:-una-carta-de-amor",
+        "en-elogio-de-{kw}",
+        "el-atractivo-{adj}-de-{kw}",
+        "{kw}:-carta-de-amor-{adj}",
+        "{kw1}-mas-{rest}:-hechos-el-uno-para-el-otro",
+        "{kw}:-el-{suffix}-{adj}"
+      ]
+    },
+    {
+      "id": "comfort",
+      "triggers": [
+        "consuelo",
+        "clasico",
+        "clásico",
+        "casero",
+        "tradicional",
+        "nostalgia",
+        "nostalgico",
+        "infancia",
+        "acogedor",
+        "calido",
+        "cálido",
+        "familiar",
+        "abuela",
+        "atemporal",
+        "hogar",
+        "sencillo"
+      ],
+      "templates": [
+        "el-consuelo-de-{kw}",
+        "{kw}-clasico",
+        "{kw}:-los-placeres-sencillos",
+        "{kw}-atemporal",
+        "{kw}-como-en-casa",
+        "volver-a-lo-basico-con-{kw}"
+      ],
+      "quirkyTemplates": [
+        "una-oda-{adj}-a-{kw}",
+        "por-que-{kw}-nunca-pasa-de-moda",
+        "{kw}:-el-clasico-{adj}",
+        "{kw}:-un-abrazo-disfrazado",
+        "el-consuelo-{adj}-de-{kw}"
+      ]
+    },
+    {
+      "id": "explainer",
+      "triggers": [
+        "por-que",
+        "porque",
+        "ciencia",
+        "razon",
+        "razón",
+        "efecto",
+        "explicar",
+        "causa",
+        "investigacion",
+        "estudio",
+        "quimica",
+        "fisica",
+        "suceder",
+        "significar",
+        "funciona"
+      ],
+      "templates": [
+        "por-que-funciona:-{kw}",
+        "la-ciencia-de-{kw}",
+        "que-hace-funcionar-{kw}",
+        "las-razones-detras-de-{kw}",
+        "como-funciona-de-verdad:-{kw}",
+        "{kw}:-la-explicacion"
+      ],
+      "quirkyTemplates": [
+        "la-ciencia-{adj}-de-{kw}",
+        "por-que-no-podemos-dejar-de-pensar-en-{kw}",
+        "la-fisica-{adj}-de-{kw}",
+        "{kw}:-la-ciencia-que-nadie-pidio",
+        "descifrando-{kw}"
+      ]
+    },
+    {
+      "id": "opinion",
+      "triggers": [
+        "opinion",
+        "opinión",
+        "verdad",
+        "sobrevalorado",
+        "infravalorado",
+        "polemico",
+        "mito",
+        "debate",
+        "impopular",
+        "creer",
+        "equivocado",
+        "sincero",
+        "pensar",
+        "argumentar",
+        "defender"
+      ],
+      "templates": [
+        "la-verdad-sobre-{kw}",
+        "{kw}:-una-opinion-sincera",
+        "repensar-{kw}",
+        "el-caso-a-favor-de-{kw}",
+        "{kw}:-mitos-y-hechos",
+        "en-defensa-de-{kw}"
+      ],
+      "quirkyTemplates": [
+        "opinion-impopular:-{kw}",
+        "{kw}:-una-opinion-picante-{adj}",
+        "el-caso-{adj}-a-favor-de-{kw}",
+        "nadie-habla-lo-suficiente-de-{kw}",
+        "deja-de-darle-vueltas-a-{kw}"
+      ]
+    },
+    {
+      "id": "tips",
+      "triggers": [
+        "consejo",
+        "consejos",
+        "truco",
+        "hack",
+        "error",
+        "evitar",
+        "secreto",
+        "atajo",
+        "asesoria",
+        "facil",
+        "rapido",
+        "listo"
+      ],
+      "templates": [
+        "consejos-para-{kw}",
+        "{kw}:-consejos-rapidos",
+        "errores-comunes-de-{kw}-a-evitar",
+        "{kw}-hecho-facil",
+        "formas-inteligentes-de-usar-{kw}",
+        "{n}-consejos-para-{kw}"
+      ],
+      "quirkyTemplates": [
+        "{n}-trucos-{adj}-de-{kw}",
+        "{n}-errores-que-todos-comen-con-{kw}",
+        "trucos-de-{kw}-que-los-expertos-no-quieren-que-sepas",
+        "{n}-consejos-{adj}-para-{kw}",
+        "el-truco-{adj}-de-{kw}"
+      ]
+    },
+    {
+      "id": "personal",
+      "triggers": [
+        "mi",
+        "historia",
+        "viaje",
+        "recuerdo",
+        "recordar",
+        "creci",
+        "leccion",
+        "lección",
+        "experiencia",
+        "diario",
+        "vida",
+        "amor"
+      ],
+      "templates": [
+        "mi-historia-con-{kw}",
+        "lo-que-{kw}-me-enseno",
+        "un-viaje-por-{kw}",
+        "lecciones-de-{kw}",
+        "{kw}:-una-historia-personal"
+      ],
+      "quirkyTemplates": [
+        "como-{kw}-cambio-mi-vida",
+        "mi-ano-{adj}-con-{kw}",
+        "{kw}:-una-confesion-{adj}",
+        "querido-{kw},-tenemos-que-hablar",
+        "mi-obsesion-{adj}-con-{kw}"
+      ]
+    },
+    {
+      "id": "travel",
+      "triggers": [
+        "viaje",
+        "viajar",
+        "visita",
+        "ciudad",
+        "vacaciones",
+        "destino",
+        "tour",
+        "explorar",
+        "local",
+        "hotel",
+        "playa",
+        "finde",
+        "carretera",
+        "vuelo"
+      ],
+      "templates": [
+        "explorando-{kw}",
+        "un-finde-con-{kw}",
+        "visitando-{kw}",
+        "{kw}:-notas-de-viaje",
+        "la-guia-local-de-{kw}"
+      ],
+      "quirkyTemplates": [
+        "perdido-en-{kw}",
+        "{kw}:-una-escapada-{adj}",
+        "un-finde-{adj}-con-{kw}",
+        "paseando-por-{kw}",
+        "fuera-de-lo-comun:-{kw}"
+      ]
+    },
+    {
+      "id": "tech",
+      "triggers": [
+        "tech",
+        "tecnologia",
+        "tecnología",
+        "software",
+        "app",
+        "codigo",
+        "código",
+        "dispositivo",
+        "digital",
+        "online",
+        "datos",
+        "sistema",
+        "gadget",
+        "ordenador",
+        "internet",
+        "algoritmo"
+      ],
+      "templates": [
+        "el-futuro-de-{kw}",
+        "{kw}-en-la-era-digital",
+        "la-tecnologia-detras-de-{kw}",
+        "{kw}-moderno",
+        "{kw}:-la-tecnologia-explicada"
+      ],
+      "quirkyTemplates": [
+        "{kw}:-no-responde",
+        "depurando-{kw}:-{suffix}-{adj}",
+        "{kw}-como-servicio:-la-idea-startup-{adj}",
+        "convertir-{kw}-en-un-algoritmo",
+        "el-pitch-startup-{adj}-de-{kw}"
+      ]
+    },
+    {
+      "id": "health",
+      "triggers": [
+        "salud",
+        "saludable",
+        "bienestar",
+        "energia",
+        "energía",
+        "sueno",
+        "sueño",
+        "dieta",
+        "nutricion",
+        "nutrición",
+        "calorias",
+        "fitness",
+        "mente",
+        "cuerpo",
+        "estres",
+        "estrés",
+        "relajar",
+        "ejercicio",
+        "proteina",
+        "fibra",
+        "vitamina"
+      ],
+      "templates": [
+        "los-beneficios-para-la-salud-de-{kw}",
+        "{kw}-para-una-vida-mas-saludable",
+        "{kw}-consciente",
+        "la-guia-de-bienestar-de-{kw}",
+        "{kw}:-lo-que-necesita-tu-cuerpo"
+      ],
+      "quirkyTemplates": [
+        "{kw}:-secretamente-bueno-para-ti?",
+        "la-rutina-de-bienestar-{adj}:-{kw}",
+        "{kw}-para-el-alma",
+        "sentirse-{adj}-con-{kw}",
+        "{kw}:-bienestar,-pero-{adj}"
+      ]
+    },
+    {
+      "id": "default",
+      "triggers": [],
+      "templates": [
+        "todo-sobre-{kw}",
+        "{kw}-explicado",
+        "resumen-de-{kw}",
+        "{kw1}-con-{rest}"
+      ],
+      "quirkyTemplates": [
+        "{kw}-{suffix}-{adj}",
+        "por-la-madriguera-de-{kw}",
+        "una-mirada-{adj}-a-{kw}",
+        "por-que-todos-infravaloran-{kw}",
+        "la-verdad-{adj}-sobre-{kw}",
+        "{kw}:-la-secuela-que-nadie-pidio",
+        "{kw1},-una-extension-natural-de-{rest}",
+        "cuando-{kw1}-conocio-a-{rest}:-{suffix}-{adj}"
+      ]
+    },
+    {
+      "id": "spotlight",
+      "triggers": [],
+      "templates": [
+        "en-el-punto-de-mira:-{kw}",
+        "conoce-{kw}",
+        "{kw}-de-un-vistazo",
+        "presentando-{kw}"
+      ],
+      "quirkyTemplates": [
+        "{kw}:-la-historia-de-origen-{adj}",
+        "entra-{kw},-por-la-izquierda",
+        "viva-{kw}",
+        "{kw}:-el-caso-a-favor-de-{suffix}-{adj}"
+      ]
+    },
+    {
+      "id": "essentials",
+      "triggers": [],
+      "templates": [
+        "{kw}:-lo-esencial",
+        "lo-basico-de-{kw}",
+        "{kw}-basico",
+        "una-introduccion-a-{kw}"
+      ],
+      "quirkyTemplates": [
+        "{kw}-basico:-edicion-{adj}",
+        "lo-basico-{adj}-de-{kw}",
+        "todo-lo-que-sabemos-sobre-{kw}-hasta-ahora",
+        "la-introduccion-{adj}-a-{kw}"
+      ]
+    }
+  ],
+  "locale": {
+    "id": "es",
+    "label": "Español",
+    "titleCase": "es",
+    "article": "none",
+    "joinerAlt": {
+      "whenNextStartsWith": [
+        "i",
+        "hi",
+        "í"
+      ],
+      "use": "e"
+    },
+    "smallWords": [
+      "el",
+      "la",
+      "los",
+      "las",
+      "un",
+      "una",
+      "de",
+      "del",
+      "al",
+      "a",
+      "en",
+      "con",
+      "por",
+      "para",
+      "sin",
+      "sobre",
+      "entre",
+      "y",
+      "e",
+      "o",
+      "u",
+      "vs",
+      "como",
+      "que"
+    ]
+  }
+}

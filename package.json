@@ -1,0 +1,51 @@
+{
+  "name": "@mouseba11/quirky-slugger",
+  "version": "1.0.0",
+  "description": "Turn keywords (themes) and a little text into a matching URL slug and title. Local, deterministic, zero dependencies.",
+  "main": "index.js",
+  "files": [
+    "index.js",
+    "quirky-slugger.config.json",
+    "langs/en.json",
+    "langs/de.json",
+    "langs/es.json",
+    "docs",
+    "AGENTS.md",
+    "CHANGELOG.md"
+  ],
+  "scripts": {
+    "test": "node test.js",
+    "start": "node example/server.js",
+    "prepublishOnly": "npm test",
+    "pack:check": "npm pack --dry-run",
+    "publish:npm": "npm publish --access public",
+    "publish:github": "npm publish --registry=https://npm.pkg.github.com"
+  },
+  "keywords": [
+    "slug",
+    "slugify",
+    "title",
+    "keywords",
+    "themes",
+    "tf-idf",
+    "text",
+    "seo"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mouseba11/quirky-slugger.git"
+  },
+  "bugs": {
+    "url": "https://github.com/mouseba11/quirky-slugger/issues"
+  },
+  "homepage": "https://github.com/mouseba11/quirky-slugger#readme",
+  "author": "mouseba11",
+  "license": "MIT",
+  "engines": {
+    "node": ">=14"
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org"
+  }
+}

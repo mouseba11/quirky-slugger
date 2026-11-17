@@ -1,0 +1,1200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>quirky-slugger example</title>
+<style>
+  body { font-family: system-ui, sans-serif; max-width: 960px; margin: 2rem auto; padding: 0 1rem 4rem; color: #222; background: #fff; color-scheme: light; }
+  h1 { margin-bottom: .25rem; }
+  h2 { font-size: 1.05rem; margin: 1.5rem 0 .5rem; }
+  h3 { font-size: .95rem; margin: .8rem 0 .3rem; }
+  p.sub { margin-top: 0; color: #666; }
+  header.top { display: flex; justify-content: space-between; align-items: flex-end; gap: 1rem; flex-wrap: wrap; margin-bottom: 1rem; }
+  header.top h1 { margin-bottom: 0; }
+  nav { display: flex; gap: .5rem; }
+  label { display: block; font-weight: 600; margin: 1rem 0 .25rem; }
+  input[type=text], input[type=number], textarea { width: 100%; box-sizing: border-box; padding: .5rem; font: inherit; border: 1px solid #bbb; border-radius: 4px; }
+  textarea { min-height: 180px; }
+  textarea.short { min-height: 120px; }
+  textarea.code { min-height: 220px; font-family: ui-monospace, Consolas, monospace; font-size: .8rem; }
+  .row { display: flex; gap: 1.5rem; align-items: center; flex-wrap: wrap; margin-top: 1rem; }
+  .count { font-size: .85rem; color: #666; }
+  .count.over { color: #b00; font-weight: 600; }
+  button { padding: .5rem 1rem; font: inherit; border: 1px solid #888; border-radius: 4px; background: #f4f4f4; cursor: pointer; }
+  button:hover { background: #e8e8e8; }
+  button:disabled { opacity: .4; cursor: default; }
+  button.primary { background: #2a6; border-color: #195; color: #fff; font-weight: 600; font-size: 1.05rem; padding: .6rem 1.5rem; }
+  button.primary:hover { background: #195; }
+  button.small { padding: .25rem .5rem; }
+  button.tab { font-weight: 600; }
+  button.tab.active { background: #222; border-color: #222; color: #fff; }
+  #result { margin-top: 1.5rem; padding: 1rem; background: #f7f7f2; border-radius: 6px; }
+  #output { border: 2px solid #2a6; border-radius: 6px; background: #fff; margin: 0 0 1rem; padding: .75rem 1rem; }
+  #output legend { font-weight: 700; letter-spacing: .1em; color: #195; padding: 0 .5rem; }
+  #output .line { font-family: ui-monospace, Consolas, monospace; font-size: 1.15rem; word-break: break-word; margin: .25rem 0; }
+  #output .key { color: #666; }
+  #error { color: #b00; }
+  dl { display: grid; grid-template-columns: 11rem 1fr; gap: .25rem 1rem; margin: .5rem 0; font-size: .9rem; }
+  dt { color: #666; }
+  dd { margin: 0; font-family: ui-monospace, Consolas, monospace; word-break: break-all; }
+  .bar { display: flex; align-items: center; gap: .5rem; margin: .25rem 0; font-size: .9rem; }
+  .bar .name { width: 9rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .bar .track { flex: 1; background: #e3e3dc; border-radius: 3px; height: 14px; }
+  .bar .fill { background: #4a7; height: 100%; border-radius: 3px; }
+  .bar.winner .fill { background: #27a; }
+  .bar.winner .name { font-weight: 700; }
+  .bar .pct { width: 3.5rem; text-align: right; }
+  pre { background: #fff; border: 1px solid #ddd; padding: .75rem; overflow: auto; font-size: .8rem; max-height: 320px; }
+  table { width: 100%; border-collapse: collapse; font-size: .85rem; }
+  th, td { text-align: left; padding: .35rem .5rem; border-bottom: 1px solid #e4e4e4; vertical-align: top; }
+  td.slug { font-family: ui-monospace, Consolas, monospace; word-break: break-all; }
+  tr.entry { cursor: pointer; }
+  tr.entry:hover { background: #f1f6ff; }
+  table.grid input { font-family: ui-monospace, Consolas, monospace; font-size: .9rem; }
+  td.actions { white-space: nowrap; width: 1%; }
+  td.actions button { margin-left: .25rem; }
+  .settings { display: grid; grid-template-columns: repeat(auto-fill, minmax(14rem, 1fr)); gap: .75rem 1rem; }
+  .settings label { margin: 0; }
+  .setting-name { display: flex; align-items: center; gap: .4rem; }
+  .setting-name label { margin: 0; }
+  button.help { width: 1.35rem; height: 1.35rem; padding: 0; border-radius: 50%; font-size: .8rem; font-weight: 700; line-height: 1; flex: none; }
+  button.help[aria-expanded="true"] { background: #222; border-color: #222; color: #fff; }
+  .help-pop { position: fixed; z-index: 5; box-sizing: border-box; margin: 0; padding: .65rem .75rem; background: #fff; border: 1px solid #888; border-radius: 6px; box-shadow: 0 6px 20px rgba(0,0,0,.12); font-weight: 400; font-size: .85rem; line-height: 1.45; }
+  .help-pop p { margin: 0 0 .5rem; }
+  .help-pop p:last-child { margin: 0; }
+  details.group { margin: .75rem 0; border: 1px solid #e4e4e4; border-radius: 6px; padding: .4rem .75rem .75rem; }
+  details.group summary { cursor: pointer; font-weight: 600; }
+  details.group summary .help { margin-left: .35rem; vertical-align: middle; }
+  .list-section { margin: 1.25rem 0 .25rem; }
+  .list-section h3 { margin-bottom: .2rem; }
+  details.advanced { margin-top: 1.5rem; border: 1px solid #ccc; border-radius: 6px; padding: .55rem .75rem .35rem; }
+  details.advanced > summary { cursor: pointer; font-weight: 700; font-size: 1.05rem; }
+  .pattern { border: 1px solid #e4e4e4; border-radius: 6px; margin: .5rem 0; }
+  .pattern-head { display: flex; flex-wrap: wrap; gap: .4rem; align-items: center; padding: .4rem .5rem; }
+  .pattern-head input { flex: 1; min-width: 10rem; }
+  .pattern-body { padding: .25rem .75rem .75rem; }
+  .warn { color: #b00; }
+  .muted { color: #777; font-size: .85rem; }
+  [hidden] { display: none !important; }
+</style>
+</head>
+<body>
+<header class="top">
+  <h1>quirky-slugger</h1>
+  <nav>
+    <button type="button" id="tabTester" class="tab active" aria-pressed="true">Tester</button>
+    <button type="button" id="tabConfig" class="tab" aria-pressed="false">Config</button>
+  </nav>
+</header>
+<p class="sub" id="blurb">Enter keywords and some text, press Generate, and see the slug and how it was chosen.</p>
+
+<section id="viewTester">
+<label for="keywords">Keywords (comma separated)</label>
+<input type="text" id="keywords" autocomplete="off">
+
+<label for="text" id="textLabel">Text (first 256 words are used)</label>
+<textarea id="text"></textarea>
+<div class="count" id="count"></div>
+
+<div class="row">
+  <button id="generate" class="primary" type="button" disabled>Generate</button>
+  <label style="margin:0">Language
+    <select id="lang" aria-label="Language"></select>
+  </label>
+  <label style="margin:0"><input type="checkbox" id="quirks"> Quirks</label>
+  <label style="margin:0">Factor
+    <input type="range" id="quirkFactor" min="0" max="1" step="0.05" value="0.7">
+    <span id="quirkFactorValue">0.7</span>
+  </label>
+  <button id="sample" type="button">Reset to sample</button>
+</div>
+<div class="row">
+  <label style="margin:0"><input type="checkbox" id="randomSeed" checked> New random seed each time</label>
+  <label style="margin:0">Seed
+    <input type="text" id="seed" style="width:10rem" placeholder="none" autocomplete="off">
+  </label>
+  <span class="muted">Same input and same seed always give the same slug.</span>
+</div>
+<p class="muted">Opening this tab loads the sample and the config from Config. The baked beans text is only an example.</p>
+
+<div id="result" hidden>
+  <fieldset id="output">
+    <legend>OUTPUT</legend>
+    <div class="line"><span class="key">slug:</span> <span id="slug"></span></div>
+    <div class="line"><span class="key">title:</span> <span id="titleLine">"<span id="title"></span>"</span></div>
+  </fieldset>
+  <div id="error"></div>
+  <div id="details" hidden>
+    <h2>Keyword weights (share of the text)</h2>
+    <div id="weights"></div>
+    <h2 id="scoresHeading">Pattern scores (cosine similarity)</h2>
+    <div id="scores"></div>
+    <h2>Choice</h2>
+    <dl id="facts"></dl>
+    <details>
+      <summary>Raw data</summary>
+      <pre id="raw"></pre>
+    </details>
+  </div>
+</div>
+
+<h2>Log of attempts <span class="muted">(stored only in this browser's localStorage, newest first)</span></h2>
+<div class="row" style="margin-top:0">
+  <button id="clearLog" type="button">Clear log</button>
+  <span class="muted" id="logCount"></span>
+</div>
+<table id="log" hidden>
+  <thead><tr><th>Time</th><th>Keywords</th><th>Title</th><th>Slug</th><th>Pattern</th><th>Seed</th></tr></thead>
+  <tbody id="logBody"></tbody>
+</table>
+<p class="muted" id="logHint">Click a row to load that attempt back into the form.</p>
+</section>
+
+<section id="viewConfig" hidden>
+<p id="configStatus" class="warn"></p>
+
+<h2>Test sample</h2>
+<p class="muted">Keywords and text for the tester. The baked beans sample is only an example. Switching to Tester fills the form with this, and runs it with the config below.</p>
+<label for="sampleKeywords">Keywords (comma separated)</label>
+<input type="text" id="sampleKeywords" autocomplete="off">
+<label for="sampleText" id="sampleTextLabel">Text (first 256 words are used)</label>
+<textarea id="sampleText" class="short"></textarea>
+<div class="count" id="sampleCount"></div>
+<div class="row">
+  <label style="margin:0"><input type="checkbox" id="sampleRandom" checked> New random seed each time</label>
+  <label style="margin:0">Seed
+    <input type="text" id="sampleSeed" style="width:10rem" placeholder="none" autocomplete="off">
+  </label>
+  <button id="useExample" type="button">Use the sample for this language</button>
+</div>
+<p class="muted">Language packs live in <code>langs/</code>. Switching language reloads that pack into the editor and the tester sample. Language support is rudimentary — the packs are demos; proper localisation is left as an exercise for other quirky sluggers.</p>
+
+<h2>Settings</h2>
+<p class="muted">Press ? beside a setting to read what it does, and what changes when you edit it.</p>
+<div class="settings" id="settings"></div>
+<div id="helpPop" class="help-pop" role="tooltip" hidden></div>
+
+
+<h2>Lists</h2>
+<p class="muted">Each list works the same way: edit a row, move it, delete it, or add one. Order matters, because a seed picks by position.</p>
+<div id="lists"></div>
+
+<h2>Patterns</h2>
+<p class="muted">A pattern needs an id, trigger words, and at least one template. Quirky templates are optional.</p>
+<div id="patterns"></div>
+<div class="row">
+  <button id="addPattern" type="button">Add pattern</button>
+</div>
+
+<h2>Config JSON</h2>
+<p class="muted">This is the config the tester uses. Copy it into <code>options.config</code>, or into a JSON file you pass by path. The sample above is not part of it. Nothing is saved to disk.</p>
+<p id="configProblems" class="warn"></p>
+<div class="row" style="margin-top:0">
+  <button id="copyConfig" type="button">Copy</button>
+  <button id="resetConfig" type="button">Reset config to defaults</button>
+</div>
+<textarea id="configOut" class="code" readonly spellcheck="false"></textarea>
+
+<details class="group">
+  <summary>Load JSON</summary>
+  <p class="muted">Paste a config to replace the editor. Keys you leave out keep the defaults. Supplying <code>patterns</code> clears the shared and connecting template lists unless you include those too.</p>
+  <textarea id="configIn" class="code" spellcheck="false" placeholder="{ }"></textarea>
+  <div class="row">
+    <button id="loadConfig" type="button">Load</button>
+    <span id="loadMessage" class="muted"></span>
+  </div>
+</details>
+</section>
+
+<script>
+const LOG_KEY = 'quirky-slugger-log';
+const LANG_KEY = 'quirky-slugger-lang';
+const CONFIG_KEY = 'quirky-slugger-config';
+const SAMPLE_KEY = 'quirky-slugger-sample';
+const LOG_MAX = 200;
+
+let algoDefaults = null;
+let samples = {};
+let currentLang = 'en';
+
+function configKey() { return CONFIG_KEY + '-' + currentLang; }
+function sampleKey() { return SAMPLE_KEY + '-' + currentLang; }
+
+function sampleFor(lang) {
+  const s = samples[lang] || samples.en || { keywords: '', text: '' };
+  return { keywords: s.keywords || '', text: s.text || '' };
+}
+
+const SCALAR_KEYS = ['maxWords', 'maxSlugLength', 'joiner', 'keywordWeight', 'minScore', 'patternSpread', 'sharedFactor', 'connectFactor', 'joinerVariantFactor', 'quirks', 'quirkFactor'];
+const NUMBER_KEYS = ['maxWords', 'maxSlugLength', 'keywordWeight', 'minScore', 'patternSpread', 'sharedFactor', 'connectFactor', 'joinerVariantFactor', 'quirkFactor'];
+const SHARED_KEYS = ['sharedTemplates', 'sharedQuirkyTemplates', 'connectTemplates', 'connectQuirkyTemplates'];
+const KNOWN = new Set(SCALAR_KEYS.concat(['numbers', 'quirkyNumbers', 'stopWords', 'connectors', 'quirkyModifiers', 'patterns', 'joinerVariants'], SHARED_KEYS));
+
+const SETTINGS = [
+  ['maxWords', 'Max words', 'number', { min: '1', step: '1' }],
+  ['maxSlugLength', 'Max slug length', 'number', { min: '0', step: '1' }],
+  ['joiner', 'Joiner', 'text', {}],
+  ['joinerVariantFactor', 'Joiner variant factor', 'number', { min: '0', max: '1', step: '0.05' }],
+  ['keywordWeight', 'Keyword weight', 'number', { step: 'any' }],
+  ['minScore', 'Min score', 'number', { step: 'any' }],
+  ['patternSpread', 'Pattern spread', 'number', { min: '0', max: '1', step: '0.05' }],
+  ['sharedFactor', 'Shared factor', 'number', { min: '0', max: '1', step: '0.05' }],
+  ['connectFactor', 'Connect factor', 'number', { min: '0', max: '1', step: '0.05' }],
+  ['quirks', 'Quirks', 'checkbox', {}],
+  ['quirkFactor', 'Quirk factor', 'number', { min: '0', max: '1', step: '0.05' }]
+];
+
+const LIST_SECTIONS = [
+  {
+    title: 'Quirky',
+    hint: 'The playful words and templates.',
+    groups: [
+      ['Adjectives', 'Used by {adj}.', (c) => c.quirkyModifiers.adjectives, false],
+      ['Suffixes', 'Used by {suffix}.', (c) => c.quirkyModifiers.suffixes, false],
+      ['Shared quirky templates', 'Quirky templates any pattern can use.', (c) => c.sharedQuirkyTemplates, false],
+      ['Connecting quirky templates', 'Quirky templates that join or compare the keywords.', (c) => c.connectQuirkyTemplates, false]
+    ]
+  },
+  {
+    title: 'Titles',
+    hint: 'Plain title shapes, and the numbers a title can include.',
+    groups: [
+      ['Shared templates', 'Plain templates any pattern can use.', (c) => c.sharedTemplates, false],
+      ['Joiner variants', 'Extra list joiners mixed in with the main joiner, e.g. "and the".', (c) => c.joinerVariants || [], false, 'joinerVariants'],
+      ['Numbers', 'The plain values {n} picks from.', (c) => c.numbers, true, 'numbers'],
+      ['Quirky numbers', 'Added to the {n} pool when the quirk factor hits. A number or a short phrase.', (c) => c.quirkyNumbers, false, 'quirkyNumbers']
+    ]
+  },
+  {
+    title: 'Advanced',
+    hint: 'Joining words and grammar. The defaults already read correctly, so leave these unless you want different connector words.',
+    advanced: true,
+    groups: [
+      ['Connecting templates', 'Plain templates that join or compare the keywords.', (c) => c.connectTemplates, false],
+      ['Connector verbs', 'Used by {connect}.', (c) => c.connectors.verbs, false],
+      ['Connector gerunds', 'Used by {connecting}.', (c) => c.connectors.gerunds, false],
+      ['Connector nouns', 'Used by {connection}.', (c) => c.connectors.nouns, false],
+      ['Connector participles', 'Used by {connected}. Keep the preposition in the item, as in paired-with.', (c) => c.connectors.participles, false],
+      ['Stop words', 'Ignored when matching text to patterns.', (c) => c.stopWords, false]
+    ]
+  }
+];
+
+const $ = (id) => document.getElementById(id);
+
+let defaults = null;
+let config = null;
+let settingHelp = {};
+let helpButton = null;
+let openPatterns = [];
+let criteria = { keywords: '', text: '', seed: '', randomSeed: true };
+
+function clone(value) {
+  return JSON.parse(JSON.stringify(value));
+}
+
+function asList(value) {
+  return Array.isArray(value) ? value.map((item) => (item == null ? '' : String(item))) : [];
+}
+
+function readNumber(value, fallback) {
+  if (value == null || String(value).trim() === '') return fallback;
+  const n = Number(value);
+  return Number.isFinite(n) ? n : fallback;
+}
+
+function normalizePattern(pattern) {
+  const source = pattern && typeof pattern === 'object' ? pattern : {};
+  return {
+    id: source.id == null ? '' : String(source.id),
+    triggers: asList(source.triggers),
+    templates: asList(source.templates),
+    quirkyTemplates: asList(source.quirkyTemplates)
+  };
+}
+
+function normalizeNamed(userGroup, baseGroup, keys) {
+  const replace = userGroup && typeof userGroup === 'object' && !Array.isArray(userGroup);
+  const out = {};
+  keys.forEach((key) => {
+    out[key] = asList(replace ? userGroup[key] : baseGroup[key]);
+  });
+  return out;
+}
+
+function prepare(user) {
+  const base = clone(defaults);
+  const source = user && typeof user === 'object' && !Array.isArray(user) ? user : {};
+  const config = clone(base);
+  SCALAR_KEYS.forEach((key) => {
+    if (source[key] !== undefined) config[key] = source[key];
+  });
+  config.quirks = Boolean(source.quirks !== undefined ? source.quirks : config.quirks);
+  config.numbers = asList(source.numbers !== undefined ? source.numbers : base.numbers);
+  config.quirkyNumbers = asList(source.quirkyNumbers !== undefined ? source.quirkyNumbers : base.quirkyNumbers);
+  config.stopWords = asList(source.stopWords !== undefined ? source.stopWords : base.stopWords);
+  config.joinerVariants = asList(source.joinerVariants !== undefined ? source.joinerVariants : base.joinerVariants);
+  const replacePatterns = source.patterns !== undefined;
+  SHARED_KEYS.forEach((key) => {
+    if (source[key] !== undefined) config[key] = asList(source[key]);
+    else if (replacePatterns) config[key] = [];
+    else config[key] = asList(base[key]);
+  });
+  config.connectors = normalizeNamed(source.connectors, base.connectors, ['verbs', 'gerunds', 'nouns', 'participles']);
+  config.quirkyModifiers = normalizeNamed(source.quirkyModifiers, base.quirkyModifiers, ['adjectives', 'suffixes']);
+  const rawPatterns = replacePatterns ? source.patterns : base.patterns;
+  config.patterns = Array.isArray(rawPatterns) ? rawPatterns.map(normalizePattern) : [];
+  Object.keys(source).forEach((key) => {
+    if (!KNOWN.has(key)) {
+      config[key] = clone(source[key]);
+    }
+  });
+  return config;
+}
+
+function trimmed(list) {
+  return asList(list).map((item) => item.trim()).filter(Boolean);
+}
+
+function cleanConfig(source) {
+  const cleaned = clone(source);
+  NUMBER_KEYS.forEach((key) => {
+    cleaned[key] = readNumber(cleaned[key], defaults[key]);
+  });
+  cleaned.joiner = cleaned.joiner == null ? String(defaults.joiner) : String(cleaned.joiner);
+  cleaned.quirks = Boolean(cleaned.quirks);
+  cleaned.numbers = trimmed(cleaned.numbers).map(Number).filter((n) => Number.isFinite(n));
+  cleaned.quirkyNumbers = trimmed(cleaned.quirkyNumbers);
+  cleaned.stopWords = trimmed(cleaned.stopWords);
+  cleaned.joinerVariants = trimmed(cleaned.joinerVariants);
+  SHARED_KEYS.forEach((key) => { cleaned[key] = trimmed(cleaned[key]); });
+  ['verbs', 'gerunds', 'nouns', 'participles'].forEach((key) => {
+    cleaned.connectors[key] = trimmed(cleaned.connectors[key]);
+  });
+  ['adjectives', 'suffixes'].forEach((key) => {
+    cleaned.quirkyModifiers[key] = trimmed(cleaned.quirkyModifiers[key]);
+  });
+  cleaned.patterns = (cleaned.patterns || []).map((pattern) => ({
+    id: String(pattern.id || '').trim(),
+    triggers: trimmed(pattern.triggers),
+    templates: trimmed(pattern.templates),
+    quirkyTemplates: trimmed(pattern.quirkyTemplates)
+  })).filter((pattern) => pattern.templates.length > 0);
+  return cleaned;
+}
+
+function loadStored(key) {
+  try {
+    const value = JSON.parse(localStorage.getItem(key));
+    return value && typeof value === 'object' ? value : null;
+  } catch (e) {
+    return null;
+  }
+}
+
+function persistSample() {
+  try { localStorage.setItem(sampleKey(), JSON.stringify(criteria)); } catch (e) { /* storage full or blocked */ }
+}
+
+function fillLangSelect(langs) {
+  const sel = $('lang');
+  sel.innerHTML = '';
+  langs.forEach((item) => {
+    const opt = document.createElement('option');
+    opt.value = item.code;
+    opt.textContent = item.label + ' (' + item.code + ')';
+    sel.appendChild(opt);
+  });
+  sel.value = currentLang;
+}
+
+async function applyLanguage(code, opts) {
+  const options = opts || {};
+  currentLang = code;
+  try { localStorage.setItem(LANG_KEY, currentLang); } catch (e) { /* ignore */ }
+  $('lang').value = currentLang;
+
+  const packRes = await fetch('/api/lang/' + encodeURIComponent(currentLang));
+  if (!packRes.ok) throw new Error('Could not load language pack');
+  const pack = await packRes.json();
+  defaults = Object.assign({}, algoDefaults, pack);
+  delete defaults.lang;
+
+  const stored = options.keepStored === false ? null : loadStored(configKey());
+  config = prepare(stored || defaults);
+  openPatterns = config.patterns.map(() => false);
+
+  const sample = sampleFor(currentLang);
+  const storedSample = options.keepStored === false ? null : loadStored(sampleKey());
+  criteria = {
+    keywords: storedSample && storedSample.keywords != null ? String(storedSample.keywords) : sample.keywords,
+    text: storedSample && storedSample.text != null ? String(storedSample.text) : sample.text,
+    seed: storedSample && storedSample.seed != null ? String(storedSample.seed) : '',
+    randomSeed: storedSample ? storedSample.randomSeed !== false : true
+  };
+  persistSample();
+  applySampleToTester();
+  renderEditor();
+  refreshOutput();
+  $('configStatus').textContent = '';
+}
+
+function maxWords() {
+  const n = Number(config && config.maxWords);
+  return Number.isFinite(n) && n > 0 ? Math.floor(n) : 256;
+}
+
+function paintCount(el, text, max) {
+  const n = String(text || '').split(/\s+/).filter(Boolean).length;
+  el.textContent = n + ' / ' + max + ' words' + (n > max ? ' (extra words are ignored)' : '');
+  el.classList.toggle('over', n > max);
+}
+
+function updateWordCounts() {
+  const max = maxWords();
+  const label = 'Text (first ' + max + ' words are used)';
+  $('textLabel').textContent = label;
+  $('sampleTextLabel').textContent = label;
+  paintCount($('count'), $('text').value, max);
+  paintCount($('sampleCount'), $('sampleText').value, max);
+}
+
+function readQuirkFactor() {
+  const fallback = defaults ? readNumber(defaults.quirkFactor, 0.7) : 0.7;
+  if (!config) return fallback;
+  return Math.min(1, Math.max(0, readNumber(config.quirkFactor, fallback)));
+}
+
+function syncControls() {
+  updateWordCounts();
+  $('quirkFactorValue').textContent = $('quirkFactor').value;
+  $('quirkFactor').disabled = !$('quirks').checked;
+  $('seed').disabled = $('randomSeed').checked;
+  $('sampleSeed').disabled = $('sampleRandom').checked;
+}
+
+function applySampleToTester() {
+  $('keywords').value = criteria.keywords;
+  $('text').value = criteria.text;
+  $('seed').value = criteria.seed || '';
+  $('randomSeed').checked = criteria.randomSeed !== false;
+  $('quirks').checked = Boolean(config && config.quirks);
+  $('quirkFactor').value = String(readQuirkFactor());
+  syncControls();
+}
+
+function syncSampleFields() {
+  $('sampleKeywords').value = criteria.keywords;
+  $('sampleText').value = criteria.text;
+  $('sampleSeed').value = criteria.seed || '';
+  $('sampleRandom').checked = criteria.randomSeed !== false;
+  syncControls();
+}
+
+function readSampleFields() {
+  criteria = {
+    keywords: $('sampleKeywords').value,
+    text: $('sampleText').value,
+    seed: $('sampleSeed').value.trim(),
+    randomSeed: $('sampleRandom').checked
+  };
+  persistSample();
+  syncControls();
+}
+
+function showView() {
+  const configView = location.hash === '#config';
+  $('viewTester').hidden = configView;
+  $('viewConfig').hidden = !configView;
+  $('tabTester').classList.toggle('active', !configView);
+  $('tabConfig').classList.toggle('active', configView);
+  $('tabTester').setAttribute('aria-pressed', String(!configView));
+  $('tabConfig').setAttribute('aria-pressed', String(configView));
+  $('blurb').textContent = configView
+    ? 'Set the sample and edit the config. Tester uses both when you switch to it.'
+    : 'Enter keywords and some text, press Generate, and see the slug and how it was chosen.';
+  if (configView) syncSampleFields();
+  else applySampleToTester();
+  window.scrollTo({ top: 0 });
+}
+
+function go(view) {
+  const onConfig = location.hash === '#config';
+  if (view === 'config' && onConfig) return;
+  if (view === 'tester' && !onConfig) return;
+  location.hash = view === 'config' ? 'config' : 'tester';
+}
+
+// ---------- log (localStorage only) ----------
+
+function readLog() {
+  try { return JSON.parse(localStorage.getItem(LOG_KEY)) || []; } catch (e) { return []; }
+}
+
+function writeLog(entries) {
+  try { localStorage.setItem(LOG_KEY, JSON.stringify(entries.slice(0, LOG_MAX))); } catch (e) { /* storage full or blocked */ }
+}
+
+function addLog(entry) {
+  const entries = readLog();
+  entries.unshift(entry);
+  writeLog(entries);
+  renderLog();
+}
+
+function renderLog() {
+  const entries = readLog();
+  $('logBody').textContent = '';
+  $('log').hidden = entries.length === 0;
+  $('logHint').hidden = entries.length === 0;
+  $('logCount').textContent = entries.length + ' attempt' + (entries.length === 1 ? '' : 's') + ' (max ' + LOG_MAX + ')';
+  entries.forEach((e) => {
+    const tr = document.createElement('tr');
+    tr.className = 'entry';
+    tr.title = 'Load this attempt';
+    const cells = [
+      new Date(e.time).toLocaleString(),
+      e.keywords,
+      e.error ? '' : (e.title || ''),
+      e.error ? 'error: ' + e.error : e.slug,
+      e.error ? '' : (e.pattern || '') + (e.quirky ? ' (quirky)' : ''),
+      e.seed || ''
+    ];
+    cells.forEach((value, i) => {
+      const td = document.createElement('td');
+      if (i === 3) td.className = 'slug';
+      td.textContent = value;
+      tr.appendChild(td);
+    });
+    tr.addEventListener('click', () => {
+      $('keywords').value = e.keywords;
+      $('text').value = e.text;
+      $('quirks').checked = Boolean(e.quirks);
+      if (e.quirkFactor != null && e.quirkFactor !== '') $('quirkFactor').value = e.quirkFactor;
+      $('seed').value = e.seed || '';
+      $('randomSeed').checked = false;
+      syncControls();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+    $('logBody').appendChild(tr);
+  });
+}
+
+// ---------- tester output ----------
+
+function bar(container, label, fraction, text, winner) {
+  const row = document.createElement('div');
+  row.className = 'bar' + (winner ? ' winner' : '');
+  const name = document.createElement('span');
+  name.className = 'name';
+  name.textContent = label;
+  const track = document.createElement('span');
+  track.className = 'track';
+  const fill = document.createElement('div');
+  fill.className = 'fill';
+  fill.style.width = Math.max(0, Math.min(1, fraction)) * 100 + '%';
+  track.appendChild(fill);
+  const pct = document.createElement('span');
+  pct.className = 'pct';
+  pct.textContent = text;
+  row.append(name, track, pct);
+  container.appendChild(row);
+}
+
+function fact(label, value) {
+  if (value === undefined || value === null || value === '') return;
+  const dt = document.createElement('dt');
+  dt.textContent = label;
+  const dd = document.createElement('dd');
+  dd.textContent = String(value);
+  $('facts').append(dt, dd);
+}
+
+function show(data) {
+  $('result').hidden = false;
+  ['weights', 'scores', 'facts'].forEach((id) => { $(id).textContent = ''; });
+
+  if (data.error) {
+    $('output').hidden = true;
+    $('error').textContent = data.error;
+    $('details').hidden = true;
+    return;
+  }
+
+  $('error').textContent = '';
+  $('output').hidden = false;
+  $('details').hidden = false;
+  $('slug').textContent = data.slug;
+  $('title').textContent = data.title;
+
+  data.keywords.forEach((k) => bar($('weights'), k.keyword, k.weight, Math.round(k.weight * 100) + '%'));
+
+  const top = data.scores.length ? data.scores[0].score || 1 : 1;
+  let shownScores = 0;
+  data.scores.forEach((s) => {
+    const text = s.score.toFixed(3);
+    if (text === '0.000') return;
+    shownScores += 1;
+    bar($('scores'), s.id, s.score / top, text, s.id === data.pattern);
+  });
+  $('scoresHeading').hidden = shownScores === 0;
+
+  fact('Language', data.lang);
+  fact('Winning pattern', data.pattern + (data.usedFallback ? ' (fallback: nothing scored above minScore)' : ' (score ' + data.score.toFixed(3) + ')'));
+  fact('Candidates (chance)', data.candidates.map((c) => c.id + ' ' + Math.round(c.share * 100) + '%').join(', '));
+  fact('Template source', data.connectTemplate ? 'connecting pool (joins/compares the keywords)' : data.sharedTemplate ? 'shared pool' : 'pattern\'s own');
+  const connectorWords = Object.keys(data.connectors || {}).map((k) => '{' + k + '} = ' + data.connectors[k]).join(', ');
+  if (connectorWords) fact('Connector words', connectorWords);
+  fact('Seed', data.seed || 'none');
+  fact('Joiner', data.joiner || 'none');
+  fact('Quirks', data.quirksMode ? 'on, quirk factor ' + data.quirkFactor : 'off');
+  fact('Template used', data.template + (data.quirky ? ' (quirky)' : ' (plain)'));
+  fact('{n}', data.number);
+  fact('{adj}', data.adjective);
+  fact('{suffix}', data.suffix);
+  fact('{top}', data.top);
+  fact('Words used', data.wordsUsed + (data.wordsIgnored ? ' (' + data.wordsIgnored + ' ignored)' : ''));
+  if (data.truncated) fact('Before length cap', data.untruncatedSlug);
+
+  $('raw').textContent = JSON.stringify(data, null, 2);
+}
+
+async function generate() {
+  if ($('randomSeed').checked) $('seed').value = Math.random().toString(36).slice(2, 8);
+  syncControls();
+  const payload = {
+    keywords: $('keywords').value,
+    text: $('text').value,
+    lang: currentLang,
+    quirks: $('quirks').checked,
+    seed: $('seed').value.trim()
+  };
+  if (config && defaults) {
+    const sent = cleanConfig(config);
+    const factor = Number($('quirkFactor').value);
+    if (Number.isFinite(factor)) sent.quirkFactor = factor;
+    if (!sent.patterns.length) {
+      show({ error: 'quirky-slugger: config.patterns must be a non-empty array' });
+      addLog({
+        time: Date.now(),
+        keywords: payload.keywords,
+        text: payload.text,
+        quirks: payload.quirks,
+        quirkFactor: factor,
+        seed: payload.seed,
+        error: 'quirky-slugger: config.patterns must be a non-empty array'
+      });
+      return;
+    }
+    payload.config = sent;
+    payload.quirkFactor = sent.quirkFactor;
+  }
+
+  let data;
+  try {
+    const res = await fetch('/api/slug', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+    data = await res.json();
+  } catch (e) {
+    data = { error: 'Could not reach the server: ' + e.message };
+  }
+
+  show(data);
+  addLog({
+    time: Date.now(),
+    keywords: payload.keywords,
+    text: payload.text,
+    quirks: payload.quirks,
+    quirkFactor: payload.quirkFactor,
+    seed: payload.seed,
+    slug: data.slug,
+    title: data.title,
+    pattern: data.pattern,
+    quirky: data.quirky,
+    error: data.error
+  });
+}
+
+// ---------- config editor ----------
+
+function refreshOutput() {
+  if (!config || !defaults) return;
+  const cleaned = cleanConfig(config);
+  $('configOut').value = JSON.stringify(cleaned, null, 2);
+  const notes = [];
+  config.patterns.forEach((pattern, index) => {
+    if (!trimmed(pattern.templates).length) {
+      notes.push((String(pattern.id || '').trim() || ('Pattern ' + (index + 1))) + ' has no template, so it is left out of the JSON.');
+    }
+  });
+  if (!cleaned.patterns.length) notes.push('The JSON needs at least one pattern with a template.');
+  $('configProblems').textContent = notes.join(' ');
+  try { localStorage.setItem(configKey(), JSON.stringify(config)); } catch (e) { /* storage full or blocked */ }
+  updateWordCounts();
+}
+
+function smallButton(label, disabled, onClick) {
+  const button = document.createElement('button');
+  button.type = 'button';
+  button.className = 'small';
+  button.textContent = label;
+  button.disabled = disabled;
+  button.addEventListener('click', onClick);
+  return button;
+}
+
+function moveItem(items, index, direction, rerender) {
+  const next = index + direction;
+  if (next < 0 || next >= items.length) return;
+  const item = items[index];
+  items[index] = items[next];
+  items[next] = item;
+  rerender();
+  refreshOutput();
+}
+
+function mountList(container, items, options) {
+  container.textContent = '';
+  const table = document.createElement('table');
+  table.className = 'grid';
+  const tbody = document.createElement('tbody');
+  items.forEach((value, index) => {
+    const tr = document.createElement('tr');
+    const td = document.createElement('td');
+    const input = document.createElement('input');
+    input.type = 'text';
+    input.autocomplete = 'off';
+    input.value = value == null ? '' : String(value);
+    if (options.numeric) input.inputMode = 'decimal';
+    input.addEventListener('input', () => {
+      items[index] = input.value;
+      refreshOutput();
+      if (options.onEdit) options.onEdit();
+    });
+    td.appendChild(input);
+    const actions = document.createElement('td');
+    actions.className = 'actions';
+    actions.append(
+      smallButton('Up', index === 0, () => moveItem(items, index, -1, () => mountList(container, items, options))),
+      smallButton('Down', index === items.length - 1, () => moveItem(items, index, 1, () => mountList(container, items, options))),
+      smallButton('Delete', false, () => {
+        items.splice(index, 1);
+        mountList(container, items, options);
+        refreshOutput();
+        if (options.onEdit) options.onEdit();
+      })
+    );
+    tr.append(td, actions);
+    tbody.appendChild(tr);
+  });
+  table.appendChild(tbody);
+  const add = smallButton('Add', false, () => {
+    items.push('');
+    mountList(container, items, options);
+    const inputs = container.querySelectorAll('input');
+    const last = inputs[inputs.length - 1];
+    if (last) last.focus();
+    refreshOutput();
+    if (options.onEdit) options.onEdit();
+  });
+  container.append(table, add);
+}
+
+function helpParagraphs(value) {
+  if (Array.isArray(value)) return value.map((item) => String(item)).filter((item) => item.trim());
+  if (typeof value === 'string' && value.trim()) return [value];
+  return [];
+}
+
+function hideHelp() {
+  $('helpPop').hidden = true;
+  $('helpPop').textContent = '';
+  if (helpButton) {
+    helpButton.setAttribute('aria-expanded', 'false');
+    helpButton = null;
+  }
+}
+
+function placeHelp(button) {
+  const pop = $('helpPop');
+  const margin = 8;
+  const viewWidth = document.documentElement.clientWidth;
+  const width = Math.min(360, viewWidth - margin * 2);
+  pop.style.width = width + 'px';
+  pop.hidden = false;
+  const rect = button.getBoundingClientRect();
+  let left = rect.left;
+  let top = rect.bottom + 6;
+  pop.style.left = left + 'px';
+  pop.style.top = top + 'px';
+  let popRect = pop.getBoundingClientRect();
+  if (popRect.right > viewWidth - margin) left -= popRect.right - (viewWidth - margin);
+  if (left < margin) left = margin;
+  pop.style.left = left + 'px';
+  popRect = pop.getBoundingClientRect();
+  if (popRect.bottom > window.innerHeight - margin) {
+    pop.style.top = Math.max(margin, rect.top - popRect.height - 6) + 'px';
+  }
+}
+
+function toggleHelp(button, paragraphs) {
+  if (helpButton === button) {
+    hideHelp();
+    return;
+  }
+  hideHelp();
+  const pop = $('helpPop');
+  pop.textContent = '';
+  paragraphs.forEach((text) => {
+    const p = document.createElement('p');
+    p.textContent = text;
+    pop.appendChild(p);
+  });
+  helpButton = button;
+  button.setAttribute('aria-expanded', 'true');
+  placeHelp(button);
+}
+
+function helpControl(key, label) {
+  const paragraphs = helpParagraphs(settingHelp[key]);
+  if (!paragraphs.length) return null;
+  const button = document.createElement('button');
+  button.type = 'button';
+  button.className = 'help';
+  button.textContent = '?';
+  button.setAttribute('aria-label', 'About ' + label);
+  button.setAttribute('aria-expanded', 'false');
+  button.addEventListener('click', (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    toggleHelp(button, paragraphs);
+  });
+  return button;
+}
+
+function renderSettings() {
+  hideHelp();
+  const root = $('settings');
+  root.textContent = '';
+  SETTINGS.forEach((def) => {
+    const key = def[0];
+    const wrap = document.createElement('div');
+    wrap.className = 'setting';
+    const name = document.createElement('div');
+    name.className = 'setting-name';
+    const label = document.createElement('label');
+    label.htmlFor = 'setting-' + key;
+    label.textContent = def[1];
+    const input = document.createElement('input');
+    input.id = 'setting-' + key;
+    input.autocomplete = 'off';
+    if (def[2] === 'checkbox') {
+      input.type = 'checkbox';
+      input.checked = Boolean(config[key]);
+      input.addEventListener('change', () => {
+        config[key] = input.checked;
+        refreshOutput();
+      });
+      name.append(input, label);
+    } else {
+      input.type = def[2];
+      Object.keys(def[3]).forEach((attr) => input.setAttribute(attr, def[3][attr]));
+      input.value = config[key] == null ? '' : String(config[key]);
+      input.addEventListener('input', () => {
+        config[key] = input.value;
+        refreshOutput();
+      });
+      name.appendChild(label);
+    }
+    const help = helpControl(key, def[1]);
+    if (help) name.appendChild(help);
+    wrap.appendChild(name);
+    if (def[2] !== 'checkbox') wrap.appendChild(input);
+    root.appendChild(wrap);
+  });
+}
+
+
+function listGroup(group) {
+  const details = document.createElement('details');
+  details.className = 'group';
+  const summary = document.createElement('summary');
+  summary.append(document.createTextNode(group[0]));
+  if (group[4]) {
+    const help = helpControl(group[4], group[0]);
+    if (help) summary.appendChild(help);
+  }
+  const hint = document.createElement('p');
+  hint.className = 'muted';
+  hint.textContent = group[1];
+  const box = document.createElement('div');
+  details.append(summary, hint, box);
+  mountList(box, group[2](config), { numeric: group[3] });
+  return details;
+}
+
+function renderLists() {
+  const root = $('lists');
+  root.textContent = '';
+  LIST_SECTIONS.forEach((section) => {
+    const groups = section.groups.map(listGroup);
+    if (section.advanced) {
+      const details = document.createElement('details');
+      details.className = 'advanced';
+      const summary = document.createElement('summary');
+      summary.textContent = section.title;
+      const hint = document.createElement('p');
+      hint.className = 'muted';
+      hint.textContent = section.hint;
+      details.append(summary, hint, ...groups);
+      root.appendChild(details);
+      return;
+    }
+    const block = document.createElement('div');
+    block.className = 'list-section';
+    const heading = document.createElement('h3');
+    heading.textContent = section.title;
+    const hint = document.createElement('p');
+    hint.className = 'muted';
+    hint.textContent = section.hint;
+    block.append(heading, hint, ...groups);
+    root.appendChild(block);
+  });
+}
+
+function patternCounts(pattern) {
+  return trimmed(pattern.triggers).length + ' triggers · '
+    + trimmed(pattern.templates).length + ' templates · '
+    + trimmed(pattern.quirkyTemplates).length + ' quirky';
+}
+
+function renderPatterns() {
+  const root = $('patterns');
+  root.textContent = '';
+  config.patterns.forEach((pattern, index) => {
+    const wrap = document.createElement('div');
+    wrap.className = 'pattern';
+    const head = document.createElement('div');
+    head.className = 'pattern-head';
+    const idInput = document.createElement('input');
+    idInput.type = 'text';
+    idInput.autocomplete = 'off';
+    idInput.placeholder = 'id';
+    idInput.value = pattern.id;
+    const summary = document.createElement('span');
+    summary.className = 'muted';
+    const body = document.createElement('div');
+    body.className = 'pattern-body';
+    body.hidden = !openPatterns[index];
+
+    function paintSummary() {
+      const missing = !trimmed(pattern.templates).length;
+      summary.textContent = patternCounts(pattern);
+      summary.className = missing ? 'warn' : 'muted';
+    }
+
+    function buildBody() {
+      body.textContent = '';
+      [['Triggers', pattern.triggers], ['Templates', pattern.templates], ['Quirky templates', pattern.quirkyTemplates]].forEach((part) => {
+        const heading = document.createElement('h3');
+        heading.textContent = part[0];
+        const box = document.createElement('div');
+        body.append(heading, box);
+        mountList(box, part[1], { onEdit: paintSummary });
+      });
+    }
+
+    idInput.addEventListener('input', () => {
+      pattern.id = idInput.value;
+      refreshOutput();
+    });
+
+    const toggle = smallButton(openPatterns[index] ? 'Hide' : 'Edit', false, () => {
+      openPatterns[index] = !openPatterns[index];
+      body.hidden = !openPatterns[index];
+      toggle.textContent = openPatterns[index] ? 'Hide' : 'Edit';
+      if (openPatterns[index] && !body.childElementCount) buildBody();
+    });
+    if (openPatterns[index]) buildBody();
+    paintSummary();
+
+    head.append(
+      toggle,
+      idInput,
+      summary,
+      smallButton('Up', index === 0, () => movePattern(index, -1)),
+      smallButton('Down', index === config.patterns.length - 1, () => movePattern(index, 1)),
+      smallButton('Delete', false, () => {
+        const name = String(pattern.id || '').trim() || 'untitled';
+        if (!confirm('Delete pattern "' + name + '"?')) return;
+        config.patterns.splice(index, 1);
+        openPatterns.splice(index, 1);
+        renderPatterns();
+        refreshOutput();
+      })
+    );
+    wrap.append(head, body);
+    root.appendChild(wrap);
+  });
+}
+
+function movePattern(index, direction) {
+  const next = index + direction;
+  if (next < 0 || next >= config.patterns.length) return;
+  const pattern = config.patterns[index];
+  config.patterns[index] = config.patterns[next];
+  config.patterns[next] = pattern;
+  const flag = openPatterns[index];
+  openPatterns[index] = openPatterns[next];
+  openPatterns[next] = flag;
+  renderPatterns();
+  refreshOutput();
+}
+
+function renderEditor() {
+  if (!config) return;
+  renderSettings();
+  renderLists();
+  renderPatterns();
+  syncSampleFields();
+}
+
+function useExample() {
+  const sample = sampleFor(currentLang);
+  criteria = { keywords: sample.keywords, text: sample.text, seed: '', randomSeed: true };
+  persistSample();
+  syncSampleFields();
+}
+
+function resetConfig() {
+  if (!confirm('Reset the config to the built-in defaults for this language? The test sample stays as it is.')) return;
+  config = prepare(defaults);
+  openPatterns = config.patterns.map(() => false);
+  renderEditor();
+  refreshOutput();
+}
+
+function loadPasted() {
+  const raw = $('configIn').value.trim();
+  if (!raw) {
+    $('loadMessage').textContent = 'Paste a config first.';
+    return;
+  }
+  let parsed;
+  try { parsed = JSON.parse(raw); } catch (e) {
+    $('loadMessage').textContent = 'That is not valid JSON.';
+    return;
+  }
+  if (!parsed || typeof parsed !== 'object' || Array.isArray(parsed)) {
+    $('loadMessage').textContent = 'The config needs to be a JSON object.';
+    return;
+  }
+  config = prepare(parsed);
+  openPatterns = config.patterns.map(() => false);
+  renderEditor();
+  refreshOutput();
+  $('loadMessage').textContent = 'Loaded into the editor. Switch to Tester to try it.';
+}
+
+async function copyConfig() {
+  const text = $('configOut').value;
+  try {
+    await navigator.clipboard.writeText(text);
+  } catch (e) {
+    $('configOut').focus();
+    $('configOut').select();
+    document.execCommand('copy');
+  }
+  $('copyConfig').textContent = 'Copied';
+  setTimeout(() => { $('copyConfig').textContent = 'Copy'; }, 1500);
+}
+
+$('tabTester').addEventListener('click', () => go('tester'));
+$('tabConfig').addEventListener('click', () => go('config'));
+window.addEventListener('hashchange', showView);
+
+$('generate').addEventListener('click', generate);
+$('keywords').addEventListener('keydown', (e) => { if (e.key === 'Enter') generate(); });
+$('text').addEventListener('input', syncControls);
+$('quirks').addEventListener('input', syncControls);
+$('quirkFactor').addEventListener('input', syncControls);
+$('randomSeed').addEventListener('input', syncControls);
+$('sample').addEventListener('click', applySampleToTester);
+$('clearLog').addEventListener('click', () => {
+  if (confirm('Clear all logged attempts?')) { localStorage.removeItem(LOG_KEY); renderLog(); }
+});
+
+$('sampleKeywords').addEventListener('input', readSampleFields);
+$('sampleText').addEventListener('input', readSampleFields);
+$('sampleSeed').addEventListener('input', readSampleFields);
+$('sampleRandom').addEventListener('change', readSampleFields);
+$('useExample').addEventListener('click', useExample);
+$('addPattern').addEventListener('click', () => {
+  config.patterns.push({ id: '', triggers: [], templates: [''], quirkyTemplates: [] });
+  openPatterns.push(true);
+  renderPatterns();
+  refreshOutput();
+  const blocks = $('patterns').querySelectorAll('.pattern');
+  const last = blocks[blocks.length - 1];
+  if (last) last.scrollIntoView({ block: 'nearest' });
+});
+$('copyConfig').addEventListener('click', copyConfig);
+$('resetConfig').addEventListener('click', resetConfig);
+$('loadConfig').addEventListener('click', loadPasted);
+document.addEventListener('click', (e) => {
+  if (!helpButton) return;
+  if (helpButton.contains(e.target) || $('helpPop').contains(e.target)) return;
+  hideHelp();
+});
+document.addEventListener('keydown', (e) => { if (e.key === 'Escape') hideHelp(); });
+window.addEventListener('scroll', () => { if (helpButton) hideHelp(); }, true);
+window.addEventListener('resize', () => { if (helpButton) hideHelp(); });
+
+renderLog();
+
+$('lang').addEventListener('change', () => {
+  applyLanguage($('lang').value).catch((e) => {
+    $('configStatus').textContent = e.message || 'Could not switch language.';
+  });
+});
+
+Promise.all([
+  fetch('/api/config').then((res) => {
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    return res.json();
+  }),
+  fetch('/api/langs').then((res) => {
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    return res.json();
+  }),
+  fetch('/api/samples').then((res) => {
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    return res.json();
+  }),
+  fetch('/settings-help.json').then((res) => res.ok ? res.json() : {}).catch(() => ({}))
+]).then(async (results) => {
+  algoDefaults = results[0];
+  const langs = results[1];
+  samples = results[2] && typeof results[2] === 'object' ? results[2] : {};
+  settingHelp = results[3] && typeof results[3] === 'object' ? results[3] : {};
+
+  let saved = 'en';
+  try { saved = localStorage.getItem(LANG_KEY) || algoDefaults.lang || 'en'; } catch (e) { saved = algoDefaults.lang || 'en'; }
+  if (!langs.some((item) => item.code === saved)) saved = (langs[0] && langs[0].code) || 'en';
+  currentLang = saved;
+  fillLangSelect(langs);
+  await applyLanguage(currentLang);
+  $('generate').disabled = false;
+  showView();
+}).catch((e) => {
+  $('configStatus').textContent = 'Could not load the default config' + (e && e.message ? ': ' + e.message : '.');
+  $('generate').disabled = false;
+  showView();
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,903 @@
+{
+  "joiner": "and",
+  "joinerVariants": [
+    "and the"
+  ],
+  "numbers": [
+    2,
+    3,
+    5
+  ],
+  "quirkyNumbers": [
+    "42",
+    "A bunch",
+    "Sneaky"
+  ],
+  "connectors": {
+    "verbs": [
+      "connect",
+      "link",
+      "join",
+      "unite",
+      "pair",
+      "combine",
+      "bridge",
+      "marry",
+      "couple",
+      "mesh",
+      "fuse",
+      "blend",
+      "yoke",
+      "tie-together",
+      "weave-together",
+      "bring-together",
+      "knit-together"
+    ],
+    "gerunds": [
+      "connecting",
+      "linking",
+      "joining",
+      "uniting",
+      "pairing",
+      "combining",
+      "bridging",
+      "marrying",
+      "coupling",
+      "meshing",
+      "fusing",
+      "blending",
+      "tying-together",
+      "weaving-together",
+      "bringing-together",
+      "knitting-together"
+    ],
+    "nouns": [
+      "link",
+      "bridge",
+      "bond",
+      "tie",
+      "connection",
+      "common-ground",
+      "common-thread",
+      "overlap",
+      "union",
+      "fusion",
+      "correlation",
+      "relationship",
+      "association",
+      "partnership",
+      "marriage",
+      "alliance"
+    ],
+    "participles": [
+      "connected-to",
+      "linked-to",
+      "tied-to",
+      "bound-to",
+      "joined-to",
+      "married-to",
+      "wed-to",
+      "paired-with",
+      "coupled-with",
+      "combined-with",
+      "fused-with",
+      "meshed-with",
+      "allied-with",
+      "bonded-with",
+      "bridged-to",
+      "yoked-to",
+      "woven-into",
+      "united-with",
+      "entangled-with",
+      "related-to",
+      "associated-with",
+      "correlated-with"
+    ]
+  },
+  "quirkyModifiers": {
+    "adjectives": [
+      "curious",
+      "peculiar",
+      "forgotten",
+      "oddly-specific",
+      "unhinged",
+      "retro",
+      "quirky",
+      "wonderfully-weird",
+      "accidental",
+      "secret",
+      "unexpected",
+      "underrated",
+      "overlooked",
+      "eccentric",
+      "improbable",
+      "whimsical",
+      "outrageous",
+      "mysterious",
+      "suspiciously-specific",
+      "mildly-chaotic",
+      "delightfully-odd",
+      "legendary"
+    ],
+    "suffixes": [
+      "rabbit-hole",
+      "shenanigans",
+      "deep-dive",
+      "mystery",
+      "adventure",
+      "chronicles",
+      "side-quest",
+      "oddity",
+      "phenomenon",
+      "saga",
+      "conspiracy",
+      "masterclass",
+      "love-story",
+      "plot-twist",
+      "hot-take",
+      "fiasco",
+      "revelation",
+      "situation"
+    ]
+  },
+  "stopWords": [
+    "a",
+    "an",
+    "and",
+    "are",
+    "as",
+    "at",
+    "be",
+    "but",
+    "by",
+    "for",
+    "from",
+    "has",
+    "have",
+    "he",
+    "i",
+    "in",
+    "is",
+    "it",
+    "its",
+    "of",
+    "on",
+    "or",
+    "she",
+    "that",
+    "the",
+    "their",
+    "they",
+    "this",
+    "to",
+    "was",
+    "we",
+    "were",
+    "will",
+    "with",
+    "you",
+    "your"
+  ],
+  "sharedTemplates": [
+    "{n}-things-to-know-about-{kw}",
+    "{n}-things-you-never-knew-about-{kw}",
+    "{n}-things-you-didnt-know-about-{kw}",
+    "the-complete-guide-to-{kw}",
+    "{kw}:-what-to-know",
+    "{kw}:-a-closer-look",
+    "getting-to-know-{kw}",
+    "{n}-reasons-to-love-{kw}",
+    "everything-you-need-to-know-about-{kw}",
+    "why-it-matters:-{kw}",
+    "{kw1}-with-{rest}:-a-closer-look"
+  ],
+  "sharedQuirkyTemplates": [
+    "{n}-{adj}-facts-about-{kw}",
+    "{n}-things-you-never-knew-about-{kw}",
+    "{n}-things-you-didnt-know-about-{kw}",
+    "the-{adj}-guide-to-{kw}",
+    "{kw}:-a-{adj}-{suffix}",
+    "dear-{kw},-we-need-to-talk",
+    "wait,-what-about-{kw}?",
+    "the-secret-life-of-{kw}",
+    "inside-the-{adj}-world-of-{kw}",
+    "a-{adj}-love-letter-to-{kw}",
+    "{kw}:-nobody-saw-this-coming",
+    "{n}-{adj}-reasons-to-try-{kw}"
+  ],
+  "connectTemplates": [
+    "the-{connection}-between-{kw}",
+    "a-{connection}-between-{kw}",
+    "is-there-a-{connection}-between-{kw}?",
+    "finding-the-{connection}-between-{kw}",
+    "{kw}:-the-{connection}-nobody-expected",
+    "{connecting}-{kw}",
+    "the-art-of-{connecting}-{kw}",
+    "how-to-{connect}-{kw}",
+    "can-you-{connect}-{kw}?",
+    "{kw1}-{connected}-{rest}",
+    "connecting-the-dots:-{kw}",
+    "mapping-the-overlap-between-{kw}",
+    "what-do-{kw}-have-in-common?",
+    "why-{kw}-belong-together",
+    "how-{kw}-fit-together",
+    "{kw}:-better-together?",
+    "{kw}:-the-missing-link",
+    "where-{kw}-overlap",
+    "from-{kw1}-to-{rest}",
+    "how-do-{kw}-compare?",
+    "comparing-{kw}:-side-by-side",
+    "{kw}:-compare-and-contrast",
+    "{kw1}-vs-{rest}:-closer-than-you-think"
+  ],
+  "connectQuirkyTemplates": [
+    "the-{adj}-{connection}-between-{kw}",
+    "{kw}:-a-{adj}-{connection}",
+    "{kw}:-the-{connection}-nobody-asked-for",
+    "{connecting}-{kw}:-a-{adj}-{suffix}",
+    "{n}-{adj}-ways-to-{connect}-{kw}",
+    "how-to-{connect}-{kw}-in-{n}-{adj}-steps",
+    "{kw1}-{connected}-{rest}:-a-{adj}-{suffix}",
+    "the-{adj}-{suffix}-of-{connecting}-{kw}",
+    "what-{kw}-secretly-have-in-common",
+    "what-{kw}-have-in-common:-a-{adj}-{suffix}",
+    "the-grand-unified-theory-of-{kw}",
+    "{kw}:-a-{adj}-venn-diagram",
+    "comparing-{kw}:-a-{adj}-{suffix}",
+    "{kw1}-vs-{rest}:-the-{adj}-showdown"
+  ],
+  "patterns": [
+    {
+      "id": "curious-history",
+      "triggers": [
+        "history",
+        "1920s",
+        "forgotten",
+        "invention",
+        "vintage",
+        "quirky",
+        "charm",
+        "era",
+        "retro",
+        "centuries"
+      ],
+      "templates": [
+        "the-history-of-{kw}",
+        "a-brief-history-of-{kw}",
+        "{kw}-through-the-years",
+        "a-short-history-of-{kw}",
+        "the-story-of-{kw}",
+        "{kw}:-a-look-back"
+      ],
+      "quirkyTemplates": [
+        "the-{adj}-history-of-{kw}",
+        "forgotten-{kw}-{suffix}",
+        "{kw}:-wilder-than-you-think",
+        "the-{adj}-world-of-{kw}",
+        "everything-you-never-knew-about-{kw}",
+        "the-{adj}-return-of-{kw}",
+        "the-curious-case-of-{kw1},-featuring-{rest}"
+      ]
+    },
+    {
+      "id": "recipe",
+      "triggers": [
+        "recipe",
+        "cook",
+        "bake",
+        "baking",
+        "ingredient",
+        "oven",
+        "fry",
+        "boil",
+        "kitchen",
+        "meal",
+        "dish",
+        "serve"
+      ],
+      "templates": [
+        "easy-{kw}-recipe",
+        "how-to-make-{kw}",
+        "{kw}-recipe-ideas",
+        "{kw1}-served-with-{rest}",
+        "{kw}-from-scratch",
+        "a-simple-{kw}-recipe",
+        "the-only-{kw}-recipe-youll-need"
+      ],
+      "quirkyTemplates": [
+        "ridiculously-good-{kw}",
+        "the-{adj}-{kw}-experiment",
+        "how-to-nail-{kw}-without-crying",
+        "{kw}:-make-it-{adj}",
+        "the-{adj}-art-of-{kw}",
+        "{kw1},-a-natural-extension-of-{rest}",
+        "{kw1}-with-{rest}:-a-{adj}-love-story"
+      ]
+    },
+    {
+      "id": "review",
+      "triggers": [
+        "review",
+        "rating",
+        "verdict",
+        "pros",
+        "cons",
+        "tested",
+        "worth",
+        "score"
+      ],
+      "templates": [
+        "{kw}-review",
+        "{kw}:-is-it-worth-it?",
+        "{kw}-honest-review",
+        "{kw1}-with-{rest}-reviewed",
+        "our-verdict-on-{kw}",
+        "{kw}:-the-pros-and-cons"
+      ],
+      "quirkyTemplates": [
+        "brutally-honest-{kw}-verdict",
+        "we-tested-{kw}-so-you-dont-have-to",
+        "{kw}:-genius-or-just-hype?",
+        "i-tried-{kw}-so-you-dont-have-to",
+        "{kw}:-the-{adj}-truth",
+        "{kw1}-vs-{rest}:-the-honest-verdict"
+      ]
+    },
+    {
+      "id": "howto",
+      "triggers": [
+        "how",
+        "step",
+        "guide",
+        "tutorial",
+        "learn",
+        "instructions",
+        "setup",
+        "install"
+      ],
+      "templates": [
+        "how-to-master-{kw}",
+        "how-to-get-started-with-{kw}",
+        "{kw}-step-by-step-guide",
+        "beginners-guide-to-{kw}",
+        "how-to-pair-{kw1}-with-{rest}",
+        "getting-the-most-from-{kw}",
+        "{kw}-for-beginners"
+      ],
+      "quirkyTemplates": [
+        "zero-fluff-guide-to-{kw}",
+        "taming-{kw}-step-by-step",
+        "the-{adj}-survival-guide-to-{kw}",
+        "from-zero-to-{adj}-with-{kw}",
+        "how-to-pair-{kw1}-with-{rest}-like-a-professional"
+      ]
+    },
+    {
+      "id": "list",
+      "triggers": [
+        "best",
+        "top",
+        "list",
+        "ranked",
+        "favourite",
+        "favorite",
+        "picks",
+        "ideas"
+      ],
+      "templates": [
+        "best-{kw}",
+        "top-{kw}-ideas",
+        "{kw}-our-top-picks",
+        "best-{kw1}-with-{rest}",
+        "our-favourite-{kw}",
+        "top-{n}-{kw}-picks",
+        "{n}-things-you-never-knew-about-{kw}",
+        "{n}-things-you-didnt-know-about-{kw}"
+      ],
+      "quirkyTemplates": [
+        "gloriously-{adj}-{kw}-picks",
+        "the-ultimate-{kw}-rabbit-hole",
+        "weirdly-great-{kw}-ideas",
+        "{kw}-ranked-by-{adj}-science",
+        "forget-{rest},-all-you-need-is-{kw1}",
+        "{n}-{adj}-{kw}-picks",
+        "{n}-things-you-never-knew-about-{kw}"
+      ]
+    },
+    {
+      "id": "connection",
+      "triggers": [
+        "connect",
+        "connection",
+        "link",
+        "relate",
+        "relationship",
+        "common",
+        "shared",
+        "together",
+        "overlap",
+        "bridge",
+        "bond",
+        "theme",
+        "association",
+        "thread"
+      ],
+      "templates": [
+        "the-{connection}-between-{kw}",
+        "finding-the-{connection}-between-{kw}",
+        "{kw1}-{connected}-{rest}",
+        "{connecting}-{kw}",
+        "connecting-the-dots:-{kw}",
+        "{kw}:-how-it-all-connects",
+        "the-threads-behind-{kw}",
+        "{kw}:-the-bigger-picture"
+      ],
+      "quirkyTemplates": [
+        "the-{adj}-{connection}-between-{kw}",
+        "{kw}:-a-{adj}-{connection}",
+        "{kw}:-the-{adj}-{suffix}-behind-it-all",
+        "the-{adj}-web-of-{kw}"
+      ]
+    },
+    {
+      "id": "comparison",
+      "triggers": [
+        "versus",
+        "vs",
+        "compare",
+        "comparison",
+        "difference",
+        "better",
+        "alternative"
+      ],
+      "templates": [
+        "{kw}-compared",
+        "{kw}-comparison",
+        "{kw}:-which-is-better?",
+        "{kw1}-vs-{rest}",
+        "{kw}-head-to-head",
+        "choosing-between-{kw}"
+      ],
+      "quirkyTemplates": [
+        "{kw}-showdown",
+        "the-great-{kw}-face-off",
+        "{kw}:-which-one-wins?",
+        "{kw}:-the-{adj}-rivalry",
+        "{kw1}-vs-{rest}:-who-wins?"
+      ]
+    },
+    {
+      "id": "news",
+      "triggers": [
+        "announced",
+        "today",
+        "breaking",
+        "report",
+        "update",
+        "launch",
+        "new",
+        "released"
+      ],
+      "templates": [
+        "{kw}-news-update",
+        "{kw}-what-you-need-to-know",
+        "{kw}:-the-latest",
+        "whats-new-with-{kw}"
+      ],
+      "quirkyTemplates": [
+        "fresh-{kw}-plot-twist",
+        "what-is-going-on-with-{kw}?",
+        "the-latest-{kw}-{suffix}",
+        "breaking:-{kw1}-in-talks-with-{rest}",
+        "{kw}:-the-{adj}-{suffix}"
+      ]
+    },
+    {
+      "id": "food",
+      "triggers": [
+        "breakfast",
+        "lunch",
+        "dinner",
+        "brunch",
+        "tomato",
+        "sauce",
+        "butter",
+        "milk",
+        "taste",
+        "flavour",
+        "flavor",
+        "delicious",
+        "tasty",
+        "crisp",
+        "crispy",
+        "savoury",
+        "savory",
+        "sweet",
+        "snack",
+        "plate",
+        "mug",
+        "fork",
+        "salt",
+        "eat",
+        "bite",
+        "hungry",
+        "appetite",
+        "cuisine",
+        "restaurant",
+        "menu"
+      ],
+      "templates": [
+        "the-joy-of-{kw}",
+        "a-taste-of-{kw}",
+        "{kw}-done-right",
+        "{kw1}-with-{rest}:-a-perfect-pairing",
+        "the-simple-pleasure-of-{kw}",
+        "what-to-eat:-{kw}"
+      ],
+      "quirkyTemplates": [
+        "{kw}:-a-love-letter",
+        "in-praise-of-{kw}",
+        "the-{adj}-appeal-of-{kw}",
+        "a-{adj}-love-letter-to-{kw}",
+        "{kw1}-plus-{rest}:-a-match-made-in-heaven",
+        "{kw}:-the-{adj}-{suffix}"
+      ]
+    },
+    {
+      "id": "comfort",
+      "triggers": [
+        "comfort",
+        "classic",
+        "homemade",
+        "traditional",
+        "nostalgia",
+        "nostalgic",
+        "childhood",
+        "cosy",
+        "cozy",
+        "warm",
+        "familiar",
+        "grandmother",
+        "grandma",
+        "timeless",
+        "home",
+        "simple"
+      ],
+      "templates": [
+        "the-comfort-of-{kw}",
+        "classic-{kw}",
+        "{kw}:-the-simple-pleasures",
+        "timeless-{kw}",
+        "{kw}-just-like-home",
+        "back-to-basics-with-{kw}"
+      ],
+      "quirkyTemplates": [
+        "a-{adj}-ode-to-{kw}",
+        "why-{kw}-will-never-go-out-of-style",
+        "{kw}:-the-{adj}-classic",
+        "{kw}:-a-hug-in-disguise",
+        "the-{adj}-comfort-of-{kw}"
+      ]
+    },
+    {
+      "id": "explainer",
+      "triggers": [
+        "why",
+        "science",
+        "reason",
+        "because",
+        "work",
+        "effect",
+        "explain",
+        "cause",
+        "research",
+        "study",
+        "chemistry",
+        "physics",
+        "happen",
+        "mean"
+      ],
+      "templates": [
+        "why-it-works:-{kw}",
+        "the-science-of-{kw}",
+        "what-makes-{kw}-work",
+        "the-reasons-behind-{kw}",
+        "how-it-really-works:-{kw}",
+        "{kw}:-the-explanation",
+        "{n}-things-you-never-knew-about-{kw}",
+        "everything-you-never-knew-about-{kw}"
+      ],
+      "quirkyTemplates": [
+        "the-{adj}-science-of-{kw}",
+        "why-we-cant-stop-thinking-about-{kw}",
+        "the-{adj}-physics-of-{kw}",
+        "{kw}:-the-science-nobody-asked-for",
+        "decoding-{kw}",
+        "{n}-things-you-never-knew-about-{kw}"
+      ]
+    },
+    {
+      "id": "opinion",
+      "triggers": [
+        "opinion",
+        "truth",
+        "overrated",
+        "underrated",
+        "controversial",
+        "myth",
+        "debate",
+        "unpopular",
+        "believe",
+        "wrong",
+        "honest",
+        "think",
+        "argue",
+        "defend"
+      ],
+      "templates": [
+        "the-truth-about-{kw}",
+        "{kw}:-an-honest-opinion",
+        "rethinking-{kw}",
+        "the-case-for-{kw}",
+        "{kw}:-myths-and-facts",
+        "in-defence-of-{kw}"
+      ],
+      "quirkyTemplates": [
+        "unpopular-opinion:-{kw}",
+        "{kw}:-a-{adj}-hot-take",
+        "the-{adj}-case-for-{kw}",
+        "nobody-talks-about-{kw}-enough",
+        "stop-overthinking-{kw}"
+      ]
+    },
+    {
+      "id": "tips",
+      "triggers": [
+        "tip",
+        "trick",
+        "hack",
+        "mistake",
+        "avoid",
+        "secret",
+        "shortcut",
+        "advice",
+        "easy",
+        "quick",
+        "smart"
+      ],
+      "templates": [
+        "tips-for-{kw}",
+        "{kw}:-quick-tips",
+        "common-{kw}-mistakes-to-avoid",
+        "{kw}-made-easy",
+        "smart-ways-to-use-{kw}",
+        "{n}-tips-for-{kw}"
+      ],
+      "quirkyTemplates": [
+        "{n}-{adj}-{kw}-hacks",
+        "{n}-mistakes-everyone-makes-with-{kw}",
+        "{kw}-hacks-the-experts-dont-want-you-to-know",
+        "{n}-{adj}-tips-for-{kw}",
+        "the-{adj}-trick-to-{kw}"
+      ]
+    },
+    {
+      "id": "personal",
+      "triggers": [
+        "my",
+        "story",
+        "journey",
+        "memory",
+        "remember",
+        "grew",
+        "lesson",
+        "experience",
+        "diary",
+        "life",
+        "love"
+      ],
+      "templates": [
+        "my-story-with-{kw}",
+        "what-{kw}-taught-me",
+        "a-journey-through-{kw}",
+        "lessons-from-{kw}",
+        "{kw}:-a-personal-story"
+      ],
+      "quirkyTemplates": [
+        "how-{kw}-changed-my-life",
+        "my-{adj}-year-of-{kw}",
+        "{kw}:-a-{adj}-confession",
+        "dear-{kw},-we-need-to-talk",
+        "my-{adj}-obsession-with-{kw}"
+      ]
+    },
+    {
+      "id": "travel",
+      "triggers": [
+        "travel",
+        "trip",
+        "visit",
+        "city",
+        "holiday",
+        "destination",
+        "tour",
+        "explore",
+        "local",
+        "hotel",
+        "beach",
+        "weekend",
+        "road",
+        "flight"
+      ],
+      "templates": [
+        "exploring-{kw}",
+        "a-weekend-in-{kw}",
+        "visiting-{kw}",
+        "{kw}:-travel-notes",
+        "the-local-guide-to-{kw}"
+      ],
+      "quirkyTemplates": [
+        "lost-in-{kw}",
+        "{kw}:-a-{adj}-getaway",
+        "a-{adj}-weekend-in-{kw}",
+        "wandering-through-{kw}",
+        "off-the-beaten-path:-{kw}"
+      ]
+    },
+    {
+      "id": "tech",
+      "triggers": [
+        "tech",
+        "technology",
+        "software",
+        "app",
+        "code",
+        "device",
+        "digital",
+        "online",
+        "data",
+        "system",
+        "gadget",
+        "computer",
+        "internet",
+        "algorithm"
+      ],
+      "templates": [
+        "the-future-of-{kw}",
+        "{kw}-in-the-digital-age",
+        "the-technology-behind-{kw}",
+        "modern-{kw}",
+        "{kw}:-the-tech-explained"
+      ],
+      "quirkyTemplates": [
+        "{kw}:-not-responding",
+        "debugging-{kw}:-a-{adj}-{suffix}",
+        "{kw}-as-a-service:-the-{adj}-startup-idea",
+        "turning-{kw}-into-an-algorithm",
+        "the-{adj}-startup-pitch-for-{kw}"
+      ]
+    },
+    {
+      "id": "health",
+      "triggers": [
+        "health",
+        "healthy",
+        "wellness",
+        "energy",
+        "sleep",
+        "diet",
+        "nutrition",
+        "calorie",
+        "fitness",
+        "mind",
+        "body",
+        "stress",
+        "relax",
+        "exercise",
+        "protein",
+        "fibre",
+        "fiber",
+        "vitamin"
+      ],
+      "templates": [
+        "the-health-benefits-of-{kw}",
+        "{kw}-for-a-healthier-you",
+        "mindful-{kw}",
+        "the-wellness-guide-to-{kw}",
+        "{kw}:-what-your-body-needs"
+      ],
+      "quirkyTemplates": [
+        "{kw}:-secretly-good-for-you?",
+        "the-{adj}-wellness-routine:-{kw}",
+        "{kw}-for-the-soul",
+        "feeling-{adj}-with-{kw}",
+        "{kw}:-wellness,-but-{adj}"
+      ]
+    },
+    {
+      "id": "default",
+      "triggers": [],
+      "templates": [
+        "all-about-{kw}",
+        "{kw}-explained",
+        "{kw}-overview",
+        "{kw1}-with-{rest}",
+        "{n}-things-you-never-knew-about-{kw}",
+        "{n}-things-to-know-about-{kw}"
+      ],
+      "quirkyTemplates": [
+        "the-{adj}-{kw}-{suffix}",
+        "down-the-{kw}-rabbit-hole",
+        "a-{adj}-look-at-{kw}",
+        "why-everyone-sleeps-on-{kw}",
+        "the-{adj}-truth-about-{kw}",
+        "{kw}:-the-sequel-nobody-asked-for",
+        "{kw1},-a-natural-extension-of-{rest}",
+        "when-{kw1}-met-{rest}:-a-{adj}-{suffix}"
+      ]
+    },
+    {
+      "id": "spotlight",
+      "triggers": [],
+      "templates": [
+        "in-the-spotlight:-{kw}",
+        "meet-{kw}",
+        "{kw}-at-a-glance",
+        "introducing-{kw}"
+      ],
+      "quirkyTemplates": [
+        "{kw}:-the-{adj}-origin-story",
+        "enter-{kw},-stage-left",
+        "all-hail-{kw}",
+        "{kw}:-the-case-for-a-{adj}-{suffix}"
+      ]
+    },
+    {
+      "id": "essentials",
+      "triggers": [],
+      "templates": [
+        "{kw}:-the-essentials",
+        "the-basics-of-{kw}",
+        "{kw}-101",
+        "a-primer-on-{kw}"
+      ],
+      "quirkyTemplates": [
+        "{kw}-101:-the-{adj}-edition",
+        "the-{adj}-basics-of-{kw}",
+        "everything-we-know-about-{kw}-so-far",
+        "the-{adj}-primer-on-{kw}"
+      ]
+    }
+  ],
+  "locale": {
+    "id": "en",
+    "label": "English",
+    "titleCase": "en",
+    "article": "en-a-an",
+    "joinerAlt": null,
+    "smallWords": [
+      "a",
+      "an",
+      "and",
+      "as",
+      "at",
+      "but",
+      "by",
+      "for",
+      "in",
+      "nor",
+      "of",
+      "on",
+      "or",
+      "the",
+      "to",
+      "vs",
+      "with",
+      "from",
+      "into",
+      "onto",
+      "than",
+      "via"
+    ]
+  }
+}
