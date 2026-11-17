@@ -307,7 +307,11 @@ A small Node server and page with two views, **Tester** and **Config**. The test
 
 Config is where you set that sample and edit the configuration (settings, word lists, templates and patterns). Each setting has a **?** button. The explanations live in `example/settings-help.json`, separate from the page, so the wording is easy to change. Switching to Tester applies the sample and the config. Config also shows the JSON to copy into `options.config`. Nothing is written to a file. The page has no dependencies.
 
+The example lives in the GitHub repo, not in the npm package (so an `npm install` stays a small library). Clone it, then start the site:
+
 ```
+git clone https://github.com/mouseba11/quirky-slugger.git
+cd quirky-slugger
 npm start
 ```
 
@@ -315,7 +319,7 @@ Then open http://localhost:4000. Use the **Language** dropdown (English / Deutsc
 
 The sample, the edited config and the log are kept in this browser's `localStorage` only. The log is newest first, up to 200 attempts. Nothing is sent anywhere else. Click a log row to reload an attempt, or use Clear log.
 
-If port 4000 is taken, set `PORT` (PowerShell: `$env:PORT=4001; npm start`; bash: `PORT=4001 npm start`). The server only listens on `127.0.0.1`. The `example` folder is not published to npm.
+If port 4000 is taken, set `PORT` (PowerShell: `$env:PORT=4001; npm start`; bash: `PORT=4001 npm start`). The server only listens on `127.0.0.1`.
 
 ## Documentation
 
@@ -341,7 +345,7 @@ Files:
 | `quirky-slugger.config.json` | Shared algorithm settings (`maxWords`, `patternSpread`, default `lang`, …). |
 | `langs/` | Language packs (`en`, `de`, `es`) and `samples.json` for the example site. |
 | `test.js` | The test suite. |
-| `example/` | The example site (`server.js`, `index.html`, `settings-help.json`). Not published. |
+| `example/` | The example site (`server.js`, `index.html`, `settings-help.json`). In the repo only; run via `npm start` after cloning. |
 | `docs/` | Algorithm documentation. |
 
 Changes to titles and wording are mostly edits under `langs/`. Algorithm settings stay in `quirky-slugger.config.json`. If you change `index.js`, read [`docs/ALGORITHM.agents.md`](docs/ALGORITHM.agents.md) first: the output is deterministic, so small changes to how the seed is built can change every result.
