@@ -26,6 +26,7 @@ quirkySlug('beans, toast', 'Here is a quick recipe: heat the beans in a pan, toa
 - [Languages](#languages)
 - [Configuration](#configuration)
 - [Templates and placeholders](#templates-and-placeholders)
+- [Plurals](#plurals)
 - [Quirks mode](#quirks-mode)
 - [Connecting the keywords](#connecting-the-keywords)
 - [Getting more (or less) variety](#getting-more-or-less-variety)
@@ -130,6 +131,7 @@ quirkySlug.explain('baked beans, toast, tea', text, { seed: 'demo' });
 | `connectors` | The connector words used, for example `{ connection: 'overlap' }`. |
 | `quirksMode` / `quirky` / `quirkFactor` | Whether quirks mode was on, whether a quirky template was chosen, and the factor used. |
 | `joiner` | The word used before the last keyword for this call: `config.joiner`, or a `joinerVariants` entry such as `and the`. |
+| `pluralFactor` / `plurals` | The chance that was used, and the original keywords that gained a trailing `s` in this slug and title. |
 | `adjective` / `suffix` / `number` / `top` | The values used for `{adj}`, `{suffix}`, `{n}` and `{top}`, if the template had them. |
 | `keywords` | `[{ keyword, weight }]`, each keyword's share of the text. |
 | `wordsUsed` / `wordsIgnored` | Words counted, and words dropped for exceeding `maxWords`. |
@@ -200,6 +202,7 @@ quirkySlug('beans, toast', text, { config: './my-patterns.json' });
 | `joiner` | `"and"` | The word placed only before the last keyword: `beans-and-toast`, `baked-beans-toast-and-tea`. Use `""` for plain hyphens. |
 | `joinerVariants` | `["and the"]` (en) | Extra joiners mixed in sometimes, e.g. `Potatoes and the John Lloyd Experience`. |
 | `joinerVariantFactor` | `0.25` | Chance (0–1) of using a joiner variant instead of `joiner`. |
+| `pluralFactor` | `0.3` | Chance (0–1) that an eligible keyword is pluralized with a trailing `s`. A keyword ending in `s` or a vowel (`a`, `e`, `i`, `o`, `u`, `y`) is left as written, so `baked beans` and `tea` never change and `toast` can become `toasts`. |
 | `keywordWeight` | `2` | How strongly keywords count against the text when scoring patterns. |
 | `minScore` | `0` | A pattern must score above this to be a candidate. |
 | `patternSpread` | `0.2` | How close to the best score a pattern must be to be a candidate, from `0` to `1`. `1` means only the best pattern can be chosen. |
@@ -216,7 +219,7 @@ quirkySlug('beans, toast', text, { config: './my-patterns.json' });
 | `connectTemplates` / `connectQuirkyTemplates` | see file | Templates that join and compare the keywords. |
 | `patterns` | see file | The control set: the title patterns the text is matched against. |
 
-Every `...Factor` setting is clamped to the range 0 to 1, and a value that is not a number counts as 0.
+Every `...Factor` setting is clamped to the range 0 to 1, and a value that is not a number counts as 0. `pluralFactor` is rolled once per keyword. Set it to `0` to keep every keyword exactly as given.
 
 If you supply `patterns`, it **replaces** the default control set entirely, and the shared and connecting template lists are emptied too (they are written for the default patterns). Supply your own lists if you want them. See [`docs/ALGORITHM.md`](docs/ALGORITHM.md) for how each key is used.
 
@@ -240,7 +243,13 @@ Each pattern is an object:
 | `templates` | Plain title shapes. At least one is required. |
 | `quirkyTemplates` | Optional. Used only in quirks mode. |
 
-The default control set has 20 patterns: `curious-history`, `recipe`, `review`, `howto`, `list`, `connection`, `comparison`, `news`, `food`, `comfort`, `explainer`, `opinion`, `tips`, `personal`, `travel`, `tech`, `health`, and the generic `default`, `spotlight` and `essentials`.
+The default control set has 29 patterns.
+
+Subject patterns match what a page is about. They are aimed at encyclopedia text, where the keywords may be two unrelated topics: `history`, `nature`, `people`, `place`, `science`, `statistics`, `sport`, `objects`, `culture`, `society`, `food`, `health`, `tech`.
+
+Voice patterns match a way of writing, and their triggers are specific enough that ordinary encyclopedia prose does not select them: `recipe`, `review`, `howto`, `list`, `news`, `opinion`, `tips`, `personal`, `comfort`, `travel`. `connection` and `comparison` are for titles that join the keywords. `explainer` is for text that is working out why something happens.
+
+`default`, `spotlight` and `essentials` have no triggers. They are used when nothing else matches.
 
 Tips for writing triggers: use intent and descriptive words (`recipe`, `review`, `breakfast`, `comfort`), not nouns likely to be keywords (`toast`, `beans`). Keywords are boosted heavily, so a keyword that is also a trigger forces its pattern every time. Triggers are stemmed, so `bake` also matches `baked` and `baking`.
 
@@ -269,6 +278,20 @@ Rules:
 - Write punctuation straight after the word it belongs to, as in `{kw}:-the-{adj}-truth`. The title becomes `Baked Beans: The Unexpected Truth`.
 - Only lowercase letters, digits, hyphens, `{placeholders}` and the punctuation `, : ; ? ! '` should appear in a template.
 - Avoid verbs that must agree with a keyword (`{kw1}-meets-{rest}`), because a keyword may be singular or plural. Use participles, gerunds, or a plural verb with the whole list (`what-do-{kw}-have-in-common?`).
+
+## Plurals
+
+`pluralFactor` (default `0.3`) is the chance that an eligible keyword gains a trailing `s` in the slug and the title. On the example site the setting is labelled Plurals. Each keyword is rolled separately, and the same input and seed always give the same choice.
+
+A keyword is not eligible when its last letter is `s` or a vowel (`a`, `e`, `i`, `o`, `u`, `y`). `baked beans` and `tea` stay as written. `toast` can become `toasts`.
+
+```js
+quirkySlug('baked beans, toast, tea', text, { config: { pluralFactor: 1 } });
+// slug contains baked-beans-toasts-and-tea
+// title contains Baked Beans, Toasts and Tea
+```
+
+`0` turns it off. `1` pluralizes every eligible keyword. `explain().plurals` lists the original keywords that were pluralized on that call, and `explain().pluralFactor` is the chance that was used.
 
 ## Quirks mode
 
@@ -303,7 +326,8 @@ Set `connectFactor` to `0` to turn connecting titles off, or raise it to make th
 | Fewer or no connecting titles | Lower `connectFactor`, or set it to `0`. |
 | More or fewer quirky titles | Change `quirkFactor` (in quirks mode). |
 | Always the plain joiner (`and`) | Set `joinerVariantFactor` to `0`. |
-| Stable results for tests | Set `patternSpread: 1`, `sharedFactor: 0`, `connectFactor: 0`, `joinerVariantFactor: 0`. |
+| Keywords never pluralized | Set `pluralFactor` to `0`. |
+| Stable results for tests | Set `patternSpread: 1`, `sharedFactor: 0`, `connectFactor: 0`, `joinerVariantFactor: 0`, `pluralFactor: 0`. |
 
 ## Example site
 

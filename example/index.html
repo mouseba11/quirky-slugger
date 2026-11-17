@@ -181,7 +181,7 @@
 <div id="lists"></div>
 
 <h2>Patterns</h2>
-<p class="muted">A pattern needs an id, trigger words, and at least one template. Quirky templates are optional.</p>
+<p class="muted">One block per pattern, loaded from the current language pack. A pattern needs an id, trigger words, and at least one template. Quirky templates are optional. Order is the pack order: subject patterns such as history, nature, people, place, science, statistics, sport and objects sit with the older ones, and default, spotlight and essentials stay at the end.</p>
 <div id="patterns"></div>
 <div class="row">
   <button id="addPattern" type="button">Add pattern</button>
@@ -219,6 +219,10 @@ let samples = {};
 let currentLang = 'en';
 
 function configKey() { return CONFIG_KEY + '-' + currentLang; }
+function patternSig(patterns) {
+  return (patterns || []).map((pattern) => String(pattern && pattern.id || '')).join('|');
+}
+function patternSigKey() { return 'quirky-slugger-pattern-sig-' + currentLang; }
 function sampleKey() { return SAMPLE_KEY + '-' + currentLang; }
 
 function sampleFor(lang) {
@@ -226,8 +230,8 @@ function sampleFor(lang) {
   return { keywords: s.keywords || '', text: s.text || '' };
 }
 
-const SCALAR_KEYS = ['maxWords', 'maxSlugLength', 'joiner', 'keywordWeight', 'minScore', 'patternSpread', 'sharedFactor', 'connectFactor', 'joinerVariantFactor', 'quirks', 'quirkFactor'];
-const NUMBER_KEYS = ['maxWords', 'maxSlugLength', 'keywordWeight', 'minScore', 'patternSpread', 'sharedFactor', 'connectFactor', 'joinerVariantFactor', 'quirkFactor'];
+const SCALAR_KEYS = ['maxWords', 'maxSlugLength', 'joiner', 'keywordWeight', 'minScore', 'patternSpread', 'sharedFactor', 'connectFactor', 'joinerVariantFactor', 'pluralFactor', 'quirks', 'quirkFactor'];
+const NUMBER_KEYS = ['maxWords', 'maxSlugLength', 'keywordWeight', 'minScore', 'patternSpread', 'sharedFactor', 'connectFactor', 'joinerVariantFactor', 'pluralFactor', 'quirkFactor'];
 const SHARED_KEYS = ['sharedTemplates', 'sharedQuirkyTemplates', 'connectTemplates', 'connectQuirkyTemplates'];
 const KNOWN = new Set(SCALAR_KEYS.concat(['numbers', 'quirkyNumbers', 'stopWords', 'connectors', 'quirkyModifiers', 'patterns', 'joinerVariants'], SHARED_KEYS));
 
@@ -236,6 +240,7 @@ const SETTINGS = [
   ['maxSlugLength', 'Max slug length', 'number', { min: '0', step: '1' }],
   ['joiner', 'Joiner', 'text', {}],
   ['joinerVariantFactor', 'Joiner variant factor', 'number', { min: '0', max: '1', step: '0.05' }],
+  ['pluralFactor', 'Plurals', 'number', { min: '0', max: '1', step: '0.05' }],
   ['keywordWeight', 'Keyword weight', 'number', { step: 'any' }],
   ['minScore', 'Min score', 'number', { step: 'any' }],
   ['patternSpread', 'Pattern spread', 'number', { min: '0', max: '1', step: '0.05' }],
@@ -421,7 +426,17 @@ async function applyLanguage(code, opts) {
   defaults = Object.assign({}, algoDefaults, pack);
   delete defaults.lang;
 
-  const stored = options.keepStored === false ? null : loadStored(configKey());
+  const packSig = patternSig(defaults.patterns);
+  let savedSig = null;
+  try { savedSig = localStorage.getItem(patternSigKey()); } catch (e) { savedSig = null; }
+  let stored = options.keepStored === false ? null : loadStored(configKey());
+  // The editor writes itself to localStorage. A copy saved before the pattern set changed would hide the new patterns.
+  const replacedStaleConfig = Boolean(stored) && savedSig !== packSig;
+  if (replacedStaleConfig) {
+    stored = null;
+    try { localStorage.removeItem(configKey()); } catch (e) { /* ignore */ }
+  }
+  try { localStorage.setItem(patternSigKey(), packSig); } catch (e) { /* ignore */ }
   config = prepare(stored || defaults);
   openPatterns = config.patterns.map(() => false);
 
@@ -437,7 +452,9 @@ async function applyLanguage(code, opts) {
   applySampleToTester();
   renderEditor();
   refreshOutput();
-  $('configStatus').textContent = '';
+  $('configStatus').textContent = replacedStaleConfig
+    ? 'Loaded the current defaults. A config saved in this browser was from an older pattern set and has been replaced.'
+    : '';
 }
 
 function maxWords() {
@@ -648,6 +665,7 @@ function show(data) {
   if (connectorWords) fact('Connector words', connectorWords);
   fact('Seed', data.seed || 'none');
   fact('Joiner', data.joiner || 'none');
+  fact('Plurals', data.plurals && data.plurals.length ? data.plurals.join(', ') : 'none');
   fact('Quirks', data.quirksMode ? 'on, quirk factor ' + data.quirkFactor : 'off');
   fact('Template used', data.template + (data.quirky ? ' (quirky)' : ' (plain)'));
   fact('{n}', data.number);

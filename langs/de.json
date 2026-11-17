@@ -258,7 +258,7 @@
   ],
   "patterns": [
     {
-      "id": "curious-history",
+      "id": "history",
       "triggers": [
         "geschichte",
         "historie",
@@ -269,8 +269,21 @@
         "aera",
         "jahrhundert",
         "jahrhunderte",
-        "charme",
-        "1920"
+        "1920",
+        "antik",
+        "mittelalter",
+        "dynastie",
+        "reich",
+        "gegruendet",
+        "historisch",
+        "archaeologie",
+        "kolonial",
+        "chronik",
+        "vertrag",
+        "schlacht",
+        "krieg",
+        "ursprung",
+        "erbe"
       ],
       "templates": [
         "die-geschichte-von-{kw}",
@@ -278,7 +291,11 @@
         "{kw}-im-lauf-der-zeit",
         "die-kurze-geschichte-von-{kw}",
         "die-story-von-{kw}",
-        "{kw}:-ein-rueckblick"
+        "{kw}:-ein-rueckblick",
+        "die-urspruenge-von-{kw}",
+        "{kw}:-eine-zeitleiste",
+        "{kw}-ueber-die-jahrhunderte",
+        "wie-{kw}-begann"
       ],
       "quirkyTemplates": [
         "die-{adj}-geschichte-von-{kw}",
@@ -287,7 +304,10 @@
         "die-{adj}-welt-von-{kw}",
         "alles-was-man-nie-ueber-{kw}-wusste",
         "die-{adj}-rueckkehr-von-{kw}",
-        "der-kuriose-fall-von-{kw1},-mit-{rest}"
+        "der-kuriose-fall-von-{kw1},-mit-{rest}",
+        "jahrhunderte-von-{kw}",
+        "{kw}:-die-{adj}-zeitleiste",
+        "die-urspruenge-von-{kw},-{adj}-nacherzaehlt"
       ]
     },
     {
@@ -360,11 +380,9 @@
     {
       "id": "howto",
       "triggers": [
-        "wie",
         "schritt",
         "anleitung",
         "tutorial",
-        "lernen",
         "anweisungen",
         "einrichtung",
         "installieren",
@@ -392,7 +410,6 @@
       "triggers": [
         "beste",
         "besten",
-        "top",
         "liste",
         "ranking",
         "favoriten",
@@ -424,13 +441,11 @@
         "verbinden",
         "verknuepfung",
         "beziehung",
-        "gemeinsam",
         "gemeinsamkeit",
         "zusammen",
         "ueberschneidung",
         "bruecke",
         "bindung",
-        "thema",
         "faden",
         "zusammenhang"
       ],
@@ -459,7 +474,6 @@
         "vergleich",
         "vergleichen",
         "unterschied",
-        "besser",
         "alternative",
         "gegenueber"
       ],
@@ -482,12 +496,10 @@
       "id": "news",
       "triggers": [
         "angekuendigt",
-        "heute",
         "breaking",
         "bericht",
         "update",
         "neuigkeit",
-        "neu",
         "veroeffentlicht",
         "start"
       ],
@@ -566,9 +578,7 @@
         "vertraut",
         "grossmutter",
         "oma",
-        "zeitlos",
-        "zuhause",
-        "einfach"
+        "zeitlos"
       ],
       "templates": [
         "der-komfort-von-{kw}",
@@ -589,20 +599,15 @@
     {
       "id": "explainer",
       "triggers": [
-        "warum",
         "wissenschaft",
         "grund",
-        "weil",
         "wirkung",
         "erklaeren",
         "ursache",
         "forschung",
         "studie",
         "chemie",
-        "physik",
-        "geschehen",
-        "bedeutung",
-        "funktioniert"
+        "physik"
       ],
       "templates": [
         "warum-es-funktioniert:-{kw}",
@@ -631,10 +636,6 @@
         "mythos",
         "debatte",
         "unbeliebt",
-        "glauben",
-        "falsch",
-        "ehrlich",
-        "denken",
         "argumentieren",
         "verteidigen"
       ],
@@ -666,8 +667,6 @@
         "geheimnis",
         "abkuerzung",
         "rat",
-        "einfach",
-        "schnell",
         "schlau"
       ],
       "templates": [
@@ -689,8 +688,6 @@
     {
       "id": "personal",
       "triggers": [
-        "mein",
-        "meine",
         "geschichte",
         "reise",
         "erinnerung",
@@ -698,9 +695,7 @@
         "aufgewachsen",
         "lektion",
         "erfahrung",
-        "tagebuch",
-        "leben",
-        "liebe"
+        "tagebuch"
       ],
       "templates": [
         "meine-geschichte-mit-{kw}",
@@ -728,7 +723,6 @@
         "ziel",
         "tour",
         "erkunden",
-        "lokal",
         "hotel",
         "strand",
         "wochenende",
@@ -757,12 +751,8 @@
         "technologie",
         "software",
         "app",
-        "code",
         "geraet",
         "digital",
-        "online",
-        "daten",
-        "system",
         "gadget",
         "computer",
         "internet",
@@ -789,14 +779,11 @@
         "gesundheit",
         "gesund",
         "wellness",
-        "energie",
         "schlaf",
         "diaet",
         "ernaehrung",
         "kalorien",
         "fitness",
-        "geist",
-        "koerper",
         "stress",
         "entspannen",
         "sport",
@@ -817,6 +804,266 @@
         "{kw}-fuer-die-seele",
         "sich-{adj}-fuehlen-mit-{kw}",
         "{kw}:-wellness,-aber-{adj}"
+      ]
+    },
+    {
+      "id": "nature",
+      "triggers": [
+        "gattung",
+        "lebensraum",
+        "wildtier",
+        "wildtiere",
+        "saeugetier",
+        "nachtaktiv",
+        "bedroht",
+        "naturschutz",
+        "beute",
+        "organismus",
+        "endemisch",
+        "heimisch"
+      ],
+      "templates": [
+        "ein-feldfuehrer-zu-{kw}",
+        "{kw}-in-der-wildnis",
+        "die-naturgeschichte-von-{kw}",
+        "wo-{kw}-leben",
+        "{kw}:-ein-portrait-aus-der-natur"
+      ],
+      "quirkyTemplates": [
+        "die-{adj}-gewohnheiten-von-{kw}",
+        "{kw}:-seltsamer-als-jeder-feldfuehrer",
+        "eine-{adj}-begegnung-mit-{kw}",
+        "{kw}-auf-der-{adj}-spur"
+      ]
+    },
+    {
+      "id": "people",
+      "triggers": [
+        "geboren",
+        "gestorben",
+        "biografie",
+        "biographie",
+        "politiker",
+        "schriftsteller",
+        "maler",
+        "komponist",
+        "herrschaft",
+        "gewaehlt",
+        "philosoph",
+        "erfinder"
+      ],
+      "templates": [
+        "das-leben-von-{kw}",
+        "{kw}:-ein-leben-in-kuerze",
+        "ein-portrait-von-{kw}",
+        "die-menschen-hinter-{kw}",
+        "{kw}:-leben-und-werk"
+      ],
+      "quirkyTemplates": [
+        "das-{adj}-leben-von-{kw}",
+        "{kw}:-die-person-hinter-dem-namen",
+        "ein-{adj}-portrait-von-{kw}",
+        "in-begleitung-von-{kw}"
+      ]
+    },
+    {
+      "id": "place",
+      "triggers": [
+        "gelegen",
+        "hauptstadt",
+        "insel",
+        "inseln",
+        "fluss",
+        "berg",
+        "grenze",
+        "kueste",
+        "geografie",
+        "provinz",
+        "kontinent"
+      ],
+      "templates": [
+        "die-geografie-von-{kw}",
+        "{kw}:-ein-ort-mit-charakter",
+        "{kw}-auf-der-karte",
+        "wo-man-{kw}-findet",
+        "die-landschaft-von-{kw}"
+      ],
+      "quirkyTemplates": [
+        "die-{adj}-geografie-von-{kw}",
+        "{kw}:-eine-{adj}-ecke-der-karte",
+        "verloren-zwischen-{kw}",
+        "abseits-der-karte:-{kw}"
+      ]
+    },
+    {
+      "id": "science",
+      "triggers": [
+        "gleichung",
+        "gleichungen",
+        "theorie",
+        "experiment",
+        "teilchen",
+        "molekuel",
+        "hypothese",
+        "theorem",
+        "atom",
+        "labor",
+        "formel",
+        "operator"
+      ],
+      "templates": [
+        "die-mechanik-von-{kw}",
+        "{kw}:-ein-arbeitsmodell",
+        "{kw}-von-den-grundlagen",
+        "die-theorie-von-{kw}",
+        "die-funktionsweise-von-{kw}"
+      ],
+      "quirkyTemplates": [
+        "die-{adj}-mechanik-von-{kw}",
+        "{kw}:-eine-{adj}-theorie",
+        "{kw}-nach-einem-{adj}-modell",
+        "die-{adj}-funktionsweise-von-{kw}"
+      ]
+    },
+    {
+      "id": "culture",
+      "triggers": [
+        "literatur",
+        "malerei",
+        "lyrik",
+        "kino",
+        "theater",
+        "architektur",
+        "mythologie",
+        "folklore",
+        "skulptur",
+        "museum"
+      ],
+      "templates": [
+        "{kw}-in-der-kultur",
+        "das-kulturleben-von-{kw}",
+        "{kw}:-kunst-und-bedeutung",
+        "ein-kulturfuehrer-zu-{kw}",
+        "{kw}:-eine-kulturgeschichte"
+      ],
+      "quirkyTemplates": [
+        "die-{adj}-kultur-von-{kw}",
+        "{kw}:-eine-{adj}-kulturreise",
+        "{kw}-als-kultur",
+        "die-{adj}-bedeutung-von-{kw}"
+      ]
+    },
+    {
+      "id": "society",
+      "triggers": [
+        "parlament",
+        "demokratie",
+        "verfassung",
+        "regierung",
+        "wahl",
+        "gesetzgebung",
+        "wirtschaft",
+        "politik",
+        "buergerschaft",
+        "wohlfahrt"
+      ],
+      "templates": [
+        "{kw}-und-die-gesellschaft",
+        "die-soziale-welt-von-{kw}",
+        "{kw}:-macht-und-menschen",
+        "die-regeln-um-{kw}",
+        "ein-leitfaden-zu-{kw}-und-gesellschaft"
+      ],
+      "quirkyTemplates": [
+        "die-{adj}-politik-von-{kw}",
+        "{kw}:-wer-profitiert",
+        "die-ungeschriebenen-regeln-von-{kw}",
+        "ein-{adj}-blick-auf-{kw}-und-gesellschaft"
+      ]
+    },
+    {
+      "id": "statistics",
+      "triggers": [
+        "statistik",
+        "statistisch",
+        "zensus",
+        "volkszaehlung",
+        "prozent",
+        "median",
+        "wahrscheinlichkeit",
+        "datensatz",
+        "varianz",
+        "perzentil"
+      ],
+      "templates": [
+        "die-zahlen-hinter-{kw}",
+        "{kw}-in-zahlen",
+        "ein-statistischer-blick-auf-{kw}",
+        "{kw}-gezaehlt",
+        "{kw}:-was-die-zahlen-sagen"
+      ],
+      "quirkyTemplates": [
+        "die-{adj}-statistik-von-{kw}",
+        "{kw}:-eine-{adj}-tabelle",
+        "{n}-{adj}-zahlen-zu-{kw}",
+        "rechnen-mit-{kw}"
+      ]
+    },
+    {
+      "id": "sport",
+      "triggers": [
+        "sport",
+        "liga",
+        "meisterschaft",
+        "turnier",
+        "olympisch",
+        "athlet",
+        "medaille",
+        "trainer",
+        "stadion",
+        "spieltag"
+      ],
+      "templates": [
+        "das-sportliche-leben-von-{kw}",
+        "{kw}-auf-dem-feld",
+        "eine-saison-von-{kw}",
+        "{kw}:-das-spiel",
+        "die-regeln-von-{kw}"
+      ],
+      "quirkyTemplates": [
+        "die-{adj}-meisterschaft-von-{kw}",
+        "{kw}:-eine-{adj}-ueberraschung",
+        "verlaengerung-fuer-{kw}",
+        "{kw}-und-die-{adj}-medaille"
+      ]
+    },
+    {
+      "id": "objects",
+      "triggers": [
+        "artefakt",
+        "gegenstand",
+        "werkzeug",
+        "instrument",
+        "apparat",
+        "waffe",
+        "relikt",
+        "erbstueck",
+        "manufaktur",
+        "utensil",
+        "maschine"
+      ],
+      "templates": [
+        "woraus-{kw}-besteht",
+        "die-herstellung-von-{kw}",
+        "{kw}:-form-und-funktion",
+        "ein-gegenstand-namens-{kw}",
+        "der-umgang-mit-{kw}"
+      ],
+      "quirkyTemplates": [
+        "das-{adj}-ding-namens-{kw}",
+        "gebaut,-benutzt,-behalten:-{kw}",
+        "das-{adj}-leben-eines-gegenstands:-{kw}",
+        "{kw}:-ein-{adj}-werkzeug"
       ]
     },
     {

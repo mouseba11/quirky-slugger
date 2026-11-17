@@ -248,18 +248,30 @@
   ],
   "patterns": [
     {
-      "id": "curious-history",
+      "id": "history",
       "triggers": [
         "history",
         "1920s",
         "forgotten",
         "invention",
         "vintage",
-        "quirky",
-        "charm",
         "era",
         "retro",
-        "centuries"
+        "centuries",
+        "ancient",
+        "medieval",
+        "dynasty",
+        "empire",
+        "founded",
+        "historical",
+        "archaeological",
+        "colonial",
+        "chronicle",
+        "treaty",
+        "battle",
+        "war",
+        "heritage",
+        "ancestor"
       ],
       "templates": [
         "the-history-of-{kw}",
@@ -267,7 +279,11 @@
         "{kw}-through-the-years",
         "a-short-history-of-{kw}",
         "the-story-of-{kw}",
-        "{kw}:-a-look-back"
+        "{kw}:-a-look-back",
+        "the-origins-of-{kw}",
+        "{kw}:-a-timeline",
+        "{kw}-across-the-centuries",
+        "how-{kw}-began"
       ],
       "quirkyTemplates": [
         "the-{adj}-history-of-{kw}",
@@ -276,7 +292,10 @@
         "the-{adj}-world-of-{kw}",
         "everything-you-never-knew-about-{kw}",
         "the-{adj}-return-of-{kw}",
-        "the-curious-case-of-{kw1},-featuring-{rest}"
+        "the-curious-case-of-{kw1},-featuring-{rest}",
+        "centuries-of-{kw}",
+        "{kw}:-the-{adj}-timeline",
+        "the-origins-of-{kw},-{adj}-retold"
       ]
     },
     {
@@ -346,11 +365,9 @@
     {
       "id": "howto",
       "triggers": [
-        "how",
         "step",
         "guide",
         "tutorial",
-        "learn",
         "instructions",
         "setup",
         "install"
@@ -376,7 +393,6 @@
       "id": "list",
       "triggers": [
         "best",
-        "top",
         "list",
         "ranked",
         "favourite",
@@ -409,13 +425,11 @@
         "link",
         "relate",
         "relationship",
-        "common",
         "shared",
         "together",
         "overlap",
         "bridge",
         "bond",
-        "theme",
         "association",
         "thread"
       ],
@@ -444,7 +458,6 @@
         "compare",
         "comparison",
         "difference",
-        "better",
         "alternative"
       ],
       "templates": [
@@ -467,12 +480,10 @@
       "id": "news",
       "triggers": [
         "announced",
-        "today",
         "breaking",
         "report",
         "update",
         "launch",
-        "new",
         "released"
       ],
       "templates": [
@@ -555,9 +566,7 @@
         "familiar",
         "grandmother",
         "grandma",
-        "timeless",
-        "home",
-        "simple"
+        "timeless"
       ],
       "templates": [
         "the-comfort-of-{kw}",
@@ -578,20 +587,15 @@
     {
       "id": "explainer",
       "triggers": [
-        "why",
         "science",
         "reason",
-        "because",
-        "work",
         "effect",
         "explain",
         "cause",
         "research",
         "study",
         "chemistry",
-        "physics",
-        "happen",
-        "mean"
+        "physics"
       ],
       "templates": [
         "why-it-works:-{kw}",
@@ -621,10 +625,6 @@
         "myth",
         "debate",
         "unpopular",
-        "believe",
-        "wrong",
-        "honest",
-        "think",
         "argue",
         "defend"
       ],
@@ -655,8 +655,6 @@
         "secret",
         "shortcut",
         "advice",
-        "easy",
-        "quick",
         "smart"
       ],
       "templates": [
@@ -678,7 +676,6 @@
     {
       "id": "personal",
       "triggers": [
-        "my",
         "story",
         "journey",
         "memory",
@@ -686,9 +683,7 @@
         "grew",
         "lesson",
         "experience",
-        "diary",
-        "life",
-        "love"
+        "diary"
       ],
       "templates": [
         "my-story-with-{kw}",
@@ -715,7 +710,6 @@
         "destination",
         "tour",
         "explore",
-        "local",
         "hotel",
         "beach",
         "weekend",
@@ -744,12 +738,8 @@
         "technology",
         "software",
         "app",
-        "code",
         "device",
         "digital",
-        "online",
-        "data",
-        "system",
         "gadget",
         "computer",
         "internet",
@@ -776,14 +766,11 @@
         "health",
         "healthy",
         "wellness",
-        "energy",
         "sleep",
         "diet",
         "nutrition",
         "calorie",
         "fitness",
-        "mind",
-        "body",
         "stress",
         "relax",
         "exercise",
@@ -805,6 +792,266 @@
         "{kw}-for-the-soul",
         "feeling-{adj}-with-{kw}",
         "{kw}:-wellness,-but-{adj}"
+      ]
+    },
+    {
+      "id": "nature",
+      "triggers": [
+        "species",
+        "genus",
+        "habitat",
+        "wildlife",
+        "mammal",
+        "marsupial",
+        "nocturnal",
+        "endangered",
+        "conservation",
+        "herbivorous",
+        "predator",
+        "native"
+      ],
+      "templates": [
+        "a-field-guide-to-{kw}",
+        "{kw}-in-the-wild",
+        "the-natural-history-of-{kw}",
+        "where-{kw}-live",
+        "{kw}:-a-portrait-from-nature"
+      ],
+      "quirkyTemplates": [
+        "the-{adj}-habits-of-{kw}",
+        "{kw}:-stranger-than-the-field-guide",
+        "a-{adj}-encounter-with-{kw}",
+        "tracking-{kw}"
+      ]
+    },
+    {
+      "id": "people",
+      "triggers": [
+        "born",
+        "died",
+        "biography",
+        "politician",
+        "novelist",
+        "painter",
+        "composer",
+        "reign",
+        "elected",
+        "philosopher",
+        "scientist",
+        "inventor"
+      ],
+      "templates": [
+        "the-life-of-{kw}",
+        "{kw}:-a-life-in-brief",
+        "a-portrait-of-{kw}",
+        "the-people-behind-{kw}",
+        "{kw}:-life-and-work"
+      ],
+      "quirkyTemplates": [
+        "the-{adj}-life-of-{kw}",
+        "{kw}:-the-person-behind-the-name",
+        "a-{adj}-portrait-of-{kw}",
+        "in-the-company-of-{kw}"
+      ]
+    },
+    {
+      "id": "place",
+      "triggers": [
+        "located",
+        "capital",
+        "island",
+        "river",
+        "mountain",
+        "border",
+        "coastline",
+        "geography",
+        "province",
+        "continent"
+      ],
+      "templates": [
+        "the-geography-of-{kw}",
+        "{kw}:-a-sense-of-place",
+        "{kw}-on-the-map",
+        "where-to-find-{kw}",
+        "the-landscape-of-{kw}"
+      ],
+      "quirkyTemplates": [
+        "the-{adj}-geography-of-{kw}",
+        "{kw}:-a-{adj}-corner-of-the-map",
+        "lost-between-{kw}",
+        "off-the-map:-{kw}"
+      ]
+    },
+    {
+      "id": "science",
+      "triggers": [
+        "equation",
+        "theory",
+        "experiment",
+        "particle",
+        "molecule",
+        "hypothesis",
+        "theorem",
+        "atom",
+        "laboratory",
+        "formula",
+        "operator",
+        "evolve"
+      ],
+      "templates": [
+        "the-mechanics-of-{kw}",
+        "{kw}:-a-working-model",
+        "{kw}-from-first-principles",
+        "a-theory-of-{kw}",
+        "the-workings-of-{kw}"
+      ],
+      "quirkyTemplates": [
+        "the-{adj}-mechanics-of-{kw}",
+        "{kw}:-a-{adj}-theory",
+        "{kw},-according-to-a-{adj}-model",
+        "the-{adj}-workings-of-{kw}"
+      ]
+    },
+    {
+      "id": "culture",
+      "triggers": [
+        "literature",
+        "painting",
+        "poetry",
+        "cinema",
+        "theatre",
+        "theater",
+        "architecture",
+        "mythology",
+        "folklore",
+        "sculpture",
+        "museum"
+      ],
+      "templates": [
+        "{kw}-in-culture",
+        "the-cultural-life-of-{kw}",
+        "{kw}:-art-and-meaning",
+        "a-cultural-guide-to-{kw}",
+        "{kw}:-a-cultural-history"
+      ],
+      "quirkyTemplates": [
+        "the-{adj}-culture-of-{kw}",
+        "{kw}:-a-{adj}-cultural-tour",
+        "{kw}-as-culture",
+        "the-{adj}-meaning-of-{kw}"
+      ]
+    },
+    {
+      "id": "society",
+      "triggers": [
+        "parliament",
+        "democracy",
+        "constitution",
+        "government",
+        "election",
+        "legislation",
+        "economy",
+        "policy",
+        "citizenship",
+        "welfare"
+      ],
+      "templates": [
+        "{kw}-and-society",
+        "the-social-world-of-{kw}",
+        "{kw}:-power-and-people",
+        "the-rules-around-{kw}",
+        "a-civics-guide-to-{kw}"
+      ],
+      "quirkyTemplates": [
+        "the-{adj}-politics-of-{kw}",
+        "{kw}:-who-benefits",
+        "the-unwritten-rules-of-{kw}",
+        "a-{adj}-look-at-{kw}-and-society"
+      ]
+    },
+    {
+      "id": "statistics",
+      "triggers": [
+        "statistics",
+        "statistical",
+        "census",
+        "percentage",
+        "median",
+        "probability",
+        "dataset",
+        "variance",
+        "percentile",
+        "histogram"
+      ],
+      "templates": [
+        "the-numbers-behind-{kw}",
+        "{kw}-by-the-numbers",
+        "a-statistical-look-at-{kw}",
+        "counting-{kw}",
+        "{kw}:-what-the-figures-say"
+      ],
+      "quirkyTemplates": [
+        "the-{adj}-statistics-of-{kw}",
+        "{kw}:-a-{adj}-spreadsheet",
+        "{n}-{adj}-numbers-about-{kw}",
+        "lying-with-the-numbers:-{kw}"
+      ]
+    },
+    {
+      "id": "sport",
+      "triggers": [
+        "sport",
+        "league",
+        "championship",
+        "tournament",
+        "athlete",
+        "olympic",
+        "medal",
+        "coach",
+        "fixture",
+        "stadium"
+      ],
+      "templates": [
+        "the-sporting-life-of-{kw}",
+        "{kw}-on-the-field",
+        "a-season-of-{kw}",
+        "{kw}:-the-game",
+        "the-rules-of-{kw}"
+      ],
+      "quirkyTemplates": [
+        "the-{adj}-championship-of-{kw}",
+        "{kw}:-a-{adj}-upset",
+        "extra-time-for-{kw}",
+        "{kw}-and-the-{adj}-medal"
+      ]
+    },
+    {
+      "id": "objects",
+      "triggers": [
+        "artifact",
+        "artefact",
+        "tool",
+        "instrument",
+        "apparatus",
+        "manufactured",
+        "utensil",
+        "weapon",
+        "relic",
+        "heirloom",
+        "machinery"
+      ],
+      "templates": [
+        "what-{kw}-is-made-of",
+        "the-making-of-{kw}",
+        "{kw}:-form-and-function",
+        "the-object-called-{kw}",
+        "handling-{kw}"
+      ],
+      "quirkyTemplates": [
+        "the-{adj}-thing-called-{kw}",
+        "built,-used,-kept:-{kw}",
+        "the-{adj}-life-of-an-object:-{kw}",
+        "{kw}:-a-{adj}-tool"
       ]
     },
     {

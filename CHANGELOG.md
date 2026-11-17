@@ -2,6 +2,12 @@
 
 All notable changes to this project are documented here. The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and the project uses [semantic versioning](https://semver.org/) with the convention described in [`AGENTS.md`](AGENTS.md): a change that alters the output for existing inputs is not a patch.
 
+## [Unreleased]
+
+### Added
+
+- `pluralFactor` (default `0.3`), shown as Plurals in the example config. An eligible keyword has that chance of a trailing `s` in the slug and the title. Keywords ending in `s` or a vowel are left as written.
+
 ## [1.0.0] - 2026-11-17
 
 First public release.

@@ -7,7 +7,7 @@ const api = require('./index.js');
 // It also pins patternSpread to 1 and sharedFactor to 0, so the top-scoring pattern's own templates are
 // always used and the tests about pattern choice stay predictable. The variance settings are tested
 // separately, using `api` directly. The real return shape ({ slug, title }) is tested in the "title" section.
-const STABLE = { patternSpread: 1, sharedFactor: 0, connectFactor: 0, joinerVariantFactor: 0 };
+const STABLE = { patternSpread: 1, sharedFactor: 0, connectFactor: 0, joinerVariantFactor: 0, pluralFactor: 0 };
 const quirkySlug = Object.assign((keywords, text, options) => {
   const opts = Object.assign({}, options);
   opts.config = Object.assign({}, STABLE, opts.config);
@@ -226,6 +226,7 @@ assert.strictEqual(api.explain(CONTROL_KEYWORDS, CONTROL_TEXT, { seed: 'abc' }).
 const titleConfig = (template, extra) => Object.assign({
   quirkyModifiers: { adjectives: ['oddly-specific'], suffixes: ['rabbit-hole'] },
   joinerVariantFactor: 0,
+  pluralFactor: 0,
   patterns: [{ id: 'only', triggers: [], templates: [template] }]
 }, extra);
 const titleOf = (keywords, template, extra) => api(keywords, 'x', { config: titleConfig(template, extra) }).title;
@@ -395,7 +396,8 @@ assert.strictEqual(api.explain('x', 'These recipes use tomatoes.', { config: ste
 assert.strictEqual(api.explain('x', 'Reviewed and reviewing.', { config: stemConfig }).pattern, 'other');
 
 // Your control text now matches real patterns instead of always falling back to the default one.
-const control = survey(CONTROL_KEYWORDS, CONTROL_TEXT, {}, 300);
+// Plurals are off here so the title counts measure templates, not the toast/toasts roll.
+const control = survey(CONTROL_KEYWORDS, CONTROL_TEXT, { config: { pluralFactor: 0 } }, 300);
 assert.ok(Object.keys(control.patterns).length >= 3, `control text patterns: ${JSON.stringify(control.patterns)}`);
 assert.ok(!control.patterns.default, 'control text should not fall back to the default pattern');
 assert.ok(control.patterns.food > control.patterns.comfort, 'the stronger match should win more often');
@@ -403,7 +405,7 @@ assert.ok(control.titles.size >= 30, `plain control titles: ${control.titles.siz
 assert.ok(control.templates.size >= 20, `plain control templates: ${control.templates.size}`);
 
 // Quirks mode adds a lot more.
-const quirkySurvey = survey(CONTROL_KEYWORDS, CONTROL_TEXT, { quirks: true }, 300);
+const quirkySurvey = survey(CONTROL_KEYWORDS, CONTROL_TEXT, { quirks: true, config: { pluralFactor: 0 } }, 300);
 assert.ok(quirkySurvey.titles.size >= 120, `quirky control titles: ${quirkySurvey.titles.size}`);
 assert.ok(quirkySurvey.titles.size > control.titles.size * 1.5);
 
@@ -414,8 +416,33 @@ assert.ok(Object.keys(nothing.patterns).every((id) => ['default', 'spotlight', '
 assert.ok(api.explain('beans', 'xyzzy plugh').usedFallback);
 
 // A strong, unambiguous text still gets its own pattern every time.
-const historyText = 'The history of beans goes back centuries. This vintage dish was a forgotten invention of the 1920s era.';
-assert.deepStrictEqual(Object.keys(survey('beans, toast', historyText, {}, 100).patterns), ['curious-history']);
+const historyText = 'The history of the empire goes back centuries. This vintage chronicle records a forgotten dynasty of the 1920s era.';
+assert.deepStrictEqual(Object.keys(survey('beans, toast', historyText, {}, 100).patterns), ['history']);
+
+// Encyclopedia subjects pick a subject pattern, not a blog voice. patternSpread 1 keeps the best score.
+const pinned = (keywords, text, lang) => api.explain(keywords, text, { lang, config: { patternSpread: 1 } }).pattern;
+const quokkaText = 'The quokka is a macropod native to Australia and the only member of the genus Setonix. Like other marsupials it is herbivorous and mainly nocturnal. Isolated populations live on smaller islands, and a colony shares a reserve with the critically endangered Gilbert\'s potoroo.';
+const gateText = 'The equation describes how quantum systems evolve over time. The solution is a unitary operator, and a gate is that operator acting on a state for a specific duration.';
+assert.strictEqual(pinned('quokka', quokkaText), 'nature');
+assert.strictEqual(pinned('quantum gate', gateText), 'science');
+assert.strictEqual(pinned('ada lovelace', 'Ada Lovelace was born in 1815 and died in 1852. She was a mathematician and is often called the first computer programmer.'), 'people');
+assert.strictEqual(pinned('paris', 'Paris is the capital of France, located on the river Seine, and a centre of art and government.'), 'place');
+assert.strictEqual(pinned('the odyssey', 'The Odyssey is a work of classical literature, told as poetry and later retold in the theatre and in cinema.'), 'culture');
+assert.strictEqual(pinned('rome', 'The medieval empire followed an ancient dynasty. A battle ended in a treaty, and the chronicle is archaeological.'), 'history');
+assert.strictEqual(pinned('the census', 'The census reports the median and the percentage. The dataset records the variance in the statistical tables.'), 'statistics');
+assert.strictEqual(pinned('the world cup', 'The tournament is a championship. The athlete won an olympic medal at the stadium.'), 'sport');
+assert.strictEqual(pinned('the astrolabe', 'The astrolabe is a manufactured instrument, an apparatus and a relic, a tool of navigation.'), 'objects');
+assert.strictEqual(pinned('rom', 'Das Reich war antik. Die Dynastie schloss nach der Schlacht einen Vertrag.', 'de'), 'history');
+assert.strictEqual(pinned('censo', 'El censo da la mediana y el porcentaje de la estadistica.', 'es'), 'statistics');
+assert.strictEqual(pinned('parliament', 'Parliament sits after each election. The constitution limits the government and sets out the legislation it may pass.'), 'society');
+assert.strictEqual(pinned('ada', 'Ada Lovelace wurde 1815 geboren und starb 1852.', 'de'), 'people');
+assert.strictEqual(pinned('ada', 'Ada Lovelace nacio en 1815 y murio en 1852.', 'es'), 'people');
+// The two excerpts together stay on the two subject patterns. Neither "how" nor "system" pulls howto or tech.
+const mash = api.explain('quokka, quantum gate', quokkaText + ' ' + gateText);
+const mashScore = Object.fromEntries(mash.scores.map((s) => [s.id, s.score]));
+assert.ok(mashScore.nature > 0 && mashScore.science > 0);
+assert.ok(mashScore.nature >= mashScore.science * 0.2 && mashScore.science >= mashScore.nature * 0.2);
+assert.ok(!mashScore.howto && !mashScore.tech);
 
 // patternSpread: 1 means only the top pattern can win; a lower spread lets close runners-up in.
 const spreadOne = survey(CONTROL_KEYWORDS, CONTROL_TEXT, { config: { patternSpread: 1 } }, 100);
@@ -511,6 +538,7 @@ assert.strictEqual(oneKeywordConnector.template, 'link-{kw}', 'templates with a 
 
 // Each connector placeholder draws from its own list, so the grammar always fits.
 const connectorConfig = (template) => ({
+  pluralFactor: 0,
   patterns: [{ id: 'p', triggers: [], templates: [template] }],
   connectors: { verbs: ['link'], gerunds: ['linking'], nouns: ['bridge'], participles: ['tied-to'] }
 });
@@ -526,7 +554,7 @@ assert.deepStrictEqual(
 );
 
 // "a" becomes "an" before a connector noun that starts with a vowel sound.
-const nounTitle = (noun) => api('beans, toast', 'x', { config: { patterns: [{ id: 'p', triggers: [], templates: ['a-{connection}-between-{kw}'] }], connectors: { nouns: [noun] } } }).title;
+const nounTitle = (noun) => api('beans, toast', 'x', { config: { pluralFactor: 0, patterns: [{ id: 'p', triggers: [], templates: ['a-{connection}-between-{kw}'] }], connectors: { nouns: [noun] } } }).title;
 assert.strictEqual(nounTitle('overlap'), 'An Overlap Between Beans and Toast');
 assert.strictEqual(nounTitle('alliance'), 'An Alliance Between Beans and Toast');
 assert.strictEqual(nounTitle('union'), 'A Union Between Beans and Toast');
@@ -588,7 +616,7 @@ assert.strictEqual(api.explain(esSample.keywords, esSample.text, { lang: 'es' })
 assert.strictEqual(
   api(['pan', 'infusion'], 'x', {
     lang: 'es',
-    config: { patterns: [{ id: 'p', triggers: [], templates: ['{kw}'] }] }
+    config: { pluralFactor: 0, patterns: [{ id: 'p', triggers: [], templates: ['{kw}'] }] }
   }).title,
   'Pan e infusion'
 );
@@ -598,6 +626,7 @@ assert.strictEqual(
   api('Toast', 'x', {
     lang: 'de',
     config: {
+      pluralFactor: 0,
       patterns: [{ id: 'p', triggers: [], templates: ['a-{kw}'] }],
       locale: { id: 'de', titleCase: 'de', article: 'none', smallWords: [] }
     }
@@ -668,6 +697,30 @@ assert.throws(() => quirkySlug('', 'text'), TypeError);
   assert.strictEqual(f({ quirkFactor: 'x' }).quirky, false);
   assert.strictEqual(f({ quirkFactor: 7 }).quirky, true);
   assert.ok(f({ patternSpread: NaN }).candidates.length >= 1, 'a NaN patternSpread must not empty the candidates');
+  assert.deepStrictEqual(f({ pluralFactor: 'x' }).plurals, []);
+}
+
+// Plurals: an eligible keyword gains a trailing s with probability pluralFactor. A final s or vowel never does.
+{
+  const pluralOf = (keywords, pluralFactor, seed) => api.explain(keywords, 'x', {
+    seed,
+    config: {
+      pluralFactor,
+      joinerVariantFactor: 0,
+      patterns: [{ id: 'p', triggers: [], templates: ['{kw}'] }]
+    }
+  });
+  const always = pluralOf('baked beans, toast, tea', 1);
+  assert.strictEqual(always.title, 'Baked Beans, Toasts and Tea');
+  assert.strictEqual(always.slug, 'baked-beans-toasts-and-tea');
+  assert.deepStrictEqual(always.plurals, ['toast']);
+  assert.strictEqual(pluralOf('toast', 0).title, 'Toast');
+  assert.deepStrictEqual(pluralOf('tea, beans, city, day, quokka', 1).plurals, []);
+  assert.strictEqual(pluralOf('Toast', 1).slug, 'toasts');
+  assert.strictEqual(pluralOf('toast', 1, 'same').title, pluralOf('toast', 1, 'same').title);
+  let hits = 0;
+  for (let i = 0; i < 400; i++) if (pluralOf('toast', 0.3, 'p' + i).plurals.length) hits++;
+  assert.ok(hits > 400 * 0.2 && hits < 400 * 0.4, `plural share ${hits}/400`);
 }
 
 console.log('all tests passed');

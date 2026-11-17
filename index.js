@@ -134,6 +134,15 @@ function joinForSlug(list, joiner, locale) {
   return `${list.slice(0, -1).join('-')}-${word}-${list[list.length - 1]}`;
 }
 
+// A keyword can take a trailing "s" when its last letter is a consonant other than s.
+// "toast" can, "baked beans" (s) and "tea" (vowel) cannot. y counts as a vowel, so "city" stays.
+function pluralEligible(keyword) {
+  const letters = stripAccents(keyword).toLowerCase().match(/[a-z]/g);
+  if (!letters) return false;
+  const last = letters[letters.length - 1];
+  return last !== 's' && !'aeiouy'.includes(last);
+}
+
 // Pick the list joiner for this run: usually config.joiner ("and"), sometimes a variant ("and the").
 function chooseJoiner(config, chance) {
   const base = config.joiner == null ? 'and' : String(config.joiner);
@@ -412,8 +421,14 @@ function explain(keywords, text, options) {
     ? pick(connectList, useQuirky ? '|cq' : '|ct')
     : fromShared ? pick(shared, useQuirky ? '|sq' : '|st') : pick(own, useQuirky ? '|qt' : '|t');
 
-  // 6. Fill placeholders: {kw}, {kw1}, {kw2}..., {rest}, {top}, and in quirks mode {adj}, {suffix}
-  const kwSlugs = kws.map(slugify).filter(Boolean);
+  // 6. Fill placeholders: {kw}, {kw1}, {kw2}..., {rest}, {top}, and in quirks mode {adj}, {suffix}.
+  //    pluralFactor (0-1) is the chance, per eligible keyword, of adding a trailing "s" in the slug and the title.
+  const pluralFactor = clamp01(config.pluralFactor);
+  const pluralFlags = kws.map((keyword, i) => (
+    pluralFactor > 0 && pluralEligible(keyword) && chance('|plural|' + i) < pluralFactor
+  ));
+  const shownKeywords = kws.map((keyword, i) => (pluralFlags[i] ? keyword + 's' : keyword));
+  const kwSlugs = shownKeywords.map(slugify).filter(Boolean);
   let top = '';
   let topCount = 0;
   textTokens.forEach((t) => {
@@ -442,7 +457,7 @@ function explain(keywords, text, options) {
     const list = (config.connectors || {})[CONNECTORS[name][0]] || [];
     return list.length ? pick(list, CONNECTORS[name][1]) : '';
   };
-  const kwTitles = kws.map((k) => k.replace(/\s+/g, ' '));
+  const kwTitles = shownKeywords.map((k) => k.replace(/\s+/g, ' '));
   const used = { connectors: {} };
 
   const PLACEHOLDER_RE = /\{(kw\d*|rest|n|top|adj|suffix|connect|connecting|connection|connected)\}/;
@@ -514,6 +529,8 @@ function explain(keywords, text, options) {
     quirky: useQuirky,
     quirkFactor,
     joiner: activeJoiner,
+    pluralFactor,
+    plurals: kws.filter((_, i) => pluralFlags[i]),
     seed: hasSeed ? String(options.seed) : null,
     adjective: used.adjective,
     suffix: used.suffix,

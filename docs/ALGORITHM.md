@@ -91,7 +91,7 @@ This is the core of the matching. It uses a classic technique called **TF-IDF wi
 
 The result is one score per pattern. A pattern does not recognise a topic. It scores only the trigger words that also appear in the text, after stemming. On the baked beans sample, `food` leads because the text contains *breakfast*, *tomato*, *sauce*, *butter*, *milk*, *salt*, *savoury*, *crisp*, *fork*, *plate*, *mug* and *eat*. `recipe` matches *cooked* and *baked*, `comfort` matches *comfort* and *homemade*, and `opinion` matches *honest*. Every other default pattern shares nothing, so its score is 0.
 
-Unused triggers dilute that score. Every trigger is part of the pattern's list, whether or not the text contains it, and the score is divided by the length of the whole list. The default `food` pattern has 30 triggers and scores about 0.167 on that sample. Stretching the same list to 500 triggers, with none of the new words in the text, drops it to about 0.041, and `recipe` (still about 0.106) becomes the stronger match. Add triggers the text is likely to contain. A long list of words the text never uses makes the pattern harder to win, not easier. The default control set has 217 trigger words across the 17 patterns that have any.
+Unused triggers dilute that score. Every trigger is part of the pattern's list, whether or not the text contains it, and the score is divided by the length of the whole list. The default `food` pattern has 30 triggers and scores about 0.167 on that sample. Stretching the same list to 500 triggers, with none of the new words in the text, drops it to about 0.041, and `recipe` (still about 0.106) becomes the stronger match. Add triggers the text is likely to contain. A long list of words the text never uses makes the pattern harder to win, not easier. The default control set has 295 trigger words across the 26 patterns that have any.
 
 Long texts with lots of unrelated words get lower scores for the same reason: those words dilute the match. Scores like 0.12 are normal, and only the **relative** scores matter.
 
@@ -100,7 +100,7 @@ Long texts with lots of unrelated words get lower scores for the same reason: th
 The best-scoring pattern does not always win outright. That would give you the same kind of title every time for similar text.
 
 1. Any pattern scoring at least `patternSpread` (default 20%) of the best score becomes a **candidate**.
-2. The candidates share the odds in proportion to their scores. If `recipe` scores 0.125 and `food` scores 0.080, `recipe` gets 61% of the odds and `food` gets 39%.
+2. The candidates share the odds in proportion to their scores. If `recipe` scores 0.126 and `food` scores 0.081, `recipe` gets 61% of the odds and `food` gets 39%.
 3. The seed picks one.
 
 If **nothing** matches (no score above `minScore`), a generic pattern is picked at random instead: `default`, `spotlight` or `essentials`. That is why text that means nothing to the patterns still gets varied titles.
@@ -140,6 +140,16 @@ The word in each gap is picked by the seed from the matching list, so each word 
 
 The keyword list puts the word "and" (`joiner`) only before the **last** keyword: `baked beans, toast and tea`. Now and then (`joinerVariantFactor`, 25% by default) it uses a variant from `joinerVariants` instead, such as `and the`, which suits names: `Potatoes and the John Lloyd Experience`. Set `joinerVariantFactor` to `0` to always use the plain joiner. A literal `a` in a template becomes `an` before a vowel sound: `an accidental plot twist`, `a curious plot twist`.
 
+**Plurals.** `pluralFactor` (default 0.3, labelled Plurals on the example site) is the chance that a keyword is shown with a trailing `s`, in both the slug and the title. Each keyword is rolled on its own, and the same input and seed always roll the same way.
+
+A keyword is left as written when its last letter is `s` or a vowel (`a`, `e`, `i`, `o`, `u`, `y`). So `baked beans` and `tea` never change, and `toast` can become `toasts`. At `0`, nothing is pluralized. At `1`, every eligible keyword is.
+
+```js
+quirkySlug('baked beans, toast, tea', text, { config: { pluralFactor: 1 } });
+// title: '... Baked Beans, Toasts and Tea'
+// baked beans and tea are unchanged
+```
+
 ### 7. Build the slug and the title
 
 The template is filled in once, then turned into two outputs.
@@ -154,11 +164,11 @@ Keywords: `baked beans, toast, tea`. Text (30 words):
 > Baked beans belong at the centre of breakfast, thick and glossy in tomato sauce. Toast has to keep up: cut thick, browned, buttered while still hot. Tea closes it quietly.
 
 1. **Weights:** baked beans 47%, toast 40%, tea 13%.
-2. **Scores:** only two patterns match anything. `recipe` scores 0.125 and `food` scores 0.080.
+2. **Scores:** only two patterns match anything. `recipe` scores 0.126 and `food` scores 0.081.
 3. **Candidates:** both pass the 20% test, so the odds are `recipe` 61% and `food` 39%.
 4. **The seed decides.** With the seed `demo` the winner is `recipe`.
 5. **Template pool:** the 40% connecting draw hits, so the template comes from `connectTemplates`: `a-{connection}-between-{kw}`.
-6. **Gaps:** `{connection}` becomes `correlation`, and `a` stays `a` because `correlation` does not start with a vowel sound. `{kw}` becomes `baked beans, toast and the tea`: this seed also hits the 25% joiner-variant roll, so the last keyword gets `and the` instead of `and`.
+6. **Gaps:** `{connection}` becomes `correlation`, and `a` stays `a` because `correlation` does not start with a vowel sound. `{kw}` becomes `baked beans, toast and the tea`: this seed also hits the 25% joiner-variant roll, so the last keyword gets `and the` instead of `and`. The plural roll does not hit for `toast`, so it stays singular. `baked beans` and `tea` were not eligible.
 7. **Result:**
 
 ```js
@@ -167,7 +177,7 @@ quirkySlug('baked beans, toast, tea', text, { seed: 'demo' });
 //      title: 'A Correlation Between Baked Beans, Toast and the Tea' }
 ```
 
-With `joinerVariantFactor: 0` the same seed gives `A Correlation Between Baked Beans, Toast and Tea`. Other seeds on the same input give other titles, such as `Baked Beans, Toast and Tea Recipe Ideas`, `What to Eat: Baked Beans, Toast and Tea` and `Baked Beans vs Toast and Tea: Closer than You Think`.
+With `joinerVariantFactor: 0` the same seed gives `A Correlation Between Baked Beans, Toast and Tea`. With `pluralFactor: 1` it gives `A Correlation Between Baked Beans, Toasts and the Tea` (`baked beans` and `tea` still unchanged). Other seeds on the same input give other titles, such as `Baked Beans, Toast and Tea Recipe Ideas`, `What to Eat: Baked Beans, Toast and Tea` and `Baked Beans vs Toast and Tea: Closer than You Think`.
 
 ## Why did I get this title?
 
@@ -180,6 +190,8 @@ info.candidates;       // [{ id: 'recipe', share: 0.61 }, { id: 'food', share: 0
 info.template;         // 'a-{connection}-between-{kw}'
 info.connectTemplate;  // true
 info.joiner;           // 'and the'
+info.pluralFactor;     // 0.3
+info.plurals;          // []  — toast was eligible, this seed left it singular
 ```
 
 The example site shows the same information on a web page. Pattern rows whose score displays as 0.000 are left out. Open Raw data to see every score.
@@ -208,32 +220,42 @@ The example site shows the same information on a web page. Pattern rows whose sc
 | A pattern to match the words you care about | Add those words to its triggers. Triggers the text never uses lower its score |
 | More words for `{adj}`, `{suffix}` or connectors | Add them to `quirkyModifiers` or `connectors` |
 | Always the plain joiner (`and`), never `and the` | `joinerVariantFactor: 0` |
-| Fully predictable output for tests | `patternSpread: 1`, `sharedFactor: 0`, `connectFactor: 0`, `joinerVariantFactor: 0`, and a fixed seed |
+| Keywords never pluralized | `pluralFactor: 0` |
+| Fully predictable output for tests | `patternSpread: 1`, `sharedFactor: 0`, `connectFactor: 0`, `joinerVariantFactor: 0`, `pluralFactor: 0`, and a fixed seed |
 
 ## The default patterns
 
 | Pattern | Triggered by (examples) | A title for `baked beans, toast` |
 | --- | --- | --- |
-| `curious-history` | history, vintage, retro, forgotten, era | The History of Baked Beans and Toast |
+| `history` | history, ancient, empire, dynasty, century, war | The History of Baked Beans and Toast |
 | `recipe` | recipe, cook, bake, oven, kitchen, serve | How to Make Baked Beans and Toast |
 | `review` | review, rating, verdict, pros, cons | Baked Beans and Toast: Is It Worth It? |
-| `howto` | how, step, guide, tutorial, install | How to Master Baked Beans and Toast |
+| `howto` | step, guide, tutorial, install | How to Master Baked Beans and Toast |
 | `list` | best, top, list, ranked, picks | Best Baked Beans and Toast |
-| `connection` | connect, link, common, overlap, together | The Overlap Between Baked Beans and Toast |
-| `comparison` | versus, compare, difference, better | Baked Beans and Toast: Which Is Better? |
+| `connection` | connect, link, overlap, together | The Overlap Between Baked Beans and Toast |
+| `comparison` | versus, compare, difference, alternative | Baked Beans and Toast: Which Is Better? |
 | `news` | announced, breaking, report, launch | Baked Beans and Toast: The Latest |
 | `food` | breakfast, lunch, tomato, butter, taste | The Joy of Baked Beans and Toast |
 | `comfort` | comfort, classic, homemade, nostalgia | The Comfort of Baked Beans and Toast |
-| `explainer` | why, science, reason, because, research | The Science of Baked Beans and Toast |
+| `explainer` | science, research, study, physics, explain | The Science of Baked Beans and Toast |
 | `opinion` | opinion, truth, overrated, myth, debate | The Truth About Baked Beans and Toast |
 | `tips` | tip, trick, hack, mistake, shortcut | Tips for Baked Beans and Toast |
 | `personal` | my, story, journey, memory, lesson | My Story with Baked Beans and Toast |
 | `travel` | travel, trip, city, holiday, explore | Exploring Baked Beans and Toast |
-| `tech` | software, app, code, data, algorithm | The Technology Behind Baked Beans and Toast |
-| `health` | health, wellness, diet, nutrition, energy | The Health Benefits of Baked Beans and Toast |
+| `tech` | software, computer, device, internet, algorithm | The Technology Behind Baked Beans and Toast |
+| `health` | health, wellness, diet, nutrition, fitness | The Health Benefits of Baked Beans and Toast |
+| `nature` | species, genus, habitat, wildlife, nocturnal | A Field Guide to Baked Beans and Toast |
+| `people` | born, died, biography, elected, scientist | The Life of Baked Beans and Toast |
+| `place` | located, capital, island, river, geography | The Geography of Baked Beans and Toast |
+| `science` | equation, theory, experiment, theorem, atom | The Mechanics of Baked Beans and Toast |
+| `culture` | literature, poetry, cinema, museum, mythology | Baked Beans and Toast in Culture |
+| `society` | parliament, government, election, economy, policy | The Social World of Baked Beans and Toast |
+| `statistics` | census, median, percentage, variance, dataset | The Numbers Behind Baked Beans and Toast |
+| `sport` | league, championship, tournament, athlete, medal | The Sporting Life of Baked Beans and Toast |
+| `objects` | artifact, tool, instrument, relic, machinery | What Baked Beans and Toast Is Made Of |
 | `default`, `spotlight`, `essentials` | none (generic) | All About Baked Beans and Toast |
 
-Each title in the last column is one real template rendered for those two keywords. Every pattern has several templates; they are all in [`quirky-slugger.config.json`](../quirky-slugger.config.json).
+Each title in the last column is one real template rendered for those two keywords. Every pattern has several templates; they live in the language pack, [`langs/en.json`](../langs/en.json). Subject patterns (`history`, `nature`, `people`, `place`, `science`, `statistics`, `sport`, `objects`, `culture`, `society`, `food`, `health`, `tech`) are for what a page is about. Each one has its own templates, so a title still reads when the keywords are two unrelated topics, and a history title does not come out in the voice of a field guide or a league table. Voice patterns (`recipe`, `review`, `howto`, and the rest of that kind) stay available, but their triggers leave out words encyclopedia prose uses in passing, such as `how`, `new` and `system`.
 
 ## Languages
 

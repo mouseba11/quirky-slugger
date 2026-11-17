@@ -8,6 +8,7 @@
   "sharedFactor": 0.25,
   "connectFactor": 0.4,
   "joinerVariantFactor": 0.25,
+  "pluralFactor": 0.3,
   "quirks": false,
   "quirkFactor": 0.7
 }

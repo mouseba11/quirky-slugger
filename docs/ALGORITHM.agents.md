@@ -47,6 +47,8 @@ quirksMode                           boolean, effective setting
 quirky                               boolean, a quirky list was chosen
 quirkFactor                          number, effective (clamped 0..1)
 joiner                               the list joiner used this call: config.joiner or a joinerVariants entry (5.6)
+pluralFactor                         number, effective (clamped 0..1)
+plurals                              original keywords that gained a trailing s this call (5.6)
 seed                                 string or null
 adjective, suffix, number, top       string or undefined; set only if the template used the placeholder
 keywords                             [{ keyword, weight }]
@@ -84,6 +86,7 @@ Defaults below come from `quirky-slugger.config.json` (algorithm settings) and `
 | `joiner` | `"and"` | string. Word before the last list item. `""` gives comma-only lists. |
 | `joinerVariants` | `["and the"]` (en only) | string[]. Alternative joiners; see 5.6. Absent or empty disables variants. |
 | `joinerVariantFactor` | 0.25 | 0..1. Chance of using a variant instead of `joiner`. |
+| `pluralFactor` | 0.3 | 0..1. Per eligible keyword, the chance of a trailing `s` in the slug and the title. See 5.6. |
 | `keywordWeight` | 2 | number. Multiplier for the keyword boost (4.2). |
 | `minScore` | 0 | number. A pattern must score strictly above this. |
 | `patternSpread` | 0.2 | 0..1. Candidate threshold as a fraction of the best score. **If the key is `undefined` the code uses 1**, but the default file sets 0.2. |
@@ -100,7 +103,7 @@ Defaults below come from `quirky-slugger.config.json` (algorithm settings) and `
 | `sharedQuirkyTemplates` | 12 | quirks mode. |
 | `connectTemplates` | 23 | templates that join/compare keywords, plain. |
 | `connectQuirkyTemplates` | 14 | quirks mode. |
-| `patterns` | 20 | see 1.3. |
+| `patterns` | 29 | see 1.3. |
 | `locale` | see 1.4 | pack-level rendering rules (title case, `a`/`an`, joiner alternate). |
 
 
@@ -112,7 +115,8 @@ Defaults below come from `quirky-slugger.config.json` (algorithm settings) and `
 
 - Pattern with no `triggers` or `[]` is **generic**.
 - If `id` is missing, `scores[].id` is `pattern-<index>` but `explain().pattern` is `null` (a known inconsistency).
-- Default ids: `curious-history`, `recipe`, `review`, `howto`, `list`, `connection`, `comparison`, `news`, `food`, `comfort`, `explainer`, `opinion`, `tips`, `personal`, `travel`, `tech`, `health` (17 with triggers), then generic `default`, `spotlight`, `essentials`.
+- Default ids, in order: `history`, `recipe`, `review`, `howto`, `list`, `connection`, `comparison`, `news`, `food`, `comfort`, `explainer`, `opinion`, `tips`, `personal`, `travel`, `tech`, `health`, `nature`, `people`, `place`, `science`, `culture`, `society`, `statistics`, `sport`, `objects` (26 with triggers), then generic `default`, `spotlight`, `essentials`.
+- Subject ids (`history`, `nature`, `people`, `place`, `science`, `statistics`, `sport`, `objects`, `culture`, `society`, `food`, `health`, `tech`) describe what the text is about. Each has its own templates, so a history title does not read like a nature title or a statistics title, and two unrelated topics still parse. Voice ids (`recipe`, `review`, `howto`, `list`, `news`, `opinion`, `tips`, `personal`, `comfort`, `travel`) describe a way of writing. Their triggers avoid words that ordinary encyclopedia prose uses in passing (`how`, `new`, `system`, `life`). `connection` and `comparison` join the keywords. `explainer` is for causal prose.
 
 ### 1.4 `locale`
 
@@ -198,6 +202,7 @@ chance(salt)     = hash(seed + salt) / 4294967296        // [0, 1)
 | `\|shared` | `chance` | shared pool vs the pattern's own |
 | `\|joiner-var` | `chance` | use a joiner variant instead of `joiner` (compared with `joinerVariantFactor`; only evaluated when variants exist and the factor is above 0) |
 | `\|joiner-pick` | `chance` | which variant: `variants[floor(chance * variants.length)]` |
+| `\|plural\|i` | `chance` | pluralize keyword `i` (compared with `pluralFactor`; only evaluated when that keyword is eligible and the factor is above 0) |
 | `\|ct` / `\|cq` | `pick` | template from `connectPlain` / `connectQuirky` |
 | `\|st` / `\|sq` | `pick` | template from `sharedPlain` / `sharedQuirky` |
 | `\|t` / `\|qt` | `pick` | template from the pattern's plain / quirky list |
@@ -263,7 +268,7 @@ vec_p[t] = idf(t)  for each unique folded trigger token t of pattern p   (binary
 score_p  = cosine(query, vec_p) = dot / (|query| * |vec_p|), 0 if either norm is 0
 ```
 
-Because `|query|` includes **every** text term, long or unrelated text lowers all scores. Because `|vec_p|` includes **every** trigger, triggers absent from the text raise the denominator and lower `score_p` without adding to the dot product. Growing a pattern from n to N unique triggers with no new overlaps multiplies its score by about `sqrt(n/N)`, assuming similar IDF. Only relative scores matter. Default trigger counts: 217 strings across 17 patterns; `food` has 30; `default`, `spotlight` and `essentials` have none.
+Because `|query|` includes **every** text term, long or unrelated text lowers all scores. Because `|vec_p|` includes **every** trigger, triggers absent from the text raise the denominator and lower `score_p` without adding to the dot product. Growing a pattern from n to N unique triggers with no new overlaps multiplies its score by about `sqrt(n/N)`, assuming similar IDF. Only relative scores matter. Default trigger counts: 295 strings across 26 patterns; `food` has 30; `default`, `spotlight` and `essentials` have none.
 
 ### 4.6 Pattern choice
 
@@ -350,6 +355,8 @@ if variants is empty or factor <= 0 or chance('|joiner-var') >= factor:  joiner 
 else joiner = variants[ floor(chance('|joiner-pick') * variants.length) ]
 ```
 
+**Plurals** (`pluralFactor`, once per keyword, before joining). If `clamp01(pluralFactor)` is above 0 and `chance('|plural|' + i)` is below it, keyword `i` gains a trailing `s` in both the slug and the title. A keyword is eligible when its last letter (accents stripped) is not `s` and not a vowel `a e i o u y`. So `toast` can become `toasts`, while `baked beans`, `tea`, `city` and `quokka` stay as written. The roll is independent for each keyword. `explain().plurals` lists the original keywords that were pluralized. `explain().keywords` stays the words as given.
+
 **Joining.** For one item, the item. With the joiner empty: items joined by `, ` (title) or `-` (slug). Otherwise `a, b joiner c` (title) and `a-b-joiner-c` (slug): the joiner appears **only** before the last item, and never when there is one item. `{rest}` applies the same function to `keywords.slice(1)`, so for two keywords `{rest}` is just the second keyword.
 
 **Joiner alternate** (`pickJoiner`, applied at each join, so it sees the last item): if `locale.joinerAlt` is set and the last item (normalised as in 1.4) starts with one of its prefixes, `joinerAlt.use` replaces the joiner. Both are then slugified for the slug.
@@ -358,7 +365,7 @@ else joiner = variants[ floor(chance('|joiner-pick') * variants.length) ]
 
 ### 6.1 Pools
 
-Sizes are those of the English pack, `langs/en.json`: 113 plain and 105 quirky pattern templates, 11 + 12 shared, 23 + 14 connecting. The `connection` pattern deliberately repeats several connecting-pool templates (5 plain, 2 quirky) so it leans on connector words when it wins; no other template appears twice among the options available to one pattern in one mode. `de` and `es` follow the same shape with slightly different counts.
+Sizes are those of the English pack, `langs/en.json`: 162 plain and 144 quirky pattern templates, 11 + 12 shared, 23 + 14 connecting. The `connection` pattern deliberately repeats several connecting-pool templates (5 plain, 2 quirky) so it leans on connector words when it wins; no other template appears twice among the options available to one pattern in one mode. `de` and `es` follow the same shape with slightly different counts.
 
 ### 6.2 Which placeholders each pool uses
 
@@ -398,7 +405,7 @@ Do not put a word in a list unless it fits every template using that placeholder
 - **Overlapping keyword tokens** (for example `tea` and `iced tea`) share weight attribution by order.
 - **Duplicate keywords** are not de-duplicated.
 - **Unsluggable keywords** (for example `"!!!"` or non-Latin text): `kwSlugs` filters them out, but `needs` and the title still count them, so `{kwN}` indices can shift in the slug. Avoid such keywords, or filter them before calling.
-- **Invalid factors count as 0.** `quirkFactor`, `sharedFactor`, `connectFactor`, `joinerVariantFactor` and a supplied `patternSpread` go through `clamp01`: a missing or non-numeric value silently turns that feature off (or, for `patternSpread`, makes every positive-scoring pattern a candidate).
+- **Invalid factors count as 0.** `quirkFactor`, `sharedFactor`, `connectFactor`, `joinerVariantFactor`, `pluralFactor` and a supplied `patternSpread` go through `clamp01`: a missing or non-numeric value silently turns that feature off (or, for `patternSpread`, makes every positive-scoring pattern a candidate).
 - **`minScore`** applies to candidate selection and the fallback test, not to the displayed `scores`.
 - **A custom config is read and validated on every call**, including re-reading a file path. Cache the object yourself in hot loops.
 - **Template characters.** Only `[a-z0-9{}.,:;?!'-]` are allowed in default templates (enforced by `test.js`). A `'` inside a template is kept in the title but dropped from the slug.
@@ -410,7 +417,7 @@ Do not put a word in a list unless it fits every template using that placeholder
 
 `test.js` pins behaviour in two ways. Know which kind you are about to break.
 
-1. **Pinned wrapper.** Most tests call a wrapper that adds `{ patternSpread: 1, sharedFactor: 0, connectFactor: 0, joinerVariantFactor: 0 }` to the config so the best pattern always wins, no pool is mixed in, and the joiner is always the plain `and`. These tests depend on triggers and templates, not on pool contents.
+1. **Pinned wrapper.** Most tests call a wrapper that adds `{ patternSpread: 1, sharedFactor: 0, connectFactor: 0, joinerVariantFactor: 0, pluralFactor: 0 }` to the config so the best pattern always wins, no pool is mixed in, the joiner is always the plain `and`, and keywords are not pluralized. These tests depend on triggers and templates, not on pool contents.
 2. **Statistical surveys** run `explain` over hundreds of seeds (`v0`..`v299`, `c0`..`c399`, `w0`..`w1999`) against the control text and assert thresholds. They fail if the default data shrinks or loses variety. Current thresholds:
 
 | Assertion | Threshold |

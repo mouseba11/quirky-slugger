@@ -23,6 +23,11 @@
     "Chance, from 0 to 1, of using a joiner variant instead of the main joiner.",
     "At 0, only the main joiner is used. At 1, a variant is always chosen when the list is non-empty."
   ],
+  "pluralFactor": [
+    "Chance, from 0 to 1, that an eligible keyword is made plural in the slug and the title.",
+    "A keyword is eligible when its last letter is not s and not a vowel (a, e, i, o, u or y). \"baked beans\" and \"tea\" stay as written. \"toast\" can become \"toasts\".",
+    "At 0, nothing is pluralized. At 1, every eligible keyword is. Each keyword is rolled on its own, and the same input and seed always roll the same way. The default 0.3 is about a 30% chance."
+  ],
   "keywordWeight": [
     "How strongly keywords count when scoring patterns.",
     "Keywords that also appear as triggers pull the match toward those patterns. Higher values make that pull stronger.",
