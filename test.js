@@ -466,6 +466,27 @@ assert.strictEqual(pinned('notes app', 'The software runs on a device and the ap
 });
 assert.strictEqual(pinned('wundheilung', 'Die Methode folgt einem Protokoll.', 'de'), 'method');
 assert.strictEqual(pinned('cicatrizacion', 'El metodo sigue un protocolo.', 'es'), 'method');
+
+// "How to ... in 3 easy steps" is part of the random mix on any page, not only a howto page.
+{
+  const steps = (config) => api('baked beans', 'x', { config: Object.assign({ pluralFactor: 0, numbers: ['3'] }, config) }).title;
+  assert.strictEqual(
+    steps({ patterns: [{ id: 'p', triggers: [], templates: ['how-to-master-{kw}-in-{n}-easy-steps'] }] }),
+    'How to Master Baked Beans in 3 Easy Steps'
+  );
+  ['en', 'de', 'es'].forEach((code) => {
+    const pack = require(`./langs/${code}.json`);
+    const howto = pack.patterns.find((p) => p.id === 'howto');
+    assert.ok(pack.sharedTemplates.some((t) => t.includes('{n}') && /steps|schritt|pasos/.test(t)), `${code}: no shared steps template`);
+    assert.ok(howto.templates.some((t) => t.includes('{n}') && /steps|schritt|pasos/.test(t)), `${code}: howto has no steps template`);
+  });
+  let stepTitles = 0;
+  for (let i = 0; i < 1000; i++) {
+    const t = api('lemurs', 'Lemurs live in Madagascar.', { seed: 'w' + i, config: { pluralFactor: 0 } }).title;
+    if (/\bSteps\b/.test(t) && /\b(Easy|Started)\b/.test(t)) stepTitles++;
+  }
+  assert.ok(stepTitles > 1000 * 0.02 && stepTitles < 1000 * 0.08, `how-to-steps share ${stepTitles}/1000`);
+}
 // The two excerpts together stay on the two subject patterns. Neither "how" nor "system" pulls howto or tech.
 const mash = api.explain('quokka, quantum gate', quokkaText + ' ' + gateText);
 const mashScore = Object.fromEntries(mash.scores.map((s) => [s.id, s.score]));

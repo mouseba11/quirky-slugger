@@ -208,7 +208,10 @@
     "notizen-zu-{kw}",
     "eine-notiz-zu-{kw}",
     "{kw}:-ein-ueberblick",
-    "eine-kurze-einfuehrung-in-{kw}"
+    "eine-kurze-einfuehrung-in-{kw}",
+    "so-gelingt-der-start-mit-{kw}-in-{n}-einfachen-schritten",
+    "{kw}-in-{n}-einfachen-schritten",
+    "{n}-einfache-schritte-zum-einstieg-in-{kw}"
   ],
   "sharedQuirkyTemplates": [
     "{n}-{adj}-fakten-ueber-{kw}",
@@ -221,7 +224,8 @@
     "drin-in-der-{adj}-welt-von-{kw}",
     "{kw}:-{adj}-liebesbrief",
     "{kw}:-damit-hat-niemand-gerechnet",
-    "{n}-{adj}-gruende-{kw}-auszuprobieren"
+    "{n}-{adj}-gruende-{kw}-auszuprobieren",
+    "so-gelingt-der-start-mit-{kw}-in-drei-{adj}-schritten"
   ],
   "connectTemplates": [
     "die-{connection}-zwischen-{kw}",
@@ -404,14 +408,19 @@
         "einsteigerleitfaden-zu-{kw}",
         "wie-man-{kw1}-mit-{rest}-kombiniert",
         "das-beste-aus-{kw}-herausholen",
-        "{kw}-fuer-einsteiger"
+        "{kw}-fuer-einsteiger",
+        "{kw}-meistern-in-{n}-einfachen-schritten",
+        "so-gelingt-der-einstieg-in-{kw}-in-{n}-schritten",
+        "{kw1}-mit-{rest}-verbinden-in-{n}-einfachen-schritten"
       ],
       "quirkyTemplates": [
         "kein-blabla-leitfaden-zu-{kw}",
         "{kw}-baendigen-schritt-fuer-schritt",
         "der-{adj}-ueberlebensleitfaden-zu-{kw}",
         "von-null-zu-{adj}-mit-{kw}",
-        "wie-man-{kw1}-mit-{rest}-wie-ein-profi-kombiniert"
+        "wie-man-{kw1}-mit-{rest}-wie-ein-profi-kombiniert",
+        "{kw}-meistern-in-drei-{adj}-schritten",
+        "{kw}-in-fuenf-{adj}-schritten"
       ]
     },
     {

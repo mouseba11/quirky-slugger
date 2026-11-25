@@ -205,7 +205,10 @@
     "notas-sobre-{kw}",
     "una-nota-sobre-{kw}",
     "{kw}:-una-vision-general",
-    "una-breve-introduccion-a-{kw}"
+    "una-breve-introduccion-a-{kw}",
+    "como-empezar-con-{kw}-en-{n}-sencillos-pasos",
+    "{kw}-en-{n}-sencillos-pasos",
+    "{n}-sencillos-pasos-para-empezar-con-{kw}"
   ],
   "sharedQuirkyTemplates": [
     "{n}-datos-{adj}-sobre-{kw}",
@@ -218,7 +221,8 @@
     "dentro-del-mundo-{adj}-de-{kw}",
     "{kw}:-carta-de-amor-{adj}",
     "{kw}:-nadie-vio-esto-venir",
-    "{n}-razones-{adj}-para-probar-{kw}"
+    "{n}-razones-{adj}-para-probar-{kw}",
+    "como-empezar-con-{kw}-en-tres-pasos-{adj}"
   ],
   "connectTemplates": [
     "el-{connection}-entre-{kw}",
@@ -406,14 +410,19 @@
         "guia-para-principiantes-de-{kw}",
         "como-combinar-{kw1}-con-{rest}",
         "sacar-el-maximo-de-{kw}",
-        "{kw}-para-principiantes"
+        "{kw}-para-principiantes",
+        "como-dominar-{kw}-en-{n}-sencillos-pasos",
+        "como-empezar-con-{kw}-en-{n}-pasos",
+        "como-combinar-{kw1}-con-{rest}-en-{n}-sencillos-pasos"
       ],
       "quirkyTemplates": [
         "guia-sin-paja-de-{kw}",
         "domar-{kw}-paso-a-paso",
         "la-guia-de-supervivencia-{adj}-de-{kw}",
         "de-cero-a-{adj}-con-{kw}",
-        "como-combinar-{kw1}-con-{rest}-como-un-profesional"
+        "como-combinar-{kw1}-con-{rest}-como-un-profesional",
+        "como-dominar-{kw}-en-tres-pasos-{adj}",
+        "{kw}-en-cinco-pasos-{adj}"
       ]
     },
     {

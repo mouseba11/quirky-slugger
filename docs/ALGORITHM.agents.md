@@ -99,8 +99,8 @@ Defaults below come from `quirky-slugger.config.json` (algorithm settings) and `
 | `quirkyModifiers` | `{ adjectives[22], suffixes[18] }` | strings, hyphenated multi-word values. |
 | `connectors` | `{ verbs[17], gerunds[16], nouns[16], participles[22] }` | see 6.3. |
 | `stopWords` | 36 words | folded with `fold` before use. |
-| `sharedTemplates` | 15 | templates for any pattern, plain mode. |
-| `sharedQuirkyTemplates` | 12 | quirks mode. |
+| `sharedTemplates` | 18 | templates for any pattern, plain mode. Three are "how to ... in {n} easy steps" frames (about 4% of titles on a page that matches no pattern). |
+| `sharedQuirkyTemplates` | 13 | quirks mode. |
 | `connectTemplates` | 23 | templates that join/compare keywords, plain. |
 | `connectQuirkyTemplates` | 14 | quirks mode. |
 | `patterns` | 34 | see 1.3. |
@@ -115,8 +115,8 @@ Defaults below come from `quirky-slugger.config.json` (algorithm settings) and `
 
 - Pattern with no `triggers` or `[]` is **generic**.
 - If `id` is missing, `scores[].id` is `pattern-<index>` but `explain().pattern` is `null` (a known inconsistency).
-- Default ids, in order: `history`, `recipe`, `review`, `howto`, `list`, `connection`, `comparison`, `news`, `food`, `comfort`, `explainer`, `opinion`, `tips`, `personal`, `travel`, `tech`, `health`, `nature`, `people`, `place`, `science`, `culture`, `society`, `statistics`, `sport`, `objects`, `method`, `finding`, `survey`, `case`, `definition` (31 with triggers), then generic `default`, `spotlight`, `essentials`. `de` and `es` have the same ids in the same order, with plain translations of the triggers and templates. They have 13 shared templates (9 before, 4 added), not 15.
-- Subject ids (`history`, `nature`, `people`, `place`, `science`, `statistics`, `sport`, `objects`, `culture`, `society`, `food`, `health`, `tech`) describe what the text is about. Each has its own templates, so a history title does not read like a nature title or a statistics title, and two unrelated topics still parse. Voice ids (`recipe`, `review`, `howto`, `list`, `news`, `opinion`, `tips`, `personal`, `comfort`, `travel`) describe a way of writing. Their triggers avoid words that ordinary encyclopedia prose uses in passing (`how`, `new`, `system`, `life`). `connection` and `comparison` join the keywords. `explainer` is for causal prose.
+- Default ids, in order: `history`, `recipe`, `review`, `howto`, `list`, `connection`, `comparison`, `news`, `food`, `comfort`, `explainer`, `opinion`, `tips`, `personal`, `travel`, `tech`, `health`, `nature`, `people`, `place`, `science`, `culture`, `society`, `statistics`, `sport`, `objects`, `method`, `finding`, `survey`, `case`, `definition` (31 with triggers), then generic `default`, `spotlight`, `essentials`. `de` and `es` have the same ids in the same order, with plain translations of the triggers and templates. They have 16 shared templates and 12 shared quirky templates, not 18 and 13.
+- Subject ids (`history`, `nature`, `people`, `place`, `science`, `statistics`, `sport`, `objects`, `culture`, `society`, `food`, `health`, `tech`) describe what the text is about. Each has its own templates, so a history title does not read like a nature title or a statistics title, and two unrelated topics still parse. Voice ids (`recipe`, `review`, `howto`, `list`, `news`, `opinion`, `tips`, `personal`, `comfort`, `travel`) describe a way of writing. Their triggers avoid words that ordinary encyclopedia prose uses in passing (`how`, `new`, `system`, `life`). `howto` also has "in {n} easy steps" templates. A title with a number is read by quirky-persona as a list (its `numbered` rule), so a "how to ... in 3 easy steps" title only gets an instructor persona when that package treats `step` as stronger than the number. `connection` and `comparison` join the keywords. `explainer` is for causal prose.
 - Purpose ids (`method`, `finding`, `survey`, `case`, `definition`) follow why a scientific or academic page exists: how something was done, what was found, what the field has published, one clinical case, what a term means. Each has a short trigger list of intent words (`protocol`, `evidence`, `systematic`, `diagnosis`, `defined`). Their lists are short on purpose, so one hit scores well (4.5). They avoid words that are likely topics (`case`, `patient`, `meaning`, `term`, `result`) and words that other patterns own (`review`, `literature`, `report`). `science` also takes `mechanism`. `review` no longer triggers on the bare word `review`, because that word is as common in a paper as in a product page. It keeps `rating`, `verdict`, `tested`, `unboxing`, `recommend` and `buyer`. `news` no longer takes `report`, `culture` no longer takes `literature`, `health` no longer takes `protein`, and `explainer` no longer takes `study`, `research`, `science`, `chemistry` or `physics`. A page whose only review signal is the word `review` falls to a generic pattern. That is accepted.
 - The plural and `fold` rules for these ids are in 5.6 and 2.1. A purpose template never contains a verb that must agree with a keyword (`what-{kw}-means` and `how-{kw}-was-measured` are not used).
 
@@ -370,7 +370,7 @@ else joiner = variants[ floor(chance('|joiner-pick') * variants.length) ]
 
 ### 6.1 Pools
 
-Sizes are those of the English pack, `langs/en.json`: 193 plain and 156 quirky pattern templates, 15 + 12 shared, 23 + 14 connecting. The `connection` pattern deliberately repeats several connecting-pool templates (5 plain, 2 quirky) so it leans on connector words when it wins; no other template appears twice among the options available to one pattern in one mode. `de` and `es` follow the same shape with slightly different counts.
+Sizes are those of the English pack, `langs/en.json`: 196 plain and 158 quirky pattern templates, 18 + 13 shared, 23 + 14 connecting. The `connection` pattern deliberately repeats several connecting-pool templates (5 plain, 2 quirky) so it leans on connector words when it wins; no other template appears twice among the options available to one pattern in one mode. `de` and `es` follow the same shape with slightly different counts.
 
 ### 6.2 Which placeholders each pool uses
 

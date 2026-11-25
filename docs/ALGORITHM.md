@@ -112,7 +112,7 @@ Set `patternSpread` to `1` to make the best match always win.
 The chosen pattern has its own list of templates. Other pools can override it, checked in this order:
 
 1. **The connecting pool.** If you gave two or more keywords, there is a `connectFactor` chance (default 40%) that the title joins or compares them instead, from `connectTemplates`: `The Link Between ...`, `How Do ... Compare?`, `... Paired with ...`.
-2. **The shared pool.** Otherwise there is a `sharedFactor` chance (default 25%) of a template that suits any pattern, from `sharedTemplates`: `The Complete Guide to ...`.
+2. **The shared pool.** Otherwise there is a `sharedFactor` chance (default 25%) of a template that suits any pattern, from `sharedTemplates`: `The Complete Guide to ...`, `Notes on ...`, `How to Get Started with ... in 3 Easy Steps`.
 3. **The pattern's own templates.** Otherwise one of the winning pattern's own templates.
 
 **Quirks mode** adds one more decision, made first. When it is on, there is a `quirkFactor` chance (default 70%) that every one of the choices above uses its *quirky* list instead of its plain list. So `quirkyTemplates`, `sharedQuirkyTemplates` and `connectQuirkyTemplates` replace their plain counterparts. The same chance adds `quirkyNumbers` to the `{n}` pool. The plain numbers stay in the pool either way.

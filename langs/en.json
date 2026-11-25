@@ -196,7 +196,10 @@
     "notes-on-{kw}",
     "a-note-on-{kw}",
     "{kw}:-an-overview",
-    "a-brief-introduction-to-{kw}"
+    "a-brief-introduction-to-{kw}",
+    "how-to-get-started-with-{kw}-in-{n}-easy-steps",
+    "{kw}-in-{n}-easy-steps",
+    "{n}-easy-steps-to-getting-started-with-{kw}"
   ],
   "sharedQuirkyTemplates": [
     "{n}-{adj}-facts-about-{kw}",
@@ -210,7 +213,8 @@
     "inside-the-{adj}-world-of-{kw}",
     "a-{adj}-love-letter-to-{kw}",
     "{kw}:-nobody-saw-this-coming",
-    "{n}-{adj}-reasons-to-try-{kw}"
+    "{n}-{adj}-reasons-to-try-{kw}",
+    "how-to-get-started-with-{kw}-in-three-{adj}-steps"
   ],
   "connectTemplates": [
     "the-{connection}-between-{kw}",
@@ -388,14 +392,19 @@
         "beginners-guide-to-{kw}",
         "how-to-pair-{kw1}-with-{rest}",
         "getting-the-most-from-{kw}",
-        "{kw}-for-beginners"
+        "{kw}-for-beginners",
+        "how-to-master-{kw}-in-{n}-easy-steps",
+        "how-to-get-started-with-{kw}-in-{n}-steps",
+        "how-to-pair-{kw1}-with-{rest}-in-{n}-easy-steps"
       ],
       "quirkyTemplates": [
         "zero-fluff-guide-to-{kw}",
         "taming-{kw}-step-by-step",
         "the-{adj}-survival-guide-to-{kw}",
         "from-zero-to-{adj}-with-{kw}",
-        "how-to-pair-{kw1}-with-{rest}-like-a-professional"
+        "how-to-pair-{kw1}-with-{rest}-like-a-professional",
+        "how-to-master-{kw}-in-three-{adj}-steps",
+        "{kw}-in-five-{adj}-steps"
       ]
     },
     {
