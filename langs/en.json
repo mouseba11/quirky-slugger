@@ -1127,7 +1127,7 @@
       "templates": [
         "a-survey-of-{kw}",
         "{kw}:-the-literature",
-        "a-review-of-the-literature-on-{kw}",
+        "a-survey-of-the-literature-on-{kw}",
         "{kw}:-what-has-been-published",
         "surveying-{kw}"
       ],
@@ -1145,14 +1145,14 @@
         "symptom"
       ],
       "templates": [
-        "a-case-study-of-{kw}",
+        "a-clinical-study-of-{kw}",
         "{kw}:-a-clinical-note",
-        "the-clinical-picture-of-{kw}",
-        "{kw}:-presentation-and-outcome",
-        "case-notes:-{kw}"
+        "the-clinical-profile-of-{kw}",
+        "{kw}:-presentation-and-course",
+        "clinical-notes:-{kw}"
       ],
       "quirkyTemplates": [
-        "a-{adj}-case-study-of-{kw}",
+        "a-{adj}-clinical-study-of-{kw}",
         "{kw}:-a-{adj}-clinical-note"
       ]
     },

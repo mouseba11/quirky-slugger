@@ -256,7 +256,7 @@ The example site shows the same information on a web page. Pattern rows whose sc
 | `method` | method, protocol, procedure, cohort, participant | A Method for Baked Beans and Toast |
 | `finding` | finding, outcome, evidence, observed, measured | The Findings on Baked Beans and Toast |
 | `survey` | systematic, scholarly, citation, bibliography | A Survey of Baked Beans and Toast |
-| `case` | clinical, diagnosis, prognosis, symptom | A Case Study of Baked Beans and Toast |
+| `case` | clinical, diagnosis, prognosis, symptom | A Clinical Study of Baked Beans and Toast |
 | `definition` | defined, definition, denotes | Defining Baked Beans and Toast |
 | `default`, `spotlight`, `essentials` | none (generic) | All About Baked Beans and Toast |
 
