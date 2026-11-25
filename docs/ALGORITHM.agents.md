@@ -48,7 +48,7 @@ quirky                               boolean, a quirky list was chosen
 quirkFactor                          number, effective (clamped 0..1)
 joiner                               the list joiner used this call: config.joiner or a joinerVariants entry (5.6)
 pluralFactor                         number, effective (clamped 0..1)
-plurals                              original keywords that gained a trailing s this call (5.6)
+plurals                              original keywords that were pluralized this call (5.6; English pack only)
 seed                                 string or null
 adjective, suffix, number, top       string or undefined; set only if the template used the placeholder
 keywords                             [{ keyword, weight }]
@@ -86,7 +86,7 @@ Defaults below come from `quirky-slugger.config.json` (algorithm settings) and `
 | `joiner` | `"and"` | string. Word before the last list item. `""` gives comma-only lists. |
 | `joinerVariants` | `["and the"]` (en only) | string[]. Alternative joiners; see 5.6. Absent or empty disables variants. |
 | `joinerVariantFactor` | 0.25 | 0..1. Chance of using a variant instead of `joiner`. |
-| `pluralFactor` | 0.3 | 0..1. Per eligible keyword, the chance of a trailing `s` in the slug and the title. See 5.6. |
+| `pluralFactor` | 0.3 | 0..1. Per eligible keyword, the chance of its English plural in the slug and the title. English pack only. See 5.6. |
 | `keywordWeight` | 2 | number. Multiplier for the keyword boost (4.2). |
 | `minScore` | 0 | number. A pattern must score strictly above this. |
 | `patternSpread` | 0.2 | 0..1. Candidate threshold as a fraction of the best score. **If the key is `undefined` the code uses 1**, but the default file sets 0.2. |
@@ -99,11 +99,11 @@ Defaults below come from `quirky-slugger.config.json` (algorithm settings) and `
 | `quirkyModifiers` | `{ adjectives[22], suffixes[18] }` | strings, hyphenated multi-word values. |
 | `connectors` | `{ verbs[17], gerunds[16], nouns[16], participles[22] }` | see 6.3. |
 | `stopWords` | 36 words | folded with `fold` before use. |
-| `sharedTemplates` | 11 | templates for any pattern, plain mode. |
+| `sharedTemplates` | 15 | templates for any pattern, plain mode. |
 | `sharedQuirkyTemplates` | 12 | quirks mode. |
 | `connectTemplates` | 23 | templates that join/compare keywords, plain. |
 | `connectQuirkyTemplates` | 14 | quirks mode. |
-| `patterns` | 29 | see 1.3. |
+| `patterns` | 34 | see 1.3. |
 | `locale` | see 1.4 | pack-level rendering rules (title case, `a`/`an`, joiner alternate). |
 
 
@@ -115,8 +115,10 @@ Defaults below come from `quirky-slugger.config.json` (algorithm settings) and `
 
 - Pattern with no `triggers` or `[]` is **generic**.
 - If `id` is missing, `scores[].id` is `pattern-<index>` but `explain().pattern` is `null` (a known inconsistency).
-- Default ids, in order: `history`, `recipe`, `review`, `howto`, `list`, `connection`, `comparison`, `news`, `food`, `comfort`, `explainer`, `opinion`, `tips`, `personal`, `travel`, `tech`, `health`, `nature`, `people`, `place`, `science`, `culture`, `society`, `statistics`, `sport`, `objects` (26 with triggers), then generic `default`, `spotlight`, `essentials`.
+- Default ids, in order: `history`, `recipe`, `review`, `howto`, `list`, `connection`, `comparison`, `news`, `food`, `comfort`, `explainer`, `opinion`, `tips`, `personal`, `travel`, `tech`, `health`, `nature`, `people`, `place`, `science`, `culture`, `society`, `statistics`, `sport`, `objects`, `method`, `finding`, `survey`, `case`, `definition` (31 with triggers), then generic `default`, `spotlight`, `essentials`. `de` and `es` have the same ids in the same order, with plain translations of the triggers and templates. They have 13 shared templates (9 before, 4 added), not 15.
 - Subject ids (`history`, `nature`, `people`, `place`, `science`, `statistics`, `sport`, `objects`, `culture`, `society`, `food`, `health`, `tech`) describe what the text is about. Each has its own templates, so a history title does not read like a nature title or a statistics title, and two unrelated topics still parse. Voice ids (`recipe`, `review`, `howto`, `list`, `news`, `opinion`, `tips`, `personal`, `comfort`, `travel`) describe a way of writing. Their triggers avoid words that ordinary encyclopedia prose uses in passing (`how`, `new`, `system`, `life`). `connection` and `comparison` join the keywords. `explainer` is for causal prose.
+- Purpose ids (`method`, `finding`, `survey`, `case`, `definition`) follow why a scientific or academic page exists: how something was done, what was found, what the field has published, one clinical case, what a term means. Each has a short trigger list of intent words (`protocol`, `evidence`, `systematic`, `diagnosis`, `defined`). Their lists are short on purpose, so one hit scores well (4.5). They avoid words that are likely topics (`case`, `patient`, `meaning`, `term`, `result`) and words that other patterns own (`review`, `literature`, `report`). `science` also takes `mechanism`. `review` no longer triggers on the bare word `review`, because that word is as common in a paper as in a product page. It keeps `rating`, `verdict`, `tested`, `unboxing`, `recommend` and `buyer`. `news` no longer takes `report`, `culture` no longer takes `literature`, `health` no longer takes `protein`, and `explainer` no longer takes `study`, `research`, `science`, `chemistry` or `physics`. A page whose only review signal is the word `review` falls to a generic pattern. That is accepted.
+- The plural and `fold` rules for these ids are in 5.6 and 2.1. A purpose template never contains a verb that must agree with a keyword (`what-{kw}-means` and `how-{kw}-was-measured` are not used).
 
 ### 1.4 `locale`
 
@@ -168,12 +170,11 @@ Hyphens inside `{adj}`, `{suffix}`, connectors and `{kw}` list values become spa
 | `truncateSlug(slug, max)` | If `!max` or `len <= max`: unchanged. Otherwise cut to `max`; if the character at `slug[max]` is not `-`, back up to the last `-` in the cut (if `> 0`); strip trailing `-`. |
 
 ### 2.1 `fold` (applied in this order, exactly one of the first five branches, then the final `e` rule)
-
 1. `len > 4` and ends `ies`: replace with `y`.
 2. else `len > 5` and ends `ing`: drop `ing`.
 3. else `len > 4` and ends `ed`: drop `ed`.
 4. else `len > 4` and matches `/(?:s|x|z|ch|sh|o)es$/`: drop `es`.
-5. else `len > 3`, ends `s`, and does not match `/(?:ss|us|is)$/`: drop `s`.
+5. else `len > 3`, ends `s`, and does not match `/(?:ss|us|is)$/`: drop `s`. Then, if the result has `len > 5` and ends `ing`, drop `ing`. So `findings` and `finding` both become `find`. Without the second step `findings` became `finding` and never met the trigger `finding`.
 6. Then, if `len > 3` and ends `e`: drop `e`.
 
 Consequences to remember: `baked` becomes `bak`, `bake` becomes `bak`, `baking` becomes `bak`, `beans` becomes `bean`, `tomatoes` becomes `tomato`, `recipes` becomes `recip`, `recipe` becomes `recip`, `toast` stays `toast`. Folding is lossy and never displayed. `origOf` remembers the first raw word seen for each stem so `{top}` can show a real word.
@@ -202,7 +203,7 @@ chance(salt)     = hash(seed + salt) / 4294967296        // [0, 1)
 | `\|shared` | `chance` | shared pool vs the pattern's own |
 | `\|joiner-var` | `chance` | use a joiner variant instead of `joiner` (compared with `joinerVariantFactor`; only evaluated when variants exist and the factor is above 0) |
 | `\|joiner-pick` | `chance` | which variant: `variants[floor(chance * variants.length)]` |
-| `\|plural\|i` | `chance` | pluralize keyword `i` (compared with `pluralFactor`; only evaluated when that keyword is eligible and the factor is above 0) |
+| `\|plural\|i` | `chance` | pluralize keyword `i` (compared with `pluralFactor`; only evaluated when the pack is English, the factor is above 0, and that keyword has a plural form, 5.6) |
 | `\|ct` / `\|cq` | `pick` | template from `connectPlain` / `connectQuirky` |
 | `\|st` / `\|sq` | `pick` | template from `sharedPlain` / `sharedQuirky` |
 | `\|t` / `\|qt` | `pick` | template from the pattern's plain / quirky list |
@@ -268,7 +269,7 @@ vec_p[t] = idf(t)  for each unique folded trigger token t of pattern p   (binary
 score_p  = cosine(query, vec_p) = dot / (|query| * |vec_p|), 0 if either norm is 0
 ```
 
-Because `|query|` includes **every** text term, long or unrelated text lowers all scores. Because `|vec_p|` includes **every** trigger, triggers absent from the text raise the denominator and lower `score_p` without adding to the dot product. Growing a pattern from n to N unique triggers with no new overlaps multiplies its score by about `sqrt(n/N)`, assuming similar IDF. Only relative scores matter. Default trigger counts: 295 strings across 26 patterns; `food` has 30; `default`, `spotlight` and `essentials` have none.
+Because `|query|` includes **every** text term, long or unrelated text lowers all scores. Because `|vec_p|` includes **every** trigger, triggers absent from the text raise the denominator and lower `score_p` without adding to the dot product. Growing a pattern from n to N unique triggers with no new overlaps multiplies its score by about `sqrt(n/N)`, assuming similar IDF. Only relative scores matter. Default trigger counts: 312 strings across 31 patterns; `food` has 30; `default`, `spotlight` and `essentials` have none.
 
 ### 4.6 Pattern choice
 
@@ -355,7 +356,11 @@ if variants is empty or factor <= 0 or chance('|joiner-var') >= factor:  joiner 
 else joiner = variants[ floor(chance('|joiner-pick') * variants.length) ]
 ```
 
-**Plurals** (`pluralFactor`, once per keyword, before joining). If `clamp01(pluralFactor)` is above 0 and `chance('|plural|' + i)` is below it, keyword `i` gains a trailing `s` in both the slug and the title. A keyword is eligible when its last letter (accents stripped) is not `s` and not a vowel `a e i o u y`. So `toast` can become `toasts`, while `baked beans`, `tea`, `city` and `quokka` stay as written. The roll is independent for each keyword. `explain().plurals` lists the original keywords that were pluralized. `explain().keywords` stays the words as given.
+**Plurals** (`pluralFactor`, once per keyword, before joining). Runs only when the merged `config.locale.article` is `en-a-an` (the English pack). The gate reads the merged config, so a caller that omits `locale` still gets English morphology from the pack. German and Spanish never pluralize and `plurals` is `[]`. For each keyword, `pluralize(keyword)` returns a plural form or `null`. If `clamp01(pluralFactor)` is above 0, the form is not `null`, and `chance('|plural|' + i)` is below the factor, keyword `i` is shown as that form in both the slug and the title. The roll is independent for each keyword and is only evaluated when a form exists.
+
+`pluralize` returns `null` (the keyword stays as written) for: a word under 2 letters; anything that is not a single run of ASCII letters (a phrase, `x-ray`, `COVID-19`); a word that is not all lowercase or Capitalized (an acronym such as `CRISPR`, or a mixed-case name such as `iPhone`); a whole word in the uncountable set (`research`, `evidence`, `information`, `equipment`, `species`, `series`, `data`, `news`, `physics`, `mathematics`, `ethics`, `entropy`, `energy`, `knowledge`, `software`, `hardware`, `algae`, `fauna`, `flora`, `criteria`, `phenomena`, `genera`); a word ending `ia`, `ism`, `ness` or `ology`; and a word longer than 4 letters ending `ity`. Otherwise, in order: an irregular whole word (`analysis`/`analyses`, `hypothesis`/`hypotheses`, `thesis`/`theses`, `phenomenon`/`phenomena`, `criterion`/`criteria`, `index`/`indices`, `matrix`/`matrices`, `child`/`children`); ends `s` stays; consonant + `y` becomes `ies`; ends `x`, `z`, `ch` or `sh` takes `es`; ends `i` stays; anything else takes `s`. A Capitalized word gives a Capitalized plural. So `toast` becomes `toasts`, `tea` becomes `teas`, `city` becomes `cities`, `study` becomes `studies`, `jazz` becomes `jazzes`, and `beans`, `entropy`, `mitochondria` and `baked beans` stay. A single-word proper noun (`Napoleon`) can take an `s`. That is accepted.
+
+`explain().plurals` lists the original keywords that were pluralized. `explain().keywords` stays the words as given.
 
 **Joining.** For one item, the item. With the joiner empty: items joined by `, ` (title) or `-` (slug). Otherwise `a, b joiner c` (title) and `a-b-joiner-c` (slug): the joiner appears **only** before the last item, and never when there is one item. `{rest}` applies the same function to `keywords.slice(1)`, so for two keywords `{rest}` is just the second keyword.
 
@@ -365,7 +370,7 @@ else joiner = variants[ floor(chance('|joiner-pick') * variants.length) ]
 
 ### 6.1 Pools
 
-Sizes are those of the English pack, `langs/en.json`: 162 plain and 144 quirky pattern templates, 11 + 12 shared, 23 + 14 connecting. The `connection` pattern deliberately repeats several connecting-pool templates (5 plain, 2 quirky) so it leans on connector words when it wins; no other template appears twice among the options available to one pattern in one mode. `de` and `es` follow the same shape with slightly different counts.
+Sizes are those of the English pack, `langs/en.json`: 193 plain and 156 quirky pattern templates, 15 + 12 shared, 23 + 14 connecting. The `connection` pattern deliberately repeats several connecting-pool templates (5 plain, 2 quirky) so it leans on connector words when it wins; no other template appears twice among the options available to one pattern in one mode. `de` and `es` follow the same shape with slightly different counts.
 
 ### 6.2 Which placeholders each pool uses
 

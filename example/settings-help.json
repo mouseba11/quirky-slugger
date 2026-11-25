@@ -25,7 +25,7 @@
   ],
   "pluralFactor": [
     "Chance, from 0 to 1, that an eligible keyword is made plural in the slug and the title.",
-    "A keyword is eligible when its last letter is not s and not a vowel (a, e, i, o, u or y). \"baked beans\" and \"tea\" stay as written. \"toast\" can become \"toasts\".",
+    "Only a single English word is eligible, and it takes its usual plural: \"toast\" becomes \"toasts\", \"city\" becomes \"cities\", \"analysis\" becomes \"analyses\". A phrase such as \"baked beans\", an acronym such as \"CRISPR\", and a mass or abstract noun such as \"research\", \"entropy\" or \"mitochondria\" stay as written. German and Spanish keywords are never changed.",
     "At 0, nothing is pluralized. At 1, every eligible keyword is. Each keyword is rolled on its own, and the same input and seed always roll the same way. The default 0.3 is about a 30% chance."
   ],
   "keywordWeight": [

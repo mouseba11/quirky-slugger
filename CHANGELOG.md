@@ -6,10 +6,19 @@ All notable changes to this project are documented here. The format follows [Kee
 
 ### Added
 
-- `pluralFactor` (default `0.3`), shown as Plurals in the example config. An eligible keyword has that chance of a trailing `s` in the slug and the title. Keywords ending in `s` or a vowel are left as written.
+- `pluralFactor` (default `0.3`), shown as Plurals in the example config. An eligible keyword has that chance of its English plural in the slug and the title. See Changed for the rule.
+- Five purpose patterns for scientific and academic pages, in all three packs, placed after `objects` and before the generic three: `method`, `finding`, `survey`, `case` and `definition`. Each has short intent-word triggers, plain templates that work with one keyword, and quirky templates.
+- Triggers: `science` takes `mechanism`. `review` takes `unboxing`, `recommend` and `buyer`.
+- Templates appended to `science` (four plain, two quirky) and `statistics` (two plain), and four appended to `sharedTemplates`: `notes-on-{kw}`, `a-note-on-{kw}`, `{kw}:-an-overview` and `a-brief-introduction-to-{kw}`. Any pattern can now draw a plain frame from the shared pool. `de` and `es` have translations.
 
 ### Changed
 
+- **Plurals are English morphology, for the English pack only.** `pluralFactor` now runs only when the merged `locale.article` is `en-a-an`. A German or Spanish call no longer adds a trailing `s`, and `plurals` is `[]`. For English, only a single word of letters, lowercase or Capitalized, is eligible: `toast` → `toasts`, `tea` → `teas`, `city` → `cities`, `study` → `studies`, `analysis` → `analyses`, `index` → `indices`, `jazz` → `jazzes`. A phrase (`baked beans`, `protein folding`), an acronym or mixed-case name (`CRISPR`, `iPhone`), a word with a digit or hyphen, and mass or abstract nouns (`research`, `evidence`, `data`, `entropy`, `energy`, `gravity`, `metabolism`, `mitochondria`, `bacteria`) stay as written. A single-word proper noun can take an `s`. The roll and its salt (`|plural|i`) are unchanged.
+- **`fold` matches a plural `-ings` word to its `-ing` trigger.** After the trailing `s` is dropped, an `ing` ending on a word longer than 5 letters is dropped too, so `findings` and `finding` both become `find`. Before, `findings` never matched a `finding` trigger. Text containing `-ings` words can score differently.
+- **Triggers removed to stop academic pages landing on the wrong voice.** `review` loses the bare word `review`, `news` loses `report`, `explainer` loses `study`, `research`, `science`, `chemistry` and `physics`, `culture` loses `literature`, and `health` loses `protein`. A page whose only review signal is the word `review` now falls to a generic pattern. `de` and `es` lose the equivalent words.
+- `de` and `es` received the same pattern ids, in the same order, with plain translations. They now have 34 patterns (31 with triggers) and 13 shared templates. English has 34 patterns (31 with triggers) and 15 shared templates.
+- Existing seeds can produce a different title. Appended templates change `hash % length` for `science`, `statistics` and the shared pool. Removed triggers and the new patterns change which pattern wins for some text.
+- An install that has already saved its own patterns (for example Babble, in `data/quirky-slug.json`) keeps them. It gets the new plural and `fold` code, but none of the new patterns, until it resets to the built-in config. A config can hold at most 40 patterns in Babble, so 34 leaves room for six.
 - `{n}` is a string. The plain pools are `2`, `3`, `5` and the words `two`, `three`, `five` (German `zwei`, `drei`, `fünf`; Spanish `dos`, `tres`, `cinco`). The example editor keeps those words instead of dropping anything that is not a digit.
 
 ## [1.0.0] - 2026-11-17

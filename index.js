@@ -24,7 +24,11 @@ function fold(token) {
   else if (t.length > 5 && t.endsWith('ing')) t = t.slice(0, -3);
   else if (t.length > 4 && t.endsWith('ed')) t = t.slice(0, -2);
   else if (t.length > 4 && /(?:s|x|z|ch|sh|o)es$/.test(t)) t = t.slice(0, -2);
-  else if (t.length > 3 && t.endsWith('s') && !/(?:ss|us|is)$/.test(t)) t = t.slice(0, -1);
+  else if (t.length > 3 && t.endsWith('s') && !/(?:ss|us|is)$/.test(t)) {
+    t = t.slice(0, -1);
+    // "findings" must meet the trigger "finding", which folds to "find".
+    if (t.length > 5 && t.endsWith('ing')) t = t.slice(0, -3);
+  }
   if (t.length > 3 && t.endsWith('e')) t = t.slice(0, -1);
   return t;
 }
@@ -134,13 +138,36 @@ function joinForSlug(list, joiner, locale) {
   return `${list.slice(0, -1).join('-')}-${word}-${list[list.length - 1]}`;
 }
 
-// A keyword can take a trailing "s" when its last letter is a consonant other than s.
-// "toast" can, "baked beans" (s) and "tea" (vowel) cannot. y counts as a vowel, so "city" stays.
-function pluralEligible(keyword) {
-  const letters = stripAccents(keyword).toLowerCase().match(/[a-z]/g);
-  if (!letters) return false;
-  const last = letters[letters.length - 1];
-  return last !== 's' && !'aeiouy'.includes(last);
+// English plurals for a single keyword. Only the English pack uses this (see explain()).
+// Mass and abstract nouns, and Latin plurals, stay as written: "The Workings of Entropies" is wrong.
+const UNCOUNTABLE = new Set([
+  'research', 'evidence', 'information', 'equipment', 'species', 'series', 'data', 'news', 'physics',
+  'mathematics', 'ethics', 'entropy', 'energy', 'knowledge', 'software', 'hardware', 'algae', 'fauna',
+  'flora', 'criteria', 'phenomena', 'genera'
+]);
+const IRREGULAR_PLURALS = {
+  analysis: 'analyses', hypothesis: 'hypotheses', thesis: 'theses', phenomenon: 'phenomena',
+  criterion: 'criteria', index: 'indices', matrix: 'matrices', child: 'children'
+};
+
+// Returns the plural of one keyword, or null when it stays as written. A phrase, an acronym
+// (CRISPR), a mixed-case name (iPhone) and a word with a digit, hyphen or apostrophe stay as written.
+function pluralize(keyword) {
+  const word = String(keyword).trim();
+  if (word.length < 2 || !/^[A-Za-z]+$/.test(word)) return null;
+  const lower = word.toLowerCase();
+  const capitalized = word.charAt(0) !== lower.charAt(0);
+  if (word !== lower && word !== lower.charAt(0).toUpperCase() + lower.slice(1)) return null;
+  if (UNCOUNTABLE.has(lower)) return null;
+  if (/(?:ia|ism|ness|ology)$/.test(lower) || (lower.length > 4 && lower.endsWith('ity'))) return null;
+  let plural;
+  if (IRREGULAR_PLURALS[lower]) plural = IRREGULAR_PLURALS[lower];
+  else if (lower.endsWith('s')) return null;
+  else if (/[^aeiou]y$/.test(lower)) plural = lower.slice(0, -1) + 'ies';
+  else if (/(?:x|z|ch|sh)$/.test(lower)) plural = lower + 'es';
+  else if (lower.endsWith('i')) return null;
+  else plural = lower + 's';
+  return capitalized ? plural.charAt(0).toUpperCase() + plural.slice(1) : plural;
 }
 
 // Pick the list joiner for this run: usually config.joiner ("and"), sometimes a variant ("and the").
@@ -422,12 +449,14 @@ function explain(keywords, text, options) {
     : fromShared ? pick(shared, useQuirky ? '|sq' : '|st') : pick(own, useQuirky ? '|qt' : '|t');
 
   // 6. Fill placeholders: {kw}, {kw1}, {kw2}..., {rest}, {top}, and in quirks mode {adj}, {suffix}.
-  //    pluralFactor (0-1) is the chance, per eligible keyword, of adding a trailing "s" in the slug and the title.
+  //    pluralFactor (0-1) is the chance, per eligible keyword, of using its English plural in the slug
+  //    and the title. Only a pack with locale.article "en-a-an" (English) pluralizes.
   const pluralFactor = clamp01(config.pluralFactor);
+  const pluralForms = kws.map((keyword) => (pluralFactor > 0 && locale.article === 'en-a-an' ? pluralize(keyword) : null));
   const pluralFlags = kws.map((keyword, i) => (
-    pluralFactor > 0 && pluralEligible(keyword) && chance('|plural|' + i) < pluralFactor
+    pluralForms[i] !== null && chance('|plural|' + i) < pluralFactor
   ));
-  const shownKeywords = kws.map((keyword, i) => (pluralFlags[i] ? keyword + 's' : keyword));
+  const shownKeywords = kws.map((keyword, i) => (pluralFlags[i] ? pluralForms[i] : keyword));
   const kwSlugs = shownKeywords.map(slugify).filter(Boolean);
   let top = '';
   let topCount = 0;

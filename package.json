@@ -1,6 +1,6 @@
 {
   "name": "@mouseba11/quirky-slugger",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "Turn keywords (themes) and a little text into a matching URL slug and title. Local, deterministic, zero dependencies.",
   "main": "index.js",
   "files": [

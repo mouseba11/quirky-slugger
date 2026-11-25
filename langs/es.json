@@ -201,7 +201,11 @@
     "{n}-razones-para-amar-{kw}",
     "todo-lo-que-hay-que-saber-sobre-{kw}",
     "por-que-importa:-{kw}",
-    "{kw1}-con-{rest}:-una-mirada-mas-de-cerca"
+    "{kw1}-con-{rest}:-una-mirada-mas-de-cerca",
+    "notas-sobre-{kw}",
+    "una-nota-sobre-{kw}",
+    "{kw}:-una-vision-general",
+    "una-breve-introduccion-a-{kw}"
   ],
   "sharedQuirkyTemplates": [
     "{n}-datos-{adj}-sobre-{kw}",
@@ -355,8 +359,6 @@
     {
       "id": "review",
       "triggers": [
-        "reseña",
-        "resena",
         "valoracion",
         "veredicto",
         "pros",
@@ -364,7 +366,10 @@
         "probado",
         "vale",
         "puntuacion",
-        "opinion"
+        "opinion",
+        "unboxing",
+        "recomendar",
+        "comprador"
       ],
       "templates": [
         "resena-de-{kw}",
@@ -505,7 +510,6 @@
       "triggers": [
         "anunciado",
         "ultima-hora",
-        "informe",
         "actualizacion",
         "lanzamiento",
         "publicado"
@@ -607,16 +611,11 @@
     {
       "id": "explainer",
       "triggers": [
-        "ciencia",
         "razon",
         "razón",
         "efecto",
         "explicar",
-        "causa",
-        "investigacion",
-        "estudio",
-        "quimica",
-        "fisica"
+        "causa"
       ],
       "templates": [
         "por-que-funciona:-{kw}",
@@ -801,7 +800,6 @@
         "estrés",
         "relajar",
         "ejercicio",
-        "proteina",
         "fibra",
         "vitamina"
       ],
@@ -942,26 +940,32 @@
         "laboratorio",
         "formula",
         "fórmula",
-        "operador"
+        "operador",
+        "mecanismo"
       ],
       "templates": [
         "la-mecanica-de-{kw}",
         "{kw}:-un-modelo-de-trabajo",
         "{kw}-desde-los-principios",
         "la-teoria-de-{kw}",
-        "el-funcionamiento-de-{kw}"
+        "el-funcionamiento-de-{kw}",
+        "{kw}:-el-mecanismo",
+        "el-proceso-detras-de-{kw}",
+        "{kw}-desde-el-experimento",
+        "un-estudio-de-{kw}"
       ],
       "quirkyTemplates": [
         "la-mecanica-{adj}-de-{kw}",
         "{kw}:-una-teoria-{adj}",
         "{kw},-segun-un-modelo-{adj}",
-        "el-funcionamiento-{adj}-de-{kw}"
+        "el-funcionamiento-{adj}-de-{kw}",
+        "el-mecanismo-{adj}-de-{kw}",
+        "{kw}:-un-experimento-{adj}"
       ]
     },
     {
       "id": "culture",
       "triggers": [
-        "literatura",
         "pintura",
         "poesia",
         "poesía",
@@ -1042,7 +1046,9 @@
         "{kw}-en-cifras",
         "una-mirada-estadistica-a-{kw}",
         "contando-{kw}",
-        "{kw}:-lo-que-dicen-las-cifras"
+        "{kw}:-lo-que-dicen-las-cifras",
+        "{kw}:-la-medicion",
+        "una-mirada-cuantitativa-a-{kw}"
       ],
       "quirkyTemplates": [
         "la-estadistica-{adj}-de-{kw}",
@@ -1105,6 +1111,108 @@
         "construido,-usado,-guardado:-{kw}",
         "la-vida-{adj}-de-un-objeto:-{kw}",
         "{kw}:-una-herramienta-{adj}"
+      ]
+    },
+    {
+      "id": "method",
+      "triggers": [
+        "metodo",
+        "metodologia",
+        "protocolo",
+        "procedimiento",
+        "cohorte",
+        "participante"
+      ],
+      "templates": [
+        "un-metodo-para-{kw}",
+        "{kw}:-el-metodo",
+        "midiendo-{kw}",
+        "el-protocolo-para-{kw}",
+        "metodos-en-{kw}"
+      ],
+      "quirkyTemplates": [
+        "el-metodo-{adj}-de-{kw}",
+        "el-protocolo-{adj}-de-{kw}"
+      ]
+    },
+    {
+      "id": "finding",
+      "triggers": [
+        "hallazgo",
+        "resultado",
+        "evidencia",
+        "observado",
+        "medido"
+      ],
+      "templates": [
+        "los-hallazgos-sobre-{kw}",
+        "{kw}:-los-resultados",
+        "pruebas-de-{kw}",
+        "lo-que-se-encontro:-{kw}",
+        "{kw}:-el-resultado"
+      ],
+      "quirkyTemplates": [
+        "el-hallazgo-{adj}-sobre-{kw}",
+        "el-resultado-{adj}-de-{kw}"
+      ]
+    },
+    {
+      "id": "survey",
+      "triggers": [
+        "sistematica",
+        "academico",
+        "cita",
+        "bibliografia"
+      ],
+      "templates": [
+        "un-panorama-de-{kw}",
+        "{kw}:-la-literatura",
+        "una-revision-de-la-literatura-sobre-{kw}",
+        "{kw}:-lo-que-se-ha-publicado",
+        "repasando-{kw}"
+      ],
+      "quirkyTemplates": [
+        "el-panorama-{adj}-de-{kw}",
+        "el-repaso-{adj}-de-{kw}"
+      ]
+    },
+    {
+      "id": "case",
+      "triggers": [
+        "clinico",
+        "diagnostico",
+        "pronostico",
+        "sintoma"
+      ],
+      "templates": [
+        "un-estudio-de-caso-sobre-{kw}",
+        "{kw}:-una-nota-clinica",
+        "el-cuadro-clinico-de-{kw}",
+        "{kw}:-presentacion-y-evolucion",
+        "notas-de-caso:-{kw}"
+      ],
+      "quirkyTemplates": [
+        "el-caso-{adj}-de-{kw}",
+        "el-diagnostico-{adj}-de-{kw}"
+      ]
+    },
+    {
+      "id": "definition",
+      "triggers": [
+        "definido",
+        "definicion",
+        "denota"
+      ],
+      "templates": [
+        "{kw}:-que-significa",
+        "{kw}:-una-definicion",
+        "definiendo-{kw}",
+        "{kw}-en-breve",
+        "el-significado-de-{kw}"
+      ],
+      "quirkyTemplates": [
+        "la-definicion-{adj}-de-{kw}",
+        "el-significado-{adj}-de-{kw}"
       ]
     },
     {

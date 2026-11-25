@@ -192,7 +192,11 @@
     "{n}-reasons-to-love-{kw}",
     "everything-you-need-to-know-about-{kw}",
     "why-it-matters:-{kw}",
-    "{kw1}-with-{rest}:-a-closer-look"
+    "{kw1}-with-{rest}:-a-closer-look",
+    "notes-on-{kw}",
+    "a-note-on-{kw}",
+    "{kw}:-an-overview",
+    "a-brief-introduction-to-{kw}"
   ],
   "sharedQuirkyTemplates": [
     "{n}-{adj}-facts-about-{kw}",
@@ -339,14 +343,16 @@
     {
       "id": "review",
       "triggers": [
-        "review",
         "rating",
         "verdict",
         "pros",
         "cons",
         "tested",
         "worth",
-        "score"
+        "score",
+        "unboxing",
+        "recommend",
+        "buyer"
       ],
       "templates": [
         "{kw}-review",
@@ -484,7 +490,6 @@
       "triggers": [
         "announced",
         "breaking",
-        "report",
         "update",
         "launch",
         "released"
@@ -590,15 +595,10 @@
     {
       "id": "explainer",
       "triggers": [
-        "science",
         "reason",
         "effect",
         "explain",
-        "cause",
-        "research",
-        "study",
-        "chemistry",
-        "physics"
+        "cause"
       ],
       "templates": [
         "why-it-works:-{kw}",
@@ -777,7 +777,6 @@
         "stress",
         "relax",
         "exercise",
-        "protein",
         "fibre",
         "fiber",
         "vitamin"
@@ -899,26 +898,32 @@
         "laboratory",
         "formula",
         "operator",
-        "evolve"
+        "evolve",
+        "mechanism"
       ],
       "templates": [
         "the-mechanics-of-{kw}",
         "{kw}:-a-working-model",
         "{kw}-from-first-principles",
         "a-theory-of-{kw}",
-        "the-workings-of-{kw}"
+        "the-workings-of-{kw}",
+        "{kw}:-the-mechanism",
+        "the-process-behind-{kw}",
+        "{kw}-from-experiment",
+        "a-study-of-{kw}"
       ],
       "quirkyTemplates": [
         "the-{adj}-mechanics-of-{kw}",
         "{kw}:-a-{adj}-theory",
         "{kw},-according-to-a-{adj}-model",
-        "the-{adj}-workings-of-{kw}"
+        "the-{adj}-workings-of-{kw}",
+        "the-{adj}-mechanism-of-{kw}",
+        "{kw}:-a-{adj}-experiment"
       ]
     },
     {
       "id": "culture",
       "triggers": [
-        "literature",
         "painting",
         "poetry",
         "cinema",
@@ -991,7 +996,9 @@
         "{kw}-by-the-numbers",
         "a-statistical-look-at-{kw}",
         "counting-{kw}",
-        "{kw}:-what-the-figures-say"
+        "{kw}:-what-the-figures-say",
+        "{kw}:-the-measurement",
+        "a-quantitative-look-at-{kw}"
       ],
       "quirkyTemplates": [
         "the-{adj}-statistics-of-{kw}",
@@ -1055,6 +1062,108 @@
         "built,-used,-kept:-{kw}",
         "the-{adj}-life-of-an-object:-{kw}",
         "{kw}:-a-{adj}-tool"
+      ]
+    },
+    {
+      "id": "method",
+      "triggers": [
+        "method",
+        "methodology",
+        "protocol",
+        "procedure",
+        "cohort",
+        "participant"
+      ],
+      "templates": [
+        "a-method-for-{kw}",
+        "{kw}:-the-method",
+        "measuring-{kw}",
+        "the-protocol-for-{kw}",
+        "methods-in-{kw}"
+      ],
+      "quirkyTemplates": [
+        "a-{adj}-method-for-{kw}",
+        "{kw}:-the-{adj}-protocol"
+      ]
+    },
+    {
+      "id": "finding",
+      "triggers": [
+        "finding",
+        "outcome",
+        "evidence",
+        "observed",
+        "measured"
+      ],
+      "templates": [
+        "the-findings-on-{kw}",
+        "{kw}:-the-results",
+        "evidence-for-{kw}",
+        "what-was-found:-{kw}",
+        "{kw}:-the-outcome"
+      ],
+      "quirkyTemplates": [
+        "the-{adj}-findings-on-{kw}",
+        "{kw}:-a-{adj}-result"
+      ]
+    },
+    {
+      "id": "survey",
+      "triggers": [
+        "systematic",
+        "scholarly",
+        "citation",
+        "bibliography"
+      ],
+      "templates": [
+        "a-survey-of-{kw}",
+        "{kw}:-the-literature",
+        "a-review-of-the-literature-on-{kw}",
+        "{kw}:-what-has-been-published",
+        "surveying-{kw}"
+      ],
+      "quirkyTemplates": [
+        "a-{adj}-survey-of-{kw}",
+        "{kw}:-the-{adj}-literature"
+      ]
+    },
+    {
+      "id": "case",
+      "triggers": [
+        "clinical",
+        "diagnosis",
+        "prognosis",
+        "symptom"
+      ],
+      "templates": [
+        "a-case-study-of-{kw}",
+        "{kw}:-a-clinical-note",
+        "the-clinical-picture-of-{kw}",
+        "{kw}:-presentation-and-outcome",
+        "case-notes:-{kw}"
+      ],
+      "quirkyTemplates": [
+        "a-{adj}-case-study-of-{kw}",
+        "{kw}:-a-{adj}-clinical-note"
+      ]
+    },
+    {
+      "id": "definition",
+      "triggers": [
+        "defined",
+        "definition",
+        "denotes"
+      ],
+      "templates": [
+        "{kw}:-what-it-means",
+        "{kw}:-a-definition",
+        "defining-{kw}",
+        "{kw}-in-brief",
+        "the-meaning-of-{kw}"
+      ],
+      "quirkyTemplates": [
+        "a-{adj}-definition-of-{kw}",
+        "the-{adj}-meaning-of-{kw}"
       ]
     },
     {

@@ -204,7 +204,11 @@
     "{n}-gruende-{kw}-zu-lieben",
     "alles-was-man-ueber-{kw}-wissen-muss",
     "warum-es-zaehlt:-{kw}",
-    "{kw1}-mit-{rest}:-ein-genauerer-blick"
+    "{kw1}-mit-{rest}:-ein-genauerer-blick",
+    "notizen-zu-{kw}",
+    "eine-notiz-zu-{kw}",
+    "{kw}:-ein-ueberblick",
+    "eine-kurze-einfuehrung-in-{kw}"
   ],
   "sharedQuirkyTemplates": [
     "{n}-{adj}-fakten-ueber-{kw}",
@@ -353,7 +357,6 @@
     {
       "id": "review",
       "triggers": [
-        "rezension",
         "bewertung",
         "urteil",
         "vorteile",
@@ -361,7 +364,10 @@
         "getestet",
         "wert",
         "score",
-        "test"
+        "test",
+        "unboxing",
+        "empfehlen",
+        "kaeufer"
       ],
       "templates": [
         "{kw}-test",
@@ -500,7 +506,6 @@
       "triggers": [
         "angekuendigt",
         "breaking",
-        "bericht",
         "update",
         "neuigkeit",
         "veroeffentlicht",
@@ -602,15 +607,10 @@
     {
       "id": "explainer",
       "triggers": [
-        "wissenschaft",
         "grund",
         "wirkung",
         "erklaeren",
-        "ursache",
-        "forschung",
-        "studie",
-        "chemie",
-        "physik"
+        "ursache"
       ],
       "templates": [
         "warum-es-funktioniert:-{kw}",
@@ -790,7 +790,6 @@
         "stress",
         "entspannen",
         "sport",
-        "protein",
         "ballaststoffe",
         "vitamin"
       ],
@@ -912,26 +911,32 @@
         "atom",
         "labor",
         "formel",
-        "operator"
+        "operator",
+        "mechanismus"
       ],
       "templates": [
         "die-mechanik-von-{kw}",
         "{kw}:-ein-arbeitsmodell",
         "{kw}-von-den-grundlagen",
         "die-theorie-von-{kw}",
-        "die-funktionsweise-von-{kw}"
+        "die-funktionsweise-von-{kw}",
+        "{kw}:-der-mechanismus",
+        "der-prozess-hinter-{kw}",
+        "{kw}-aus-dem-experiment",
+        "eine-studie-ueber-{kw}"
       ],
       "quirkyTemplates": [
         "die-{adj}-mechanik-von-{kw}",
         "{kw}:-eine-{adj}-theorie",
         "{kw}-nach-einem-{adj}-modell",
-        "die-{adj}-funktionsweise-von-{kw}"
+        "die-{adj}-funktionsweise-von-{kw}",
+        "{kw}:-der-mechanismus,-{adj}-erklaert",
+        "{kw}:-ein-experiment,-{adj}-erzaehlt"
       ]
     },
     {
       "id": "culture",
       "triggers": [
-        "literatur",
         "malerei",
         "lyrik",
         "kino",
@@ -1003,7 +1008,9 @@
         "{kw}-in-zahlen",
         "ein-statistischer-blick-auf-{kw}",
         "{kw}-gezaehlt",
-        "{kw}:-was-die-zahlen-sagen"
+        "{kw}:-was-die-zahlen-sagen",
+        "{kw}:-die-messung",
+        "ein-quantitativer-blick-auf-{kw}"
       ],
       "quirkyTemplates": [
         "die-{adj}-statistik-von-{kw}",
@@ -1067,6 +1074,108 @@
         "gebaut,-benutzt,-behalten:-{kw}",
         "das-{adj}-leben-eines-gegenstands:-{kw}",
         "{kw}:-ein-{adj}-werkzeug"
+      ]
+    },
+    {
+      "id": "method",
+      "triggers": [
+        "methode",
+        "methodik",
+        "protokoll",
+        "verfahren",
+        "kohorte",
+        "teilnehmer"
+      ],
+      "templates": [
+        "eine-methode-fuer-{kw}",
+        "{kw}:-die-methode",
+        "{kw}-messen",
+        "das-protokoll-fuer-{kw}",
+        "methoden-in-{kw}"
+      ],
+      "quirkyTemplates": [
+        "{kw}:-die-methode,-{adj}-erklaert",
+        "{kw}:-das-protokoll,-{adj}-erzaehlt"
+      ]
+    },
+    {
+      "id": "finding",
+      "triggers": [
+        "befund",
+        "ergebnis",
+        "evidenz",
+        "beobachtet",
+        "gemessen"
+      ],
+      "templates": [
+        "die-befunde-zu-{kw}",
+        "{kw}:-die-ergebnisse",
+        "belege-fuer-{kw}",
+        "was-gefunden-wurde:-{kw}",
+        "{kw}:-das-resultat"
+      ],
+      "quirkyTemplates": [
+        "die-ergebnisse-zu-{kw},-{adj}-erzaehlt",
+        "{kw}:-{adj}-beobachtet"
+      ]
+    },
+    {
+      "id": "survey",
+      "triggers": [
+        "systematisch",
+        "wissenschaftlich",
+        "zitat",
+        "bibliographie"
+      ],
+      "templates": [
+        "ein-ueberblick-ueber-{kw}",
+        "{kw}:-die-literatur",
+        "ein-literaturueberblick-zu-{kw}",
+        "{kw}:-was-bisher-veroeffentlicht-wurde",
+        "{kw}-unter-der-lupe"
+      ],
+      "quirkyTemplates": [
+        "ein-ueberblick-ueber-{kw},-{adj}-erzaehlt",
+        "{kw}:-die-literatur,-{adj}-gelesen"
+      ]
+    },
+    {
+      "id": "case",
+      "triggers": [
+        "klinisch",
+        "diagnose",
+        "prognose",
+        "symptom"
+      ],
+      "templates": [
+        "eine-fallstudie-zu-{kw}",
+        "{kw}:-eine-klinische-notiz",
+        "das-klinische-bild-von-{kw}",
+        "{kw}:-darstellung-und-verlauf",
+        "fallnotizen:-{kw}"
+      ],
+      "quirkyTemplates": [
+        "eine-fallstudie-zu-{kw},-{adj}-erzaehlt",
+        "{kw}:-eine-klinische-notiz,-{adj}-erzaehlt"
+      ]
+    },
+    {
+      "id": "definition",
+      "triggers": [
+        "definiert",
+        "definition",
+        "bezeichnet"
+      ],
+      "templates": [
+        "{kw}:-was-das-bedeutet",
+        "{kw}:-eine-definition",
+        "{kw}-definieren",
+        "{kw}-in-kuerze",
+        "die-bedeutung-von-{kw}"
+      ],
+      "quirkyTemplates": [
+        "{kw}:-{adj}-definiert",
+        "{kw}:-die-bedeutung,-{adj}-erklaert"
       ]
     },
     {

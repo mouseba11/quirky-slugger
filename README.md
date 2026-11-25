@@ -131,7 +131,7 @@ quirkySlug.explain('baked beans, toast, tea', text, { seed: 'demo' });
 | `connectors` | The connector words used, for example `{ connection: 'overlap' }`. |
 | `quirksMode` / `quirky` / `quirkFactor` | Whether quirks mode was on, whether a quirky template was chosen, and the factor used. |
 | `joiner` | The word used before the last keyword for this call: `config.joiner`, or a `joinerVariants` entry such as `and the`. |
-| `pluralFactor` / `plurals` | The chance that was used, and the original keywords that gained a trailing `s` in this slug and title. |
+| `pluralFactor` / `plurals` | The chance that was used, and the original keywords that were pluralized in this slug and title. Always `[]` for German and Spanish. |
 | `adjective` / `suffix` / `number` / `top` | The values used for `{adj}`, `{suffix}`, `{n}` and `{top}`, if the template had them. |
 | `keywords` | `[{ keyword, weight }]`, each keyword's share of the text. |
 | `wordsUsed` / `wordsIgnored` | Words counted, and words dropped for exceeding `maxWords`. |
@@ -182,7 +182,7 @@ quirkySlug('alubias, tostadas, té', spanishText, { lang: 'es', quirks: true, se
 
 Merge order is **algorithm defaults → language pack → `options.config`**. Point `options.langsDir` at your own folder if you keep editable copies outside `node_modules`.
 
-**Language support is rudimentary.** The hooks (`options.lang`, `langs/*.json`, locale title/joiner rules) are there so packs can be switched and expanded. The shipped `de` and `es` files are thin demos, not production localisation. There is no gender or case engine, and the English light stemmer is still used for every language. **Proper language support is left as an exercise for other quirky sluggers** — fork a pack, rewrite it for your locale, and improve the rules if you need to.
+**Language support is rudimentary.** The hooks (`options.lang`, `langs/*.json`, locale title/joiner rules) are there so packs can be switched and expanded. The shipped `de` and `es` files are thin demos, not production localisation. There is no gender or case engine, and the English light stemmer is still used for every language. Plural morphology (`pluralFactor`) runs for the English pack only, so German and Spanish keywords are never changed. **Proper language support is left as an exercise for other quirky sluggers** — fork a pack, rewrite it for your locale, and improve the rules if you need to.
 
 See [`docs/ALGORITHM.md`](docs/ALGORITHM.md) and the “Add a language” recipe in [`AGENTS.md`](AGENTS.md).
 
@@ -202,7 +202,7 @@ quirkySlug('beans, toast', text, { config: './my-patterns.json' });
 | `joiner` | `"and"` | The word placed only before the last keyword: `beans-and-toast`, `baked-beans-toast-and-tea`. Use `""` for plain hyphens. |
 | `joinerVariants` | `["and the"]` (en) | Extra joiners mixed in sometimes, e.g. `Potatoes and the John Lloyd Experience`. |
 | `joinerVariantFactor` | `0.25` | Chance (0–1) of using a joiner variant instead of `joiner`. |
-| `pluralFactor` | `0.3` | Chance (0–1) that an eligible keyword is pluralized with a trailing `s`. A keyword ending in `s` or a vowel (`a`, `e`, `i`, `o`, `u`, `y`) is left as written, so `baked beans` and `tea` never change and `toast` can become `toasts`. |
+| `pluralFactor` | `0.3` | Chance (0–1) that an eligible keyword is shown in its English plural. Only a single English word is eligible, so `baked beans` is never changed, while `toast` can become `toasts` and `tea` can become `teas`. See [Plurals](#plurals). |
 | `keywordWeight` | `2` | How strongly keywords count against the text when scoring patterns. |
 | `minScore` | `0` | A pattern must score above this to be a candidate. |
 | `patternSpread` | `0.2` | How close to the best score a pattern must be to be a candidate, from `0` to `1`. `1` means only the best pattern can be chosen. |
@@ -243,13 +243,15 @@ Each pattern is an object:
 | `templates` | Plain title shapes. At least one is required. |
 | `quirkyTemplates` | Optional. Used only in quirks mode. |
 
-The default control set has 29 patterns.
+The default control set has 34 patterns: 31 with triggers, then the three generic ones.
 
 Subject patterns match what a page is about. They are aimed at encyclopedia text, where the keywords may be two unrelated topics: `history`, `nature`, `people`, `place`, `science`, `statistics`, `sport`, `objects`, `culture`, `society`, `food`, `health`, `tech`.
 
 Voice patterns match a way of writing, and their triggers are specific enough that ordinary encyclopedia prose does not select them: `recipe`, `review`, `howto`, `list`, `news`, `opinion`, `tips`, `personal`, `comfort`, `travel`. `connection` and `comparison` are for titles that join the keywords. `explainer` is for text that is working out why something happens.
 
-`default`, `spotlight` and `essentials` have no triggers. They are used when nothing else matches.
+Purpose patterns match why a scientific or academic page exists: `method` (how it was done), `finding` (what was found), `survey` (what the field has published), `case` (one clinical case) and `definition` (what a term means). Their trigger lists are short and made of intent words, so one hit counts for a lot. They avoid words that are likely topics (`case`, `patient`, `meaning`) and words other patterns own (`review`, `literature`, `report`). The bare word `review` no longer selects the `review` pattern, because it is as common in a paper as in a product page. `review` keeps `rating`, `verdict`, `tested`, `unboxing`, `recommend` and `buyer`. `de` and `es` have the same pattern ids, with plain translations.
+
+`default`, `spotlight` and `essentials` have no triggers. They are used when nothing else matches. Any pattern can also draw a plain frame (`Notes on ...`, `... : An Overview`, `A Brief Introduction to ...`) from the shared pool.
 
 Tips for writing triggers: use intent and descriptive words (`recipe`, `review`, `breakfast`, `comfort`), not nouns likely to be keywords (`toast`, `beans`). Keywords are boosted heavily, so a keyword that is also a trigger forces its pattern every time. Triggers are stemmed, so `bake` also matches `baked` and `baking`.
 
@@ -281,14 +283,16 @@ Rules:
 
 ## Plurals
 
-`pluralFactor` (default `0.3`) is the chance that an eligible keyword gains a trailing `s` in the slug and the title. On the example site the setting is labelled Plurals. Each keyword is rolled separately, and the same input and seed always give the same choice.
+`pluralFactor` (default `0.3`) is the chance that an eligible keyword is shown in its English plural in the slug and the title. On the example site the setting is labelled Plurals. Each keyword is rolled separately, and the same input and seed always give the same choice.
 
-A keyword is not eligible when its last letter is `s` or a vowel (`a`, `e`, `i`, `o`, `u`, `y`). `baked beans` and `tea` stay as written. `toast` can become `toasts`.
+Only the English pack pluralizes. German and Spanish keywords are never changed. A keyword is eligible when it is one English word made of letters, in lowercase or Capitalized form. It follows the usual spelling: `toast` becomes `toasts`, `tea` becomes `teas`, `city` becomes `cities`, `study` becomes `studies`, `analysis` becomes `analyses`, `index` becomes `indices`, `jazz` becomes `jazzes`.
+
+These stay as written: a phrase (`baked beans`, `protein folding`), an acronym or mixed-case name (`CRISPR`, `iPhone`), a word with a digit or hyphen (`COVID-19`), a word that is already plural in form (`beans`), and mass or abstract nouns (`research`, `evidence`, `data`, `entropy`, `energy`, `gravity`, `metabolism`, `biology`, `mitochondria`, `bacteria`). A single-word proper noun, such as `Napoleon`, can still take an `s`; set `pluralFactor` to `0` if that matters for your keywords.
 
 ```js
 quirkySlug('baked beans, toast, tea', text, { config: { pluralFactor: 1 } });
-// slug contains baked-beans-toasts-and-tea
-// title contains Baked Beans, Toasts and Tea
+// slug contains baked-beans-toasts-and-teas
+// title contains Baked Beans, Toasts and Teas (baked beans is a phrase and stays as written)
 ```
 
 `0` turns it off. `1` pluralizes every eligible keyword. `explain().plurals` lists the original keywords that were pluralized on that call, and `explain().pluralFactor` is the chance that was used.

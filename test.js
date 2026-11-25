@@ -437,6 +437,35 @@ assert.strictEqual(pinned('censo', 'El censo da la mediana y el porcentaje de la
 assert.strictEqual(pinned('parliament', 'Parliament sits after each election. The constitution limits the government and sets out the legislation it may pass.'), 'society');
 assert.strictEqual(pinned('ada', 'Ada Lovelace wurde 1815 geboren und starb 1852.', 'de'), 'people');
 assert.strictEqual(pinned('ada', 'Ada Lovelace nacio en 1815 y murio en 1852.', 'es'), 'people');
+
+// Scientific and academic pages follow why the page exists: a method, a finding, a survey, a case, a definition.
+assert.strictEqual(pinned('wound healing', 'The method follows a protocol. Each cohort was given the same procedure.'), 'method');
+assert.strictEqual(pinned('wound healing', 'The finding was clear. The evidence was measured and the outcome observed.'), 'finding');
+assert.strictEqual(pinned('wound healing', 'The findings were clear, and the findings were repeated.'), 'finding');
+assert.strictEqual(pinned('gene editing', 'A systematic bibliography lists each citation in a scholarly style.'), 'survey');
+assert.strictEqual(pinned('diabetes', 'A clinical diagnosis rests on the symptom and the prognosis.'), 'case');
+assert.strictEqual(pinned('entropy', 'Entropy is defined as a measure of disorder. The definition is statistical.'), 'definition');
+assert.strictEqual(pinned('protein folding', 'A physical mechanism folds a chain of amino acids into a stable structure.'), 'science');
+assert.ok(!['health', 'culture', 'review', 'news'].includes(pinned('protein folding', 'The protein folds through a mechanism driven by energy and entropy.')));
+const systematicReview = pinned('gene editing', 'A systematic review of the published literature on gene editing, with a report of findings and a bibliography of each citation.');
+assert.ok(!['culture', 'review', 'news'].includes(systematicReview), `systematic review picked ${systematicReview}`);
+assert.strictEqual(systematicReview, 'survey');
+assert.strictEqual(pinned('blender', 'We recommend it for most buyers, and the unboxing was easy.'), 'review');
+// Everyday text keeps its own pattern. A stray academic word does not pull a new pattern in.
+assert.strictEqual(pinned('sourdough', 'The recipe uses flour and water and a long bake in a hot oven. The method is simple.'), 'recipe');
+assert.strictEqual(pinned('wifi router', 'We tested the router. The verdict is good and the rating is high.'), 'review');
+assert.strictEqual(pinned('lisbon', 'Book a hotel near the beach for a weekend trip. The holiday destination is easy to explore.'), 'travel');
+assert.strictEqual(pinned('the derby', 'The league champions won the championship at the stadium, and the coach praised the athlete.'), 'sport');
+assert.strictEqual(pinned('notes app', 'The software runs on a device and the app syncs with the internet.'), 'tech');
+
+// German and Spanish expose the same new pattern ids, and a translated trigger selects the pattern.
+['en', 'de', 'es'].forEach((code) => {
+  const ids = require(`./langs/${code}.json`).patterns.map((p) => p.id);
+  ['method', 'finding', 'survey', 'case', 'definition'].forEach((id) => assert.ok(ids.includes(id), `${code} lacks ${id}`));
+  assert.ok(ids.indexOf('definition') < ids.indexOf('default'), `${code}: new patterns come before the generic ones`);
+});
+assert.strictEqual(pinned('wundheilung', 'Die Methode folgt einem Protokoll.', 'de'), 'method');
+assert.strictEqual(pinned('cicatrizacion', 'El metodo sigue un protocolo.', 'es'), 'method');
 // The two excerpts together stay on the two subject patterns. Neither "how" nor "system" pulls howto or tech.
 const mash = api.explain('quokka, quantum gate', quokkaText + ' ' + gateText);
 const mashScore = Object.fromEntries(mash.scores.map((s) => [s.id, s.score]));
@@ -702,7 +731,8 @@ assert.throws(() => quirkySlug('', 'text'), TypeError);
   assert.deepStrictEqual(f({ pluralFactor: 'x' }).plurals, []);
 }
 
-// Plurals: an eligible keyword gains a trailing s with probability pluralFactor. A final s or vowel never does.
+// Plurals: an eligible single English word takes its plural with probability pluralFactor.
+// A phrase, an acronym, a mixed-case name, a mass noun and a non-English call stay as written.
 {
   const pluralOf = (keywords, pluralFactor, seed) => api.explain(keywords, 'x', {
     seed,
@@ -713,12 +743,42 @@ assert.throws(() => quirkySlug('', 'text'), TypeError);
     }
   });
   const always = pluralOf('baked beans, toast, tea', 1);
-  assert.strictEqual(always.title, 'Baked Beans, Toasts and Tea');
-  assert.strictEqual(always.slug, 'baked-beans-toasts-and-tea');
-  assert.deepStrictEqual(always.plurals, ['toast']);
+  assert.strictEqual(always.title, 'Baked Beans, Toasts and Teas');
+  assert.strictEqual(always.slug, 'baked-beans-toasts-and-teas');
+  assert.deepStrictEqual(always.plurals, ['toast', 'tea']);
+  assert.deepStrictEqual(always.keywords.map((k) => k.keyword), ['baked beans', 'toast', 'tea']);
   assert.strictEqual(pluralOf('toast', 0).title, 'Toast');
-  assert.deepStrictEqual(pluralOf('tea, beans, city, day, quokka', 1).plurals, []);
+  assert.strictEqual(pluralOf('toast, tea', 0).title, 'Toast and Tea');
+
+  const plural = (word) => pluralOf(word, 1).title;
+  const regular = {
+    city: 'Cities', day: 'Days', quokka: 'Quokkas', theory: 'Theories', study: 'Studies', formula: 'Formulas',
+    analysis: 'Analyses', hypothesis: 'Hypotheses', thesis: 'Theses', index: 'Indices', matrix: 'Matrices',
+    approach: 'Approaches', phenomenon: 'Phenomena', criterion: 'Criteria', child: 'Children', jazz: 'Jazzes',
+    cell: 'Cells', method: 'Methods', protein: 'Proteins', gate: 'Gates', toast: 'Toasts', Toast: 'Toasts',
+    City: 'Cities', Analysis: 'Analyses'
+  };
+  Object.entries(regular).forEach(([word, expected]) => assert.strictEqual(plural(word), expected, word));
   assert.strictEqual(pluralOf('Toast', 1).slug, 'toasts');
+  assert.strictEqual(pluralOf('analysis', 1).slug, 'analyses');
+
+  const unchanged = [
+    'beans', 'research', 'evidence', 'information', 'species', 'series', 'data', 'news', 'physics', 'entropy',
+    'energy', 'gravity', 'relativity', 'mitochondria', 'bacteria', 'media', 'criteria', 'algae', 'metabolism',
+    'happiness', 'biology', 'CRISPR', 'NASA', 'iPhone', 'COVID-19', 'x-ray', 'protein folding', 'baked beans',
+    'bacilli', 'a'
+  ];
+  unchanged.forEach((word) => assert.deepStrictEqual(pluralOf(word, 1).plurals, [], word));
+  assert.strictEqual(pluralOf('CRISPR', 1).title, 'CRISPR');
+
+  // The morphology gates on the merged locale, so a config that omits `locale` still pluralizes in English,
+  // while German and Spanish never do.
+  assert.deepStrictEqual(api.explain('toast', 'x', { config: { pluralFactor: 1 } }).plurals, ['toast']);
+  ['de', 'es'].forEach((lang) => {
+    const out = api.explain('toast', 'x', { lang, config: { pluralFactor: 1 } });
+    assert.deepStrictEqual(out.plurals, [], lang);
+    assert.ok(!/toasts/i.test(out.slug), `${lang} slug ${out.slug}`);
+  });
   assert.strictEqual(pluralOf('toast', 1, 'same').title, pluralOf('toast', 1, 'same').title);
   let hits = 0;
   for (let i = 0; i < 400; i++) if (pluralOf('toast', 0.3, 'p' + i).plurals.length) hits++;
