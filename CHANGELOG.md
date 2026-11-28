@@ -6,6 +6,7 @@ All notable changes to this project are documented here. The format follows [Kee
 
 ### Added
 
+- The example site is part of the published package: `example/` (`server.js`, `index.html`, `settings-help.json`) and `langs/samples.json`. From an install, `node node_modules/@mouseba11/quirky-slugger/example/server.js` or `npm explore @mouseba11/quirky-slugger -- npm start`. From a clone, `npm start`.
 - `pluralFactor` (default `0.3`), shown as Plurals in the example config. An eligible keyword has that chance of its English plural in the slug and the title. See Changed for the rule.
 - Five purpose patterns for scientific and academic pages, in all three packs, placed after `objects` and before the generic three: `method`, `finding`, `survey`, `case` and `definition`. Each has short intent-word triggers, plain templates that work with one keyword, and quirky templates.
 - Triggers: `science` takes `mechanism`. `review` takes `unboxing`, `recommend` and `buyer`.

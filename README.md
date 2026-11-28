@@ -339,7 +339,21 @@ A small Node server and page with two views, **Tester** and **Config**. The test
 
 Config is where you set that sample and edit the configuration (settings, word lists, templates and patterns). Each setting has a **?** button. The explanations live in `example/settings-help.json`, separate from the page, so the wording is easy to change. Switching to Tester applies the sample and the config. Config also shows the JSON to copy into `options.config`. Nothing is written to a file. The page has no dependencies.
 
-The example lives in the GitHub repo, not in the npm package (so an `npm install` stays a small library). Clone it, then start the site:
+The example ships in the npm package and in this repository. `example/server.js` finds the library, `quirky-slugger.config.json`, `langs/`, and its own page from the directory it lives in, so the working directory can be anywhere.
+
+From a project that has installed the package:
+
+```
+node node_modules/@mouseba11/quirky-slugger/example/server.js
+```
+
+Or open the installed package and use its start script:
+
+```
+npm explore @mouseba11/quirky-slugger -- npm start
+```
+
+From a clone of this repository:
 
 ```
 git clone https://github.com/mouseba11/quirky-slugger.git
@@ -377,7 +391,7 @@ Files:
 | `quirky-slugger.config.json` | Shared algorithm settings (`maxWords`, `patternSpread`, default `lang`, …). |
 | `langs/` | Language packs (`en`, `de`, `es`) and `samples.json` for the example site. |
 | `test.js` | The test suite. |
-| `example/` | The example site (`server.js`, `index.html`, `settings-help.json`). In the repo only; run via `npm start` after cloning. |
+| `example/` | The example site (`server.js`, `index.html`, `settings-help.json`). Published. `npm start` from a clone, or `node node_modules/@mouseba11/quirky-slugger/example/server.js` from an install. |
 | `docs/` | Algorithm documentation. |
 
 Changes to titles and wording are mostly edits under `langs/`. Algorithm settings stay in `quirky-slugger.config.json`. If you change `index.js`, read [`docs/ALGORITHM.agents.md`](docs/ALGORITHM.agents.md) first: the output is deterministic, so small changes to how the seed is built can change every result.
