@@ -1,6 +1,9 @@
 'use strict';
 
-// Example site for quirky-slugger. No dependencies: `npm start`, then open http://localhost:4000
+// Example site for quirky-slugger. No dependencies.
+// Paths are based on this file, so the process can be started from any directory.
+// Clone: `npm start`. Install: `node node_modules/@mouseba11/quirky-slugger/example/server.js`.
+// Then open http://localhost:4000
 const http = require('http');
 const fs = require('fs');
 const path = require('path');

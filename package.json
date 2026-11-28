@@ -9,6 +9,8 @@
     "langs/en.json",
     "langs/de.json",
     "langs/es.json",
+    "langs/samples.json",
+    "example",
     "docs",
     "AGENTS.md",
     "CHANGELOG.md"

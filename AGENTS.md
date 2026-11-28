@@ -27,7 +27,7 @@ Run `npm test` after every change. It takes about 10 seconds because it runs sta
 | `index.js` | The whole algorithm and the public API (`quirkySlug`, `explain`, `keywordWeights`, `slugify`), including `options.lang` / locale hooks. | The **method** changes. |
 | `quirky-slugger.config.json` | Shared algorithm settings only (`maxWords`, `patternSpread`, default `lang`, the `...Factor` values, …). | You change scoring / length / quirk / joiner-variant defaults. |
 | `langs/*.json` | Language packs (`en`, `de`, `es`): **patterns**, templates, connectors, stop words, joiner, `locale`. | You want different **wording**, a new pattern, or a new language. Most content changes belong here. |
-| `langs/samples.json` | Example-site sample keywords/text per language. Not published. | The demo sample changes. |
+| `langs/samples.json` | Example-site sample keywords/text per language. Published with the package so the example site can load them from an install. | The demo sample changes. |
 | `package.json` | Name (`@mouseba11/quirky-slugger`), scripts, and the `files` whitelist that decides what is published. | A file must be added to or kept out of the package, or you add a language pack. |
 | `test.js` | Test suite. Uses a pinned wrapper plus statistical surveys. | You change behaviour or defaults. |
 | `example/server.js` | Zero-dependency HTTP server. Serves `/api/config`, `/api/langs`, `/api/lang/:code`, `/api/samples`, `POST /api/slug`. | The API or options change. |
@@ -38,7 +38,7 @@ Run `npm test` after every change. It takes about 10 seconds because it runs sta
 | `README.md` | Package documentation (install, API, languages, config, templates). | The API, config keys or placeholders change. |
 | `CHANGELOG.md` | Version history. | Every release, and any output-changing change. |
 
-Published: `index.js`, the config file, `langs/en.json`, `langs/de.json`, `langs/es.json`, `docs/`, `AGENTS.md`, `CHANGELOG.md` (plus `README.md`, `LICENSE` and `package.json`, which npm always includes). Not published: `example/`, `test.js`, `langs/samples.json`. Run `npm run pack:check` to confirm.
+Published: `index.js`, the config file, `langs/en.json`, `langs/de.json`, `langs/es.json`, `langs/samples.json`, `example/` (`server.js`, `index.html`, `settings-help.json`), `docs/`, `AGENTS.md`, `CHANGELOG.md` (plus `README.md`, `LICENSE` and `package.json`, which npm always includes). Not published: `test.js`. Run `npm run pack:check` to confirm.
 
 ## Rules
 
@@ -93,7 +93,7 @@ for (const t of c.patterns.find(p => p.id === 'review').templates) {
 3. Rewrite `joiner`, stop words, connectors, quirky modifiers, numbers, all template pools, and every pattern’s triggers/templates. Prefer fixed articles inside templates; avoid frames that need gender agreement with unknown keywords.
 4. Keep template characters to `[a-z0-9{}.,:;?!'-]` (accents belong in titles via keywords, not template literals, so validation and slugs stay clean).
 5. Add a sample under `langs/samples.json` with ~50/40/10 keyword weights if it is a three-keyword demo.
-6. Add `langs/xx.json` to the `files` list in `package.json`. It is an explicit whitelist (so `samples.json` stays out), and a pack that is not listed is not published.
+6. Add `langs/xx.json` to the `files` list in `package.json`. It is an explicit whitelist, and a pack that is not listed is not published. `langs/samples.json` is listed on its own so the example site can serve it from an install.
 7. The example site picks up new packs from the `langs/` folder automatically (`GET /api/langs`).
 8. Add smoke tests (load pack, non-empty slug/title, `explain().lang`, weight check if you added a sample).
 9. Update README / CHANGELOG. Keep the note that language support is rudimentary and further work is left to other quirky sluggers.
